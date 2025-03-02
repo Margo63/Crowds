@@ -2,6 +2,8 @@ package model;
 
 import java.awt.*;
 
+
+
 public class Cell{
     private boolean isAvailable = true;
     private boolean isGoal = false;
