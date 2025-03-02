@@ -1,23 +1,28 @@
 package model;
 
-import java.awt.*;
-
-
 
 public class Cell{
     private boolean isAvailable = true;
     private boolean isGoal = false;
+    private State state = State.EMPTY;
 
-    public void setAvailable(boolean b) {
-        isAvailable = b;
+
+    public void setState(State state) {
+        this.state = state;
+    }
+    public State getState() {
+        return state;
     }
     public boolean getAvailable() {
-        return isAvailable;
+        return state == State.EMPTY;
     }
-    public void setGoal(boolean b) {
-        isGoal = b;
+    public boolean getIsPedestrian(){
+        return state == State.PEDESTRIAN;
     }
-    public boolean getGoal() {
-        return isGoal;
+    public void setGoal() {
+        state = State.EXIT;
+    }
+    public boolean getIsCellGoal() {
+        return state == State.EXIT;
     }
 }

@@ -15,14 +15,18 @@ public class Panel extends JPanel {
         for (int i = 0; i < board.getAmountOfRows(); i++) {
             for (int j = 0; j < board.getAmountOfCols(); j++) {
 
-                if (!board.getCell(i, j).getAvailable())
-                    g.fillRect(j * 10, i * 10, 10, 10);
-                else if (board.getCell(i, j).getGoal()) {
+                if (board.getCell(i, j).getAvailable())
+                    g.drawRect(j * 10, i * 10, 10, 10);
+                else if (board.getCell(i, j).getIsCellGoal()) {
                     g.setColor(Color.RED);
                     g.fillRect(j * 10, i * 10, 10, 10);
                     g.setColor(Color.BLACK);
-                } else
-                    g.drawRect(j * 10, i * 10, 10, 10);
+                } else if (board.getCell(i, j).getIsPedestrian()) {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(j * 10, i * 10, 10, 10);
+                    g.setColor(Color.BLACK);
+                }else
+                    g.fillRect(j * 10, i * 10, 10, 10);
                 //System.out.print(i + " "+j+"; ");
             }
             //System.out.println();

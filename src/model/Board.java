@@ -1,7 +1,5 @@
 package model;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Board {
@@ -23,20 +21,28 @@ public class Board {
 
     }
 
-    public void setCellNotAvaible(int row, int col) {
+    public void addPedestrian(int row, int col) {
+        board.get(row).get(col).setState(State.PEDESTRIAN);
+        tmp_board.get(row).get(col).setState(State.PEDESTRIAN);
+    }
+    public void addWall(int row, int col) {
+        board.get(row).get(col).setState(State.OBSTRUCTION);
+        tmp_board.get(row).get(col).setState(State.OBSTRUCTION);
+    }
+    public void movePedestrian(int row, int col) {
         //System.out.println(row + " " + col);
-        board.get(row).get(col).setAvailable(false);
+        tmp_board.get(row).get(col).setState(State.PEDESTRIAN);
 
     }
 
-    public void setCellAvaible(int row, int col) {
+    public void removePedestrian(int row, int col) {
         //System.out.println(row + " " + col);
-        board.get(row).get(col).setAvailable(true);
+        tmp_board.get(row).get(col).setState(State.EMPTY);
     }
 
     public void setCellGoal(int row, int col) {
         //System.out.println(row + " " + col);
-        board.get(row).get(col).setGoal(true);
+        board.get(row).get(col).setGoal();
     }
 
     public int getAmountOfRows() {
@@ -56,17 +62,11 @@ public class Board {
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                 //System.out.print(this.getCell(i,j).getAvailable()+" ");
-                if (!this.getCell(i, j).getAvailable()) {
-                    System.out.println("not available");
+                if (this.getCell(i, j).getIsPedestrian()) {
+                    //System.out.println("next cell: " + this.getCell(i + 1, j).getAvailable());
                     if (this.getCell(i + 1, j).getAvailable()) {
-                        tmp_board.get(i+1).get(j).setAvailable(false);
-                        tmp_board.get(i).get(j).setAvailable(true);
-                        //this.setCellNotAvaible(i + 1, j);
-                        //this.setCellAvaible(i, j);
-                        System.out.println("change tmp:"+tmp_board.get(i+1).get(j).getAvailable());
-                        System.out.println("change tmp:"+tmp_board.get(i).get(j).getAvailable());
-                        System.out.println("change:"+board.get(i+1).get(j).getAvailable());
-                        System.out.println("change:"+board.get(i).get(j).getAvailable());
+                        movePedestrian(i+1, j);
+                        removePedestrian(i, j);
                     }
                 }
             }
@@ -78,10 +78,11 @@ public class Board {
         //System.out.println(tmp_board);
         updateBoard();
     }
+
     void updateBoard(){
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
-                board.get(i).get(j).setAvailable(tmp_board.get(i).get(j).getAvailable());
+                board.get(i).get(j).setState(tmp_board.get(i).get(j).getState());
             }
 
         }
