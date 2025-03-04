@@ -17,12 +17,19 @@ public class Cell{
         return state == State.EMPTY;
     }
     public boolean getIsPedestrian(){
-        return state == State.PEDESTRIAN;
+        return false;
     }
     public void setGoal() {
         state = State.EXIT;
     }
     public boolean getIsCellGoal() {
         return state == State.EXIT;
+    }
+
+    public String printCell(){
+        if(state == State.EXIT) return "9";
+        else if(state == State.EMPTY) return "0";
+        else if(state == State.OBSTRUCTION) return "1";
+        else return "-1";
     }
 }

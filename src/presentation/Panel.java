@@ -12,6 +12,7 @@ public class Panel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        //board.printBoard();
         for (int i = 0; i < board.getAmountOfRows(); i++) {
             for (int j = 0; j < board.getAmountOfCols(); j++) {
 
