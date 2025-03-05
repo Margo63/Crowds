@@ -3,11 +3,16 @@ package model;
 import kotlin.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Board {
 
     private ArrayList<ArrayList<Cell>> board;
     private ArrayList<ArrayList<Cell>> tmp_board = new ArrayList<>();
+    //cell from_x, from_y to_x to_y
+    private Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> wish_list = new HashMap<>();
+    //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
     public Board(int size) {
         //board = new Cell[size][size];
@@ -48,7 +53,10 @@ public class Board {
         //printBoard();
         //System.out.println(row + " " + col);
         PedestrianCell tmp_pedestrian = (PedestrianCell) tmp_board.get(row).get(col);
-
+        Cell up = tmp_board.get(row - 1).get(col);
+        Cell down = tmp_board.get(row + 1).get(col);
+        Cell left = tmp_board.get(row).get(col - 1);
+        Cell right = tmp_board.get(row).get(col + 1);
 
         int up_value = tmp_pedestrian.getProximityToExit(row - 1, col);
         int down_value = tmp_pedestrian.getProximityToExit(row + 1, col);
@@ -63,20 +71,43 @@ public class Board {
             if (arr[i] >= 0 && min > arr[i]) min = arr[i];
         }
 
-        if (up_value == min) min_list.add(new Pair<>(row - 1, col));
-        if (down_value == min) min_list.add(new Pair<>(row + 1, col));
-        if (left_value == min) min_list.add(new Pair<>(row, col - 1));
-        if (right_value == min) min_list.add(new Pair<>(row, col + 1));
+        if (up.getAvailable() && //!up.getIsPedestrian() &&
+                up_value == min) min_list.add(new Pair<>(row - 1, col));
+        if (down.getAvailable() &&//!down.getIsPedestrian() &&
+                down_value == min) min_list.add(new Pair<>(row + 1, col));
+        if (left.getAvailable() && //!left.getIsPedestrian() &&
+                left_value == min) min_list.add(new Pair<>(row, col - 1));
+        if (right.getAvailable() &&//!right.getIsPedestrian() &&
+                right_value == min) min_list.add(new Pair<>(row, col + 1));
 
-        int next = (int) (Math.random() % min_list.size());
+        if(min_list.isEmpty()) return;
+
+        int next = (int) ((Math.random()*100) % min_list.size());
         int next_row = min_list.get(next).getFirst();
         int next_col = min_list.get(next).getSecond();
 
-        //System.out.println(next_row + " " + next_col);
+        //System.out.println(next_row + " " + next_col + " " +up_value + " " + down_value + " " + left_value + " " + right_value);
 
-        Cell newCell = tmp_board.get(next_row).get(next_col);
-        tmp_board.get(next_row).set(next_col, tmp_pedestrian);
-        tmp_board.get(row).set(col, newCell);
+        Pair<Cell, Pair<Integer, Integer>> pedestrian_wish =
+                new Pair<>(tmp_pedestrian, new Pair<>(row, col));
+
+        Pair key_next = new Pair(next_row, next_col);
+        if (wish_list.containsKey(key_next)) {
+            ArrayList tmp = new ArrayList();
+            tmp.addAll(wish_list.get(key_next));
+            tmp.add(pedestrian_wish);
+            wish_list.replace(key_next, tmp);
+        } else {
+            ArrayList tmp = new ArrayList();
+            tmp.add(pedestrian_wish);
+            wish_list.put(key_next, tmp);
+        }
+
+        //wish_list.add(pedestrian_wish);
+
+//         Cell newCell = tmp_board.get(next_row).get(next_col);
+//        tmp_board.get(next_row).set(next_col, tmp_pedestrian);
+//        tmp_board.get(row).set(col, newCell);
 
         //printBoard();
 
@@ -110,6 +141,30 @@ public class Board {
             }
             //System.out.println();
         }
+        //System.out.println(wish_list);
+        wish_list.forEach((key, value) -> {
+            int next_row = key.getFirst();
+            int next_col = key.getSecond();
+
+            if (value.size() == 1) {
+                int row = value.get(0).getSecond().getFirst();
+                int col = value.get(0).getSecond().getSecond();
+                Cell newCell = tmp_board.get(next_row).get(next_col);
+                tmp_board.get(next_row).set(next_col, value.get(0).getFirst());
+                tmp_board.get(row).set(col, newCell);
+                //System.out.println("swap");
+            }else{
+                System.out.println("conflict");
+                int next = (int) ((Math.random()*100) % value.size());
+                int row = value.get(next).getSecond().getFirst();
+                int col = value.get(next).getSecond().getSecond();
+                Cell newCell = tmp_board.get(next_row).get(next_col);
+                tmp_board.get(next_row).set(next_col, value.get(next).getFirst());
+                tmp_board.get(row).set(col, newCell);
+            }
+
+        });
+        wish_list.clear();
         //System.out.println("step");
 
         //System.out.println(board);
@@ -121,7 +176,7 @@ public class Board {
     void updateBoard() {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
-                board.get(i).set(j,tmp_board.get(i).get(j));
+                board.get(i).set(j, tmp_board.get(i).get(j));
             }
 
         }

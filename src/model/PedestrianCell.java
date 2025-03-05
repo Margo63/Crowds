@@ -5,10 +5,10 @@ public class PedestrianCell extends Cell {
     private int xGoal, yGoal;
     private int [][] goalMap ={
             {-1,-1,-1,-1,-1},
-            {-1, 3, 4, 5,-1},
-            {-1, 2, 3, -1,-1},
-            {-1, 1, 2, 3,-1},
-            {-1, 0, -1, -1,-1},
+            {-1, 4, 3, 4,-1},
+            {-1, -1, 2, -1,-1},
+            {-1, 2, 1, 2,-1},
+            {-1, -1, 0, -1,-1},
     };
 
     @Override

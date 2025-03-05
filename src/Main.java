@@ -9,9 +9,11 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         Board board = new Board(5);
-        board.addPedestrian(1, 3);
+        board.addPedestrian(2, 1);
+        board.addPedestrian(2, 3);
         board.addPedestrian(1, 2);
-        board.addWall(2, 3);
+        board.addWall(3, 1);
+        board.addWall(3, 3);
         //System.out.println(board.getCell(0,5).getAvailable());
         Panel panel = new Panel();
         panel.addBoard(board);
