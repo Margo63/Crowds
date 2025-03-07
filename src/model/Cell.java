@@ -32,4 +32,7 @@ public class Cell{
         else if(state == State.OBSTRUCTION) return "1";
         else return "-1";
     }
+    public boolean achievedGoal(int row, int col) {
+        return false;
+    }
 }

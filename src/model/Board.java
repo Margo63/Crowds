@@ -11,7 +11,7 @@ public class Board {
     private ArrayList<ArrayList<Cell>> board;
     private ArrayList<ArrayList<Cell>> tmp_board = new ArrayList<>();
     //cell from_x, from_y to_x to_y
-    private Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> wish_list = new HashMap<>();
+    public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> wish_list = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
     public Board(int size) {
@@ -34,6 +34,10 @@ public class Board {
 
     }
 
+    public void removePedestrian(int row, int col) {
+        board.get(row).set(col, new Cell());
+        tmp_board.get(row).set(col, new Cell());
+    }
     public void addWall(int row, int col) {
         board.get(row).get(col).setState(State.OBSTRUCTION);
         tmp_board.get(row).get(col).setState(State.OBSTRUCTION);
@@ -49,6 +53,10 @@ public class Board {
 //        tmp_board.get(row).set(col, new PedestrianCell());
 //    }
 
+    public void cleanCell(int row, int col) {
+        board.get(row).get(col).setState(State.EMPTY);
+        tmp_board.get(row).get(col).setState(State.EMPTY);
+    }
     public void pedestrianStep(int row, int col) {
         //printBoard();
         //System.out.println(row + " " + col);
@@ -132,6 +140,7 @@ public class Board {
 
     public void step() throws InterruptedException {
         //Thread.sleep(1000);
+        wish_list.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                 //System.out.print(this.getCell(i,j).getAvailable()+" ");
@@ -164,7 +173,7 @@ public class Board {
             }
 
         });
-        wish_list.clear();
+
         //System.out.println("step");
 
         //System.out.println(board);
@@ -177,6 +186,9 @@ public class Board {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 board.get(i).set(j, tmp_board.get(i).get(j));
+                if(board.get(i).get(j).achievedGoal(i,j)){
+                    this.removePedestrian(i,j);
+                }
             }
 
         }
