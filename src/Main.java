@@ -4,35 +4,20 @@ import presentation.Panel;
 import presentation.Screen;
 
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Board board = new Board(11);
+        ArrayList<ArrayList<Integer>> tmp = readFile("C:/Users/User/Documents/IntelijIdea/Crowds/src/map.txt");
+
+        Board board = new Board(tmp);
         Analyze analyze = new Analyze();
-
-        board.addPedestrian(2, 1);
-        board.addPedestrian(2, 3);
-        board.addPedestrian(1, 2);
-
-        for (int i = 0; i < 11; i++) {
-            board.addWall(0, i);
-            board.addWall(10, i);
-            board.addWall(i, 0);
-            board.addWall(i, 10);
-        }
-        board.addWall(4, 4);
-        board.addWall(4, 5);
-
-        board.addWall(5, 9);
-        board.addWall(5, 8);
-
-        board.addWall(8, 2);
-        board.addWall(8, 3);
-        board.addWall(7, 3);
-
-        board.cleanCell(10,5);
 
         //System.out.println(board.getCell(0,5).getAvailable());
         Panel panel = new Panel();
@@ -43,8 +28,6 @@ public class Main {
         panel.add(button);
         panel.add(label);
         Screen screen = new Screen(panel);
-
-
         button.addActionListener(e -> {
             try {
                 board.step();
@@ -57,5 +40,28 @@ public class Main {
         });
 
 
+    }
+
+    static ArrayList<ArrayList<Integer>> readFile(String filename) {
+        ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(filename)))
+        {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                ArrayList<Integer> row = new ArrayList<>();
+                for (String value : values) {
+                    row.add(Integer.parseInt(value.replaceAll(" ","")));
+                    //System.out.print(value.trim() + " | ");
+                }
+                tmp.add(row);
+                //System.out.println();
+            }
+        }
+        catch(IOException ex){
+
+            System.out.println(ex.getMessage());
+        }
+        return tmp;
     }
 }

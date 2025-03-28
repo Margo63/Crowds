@@ -5,24 +5,31 @@ import kotlin.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
+
+import static model.State.EMPTY;
 
 public class Board {
 
+    private ArrayList<ArrayList<Integer>> start_map;
     private ArrayList<ArrayList<Cell>> board;
     private ArrayList<ArrayList<Cell>> tmp_board = new ArrayList<>();
     //cell from_x, from_y to_x to_y
     public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> wish_list = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
-    public Board(int size) {
+    public Board(ArrayList<ArrayList<Integer>> start_map) {
+        this.start_map = start_map;
         //board = new Cell[size][size];
         board = new ArrayList<ArrayList<Cell>>();
-        for (int i = 0; i < size; i++) {
-            board.add(new ArrayList<Cell>(size));
-            tmp_board.add(new ArrayList<Cell>(size));
-            for (int j = 0; j < size; j++) {
-                board.get(i).add(new Cell());
-                tmp_board.get(i).add(new Cell());
+        for (int i = 0; i < start_map.size(); i++) {
+            board.add(new ArrayList<Cell>(start_map.size()));
+            tmp_board.add(new ArrayList<Cell>(start_map.size()));
+            for (int j = 0; j < start_map.size(); j++) {
+                Cell cell = new Cell();
+                cell.setState(State.getFromInt(start_map.get(i).get(j)));
+                board.get(i).add(cell);
+                tmp_board.get(i).add(cell);
             }
         }
 
@@ -54,8 +61,8 @@ public class Board {
 //    }
 
     public void cleanCell(int row, int col) {
-        board.get(row).get(col).setState(State.EMPTY);
-        tmp_board.get(row).get(col).setState(State.EMPTY);
+        board.get(row).get(col).setState(EMPTY);
+        tmp_board.get(row).get(col).setState(EMPTY);
     }
     public void pedestrianStep(int row, int col) {
         //printBoard();
@@ -213,6 +220,8 @@ public class Board {
             System.out.println();
         }
     }
+
+
 
 
 }
