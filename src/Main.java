@@ -18,6 +18,7 @@ public class Main {
 
         Board board = new Board(tmp);
         Analyze analyze = new Analyze();
+        board.addPedestrian(2,3);
 
         //System.out.println(board.getCell(0,5).getAvailable());
         Panel panel = new Panel();

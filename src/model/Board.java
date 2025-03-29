@@ -36,6 +36,9 @@ public class Board {
     }
 
     public void addPedestrian(int row, int col) {
+        PedestrianCell pedestrianCell = new PedestrianCell();
+        pedestrianCell.initGoalMap(start_map);
+
         board.get(row).set(col, new PedestrianCell());
         tmp_board.get(row).set(col, new PedestrianCell());
 
