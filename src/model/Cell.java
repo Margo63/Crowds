@@ -2,10 +2,16 @@ package model;
 
 
 public class Cell{
-    private boolean isAvailable = true;
-    private boolean isGoal = false;
+//    private boolean isAvailable = true;
+//    private boolean isGoal = false;
     private State state = State.EMPTY;
 
+    Cell(){
+
+    }
+    Cell( State state){
+        this.state = state;
+    }
 
     public void setState(State state) {
         this.state = state;
@@ -14,7 +20,7 @@ public class Cell{
         return state;
     }
     public boolean getAvailable() {
-        return state == State.EMPTY;
+        return state == State.EMPTY || state == State.EXIT;
     }
     public boolean getIsPedestrian(){
         return false;

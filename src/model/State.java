@@ -17,8 +17,8 @@ public enum State {
         return switch (value) {
             case -1 -> OBSTRUCTION;
             case 0 -> EMPTY;
-            case 1 -> ENTRY;
-            case 2 -> EXIT;
+            case -3 -> ENTRY;
+            case -2 -> EXIT;
             case 3 -> PEDESTRIAN;
             default -> OBSTRUCTION;
         };

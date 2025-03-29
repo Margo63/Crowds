@@ -13,6 +13,11 @@ public class PedestrianCell extends Cell {
     private ArrayList<ArrayList<Integer>> goalMap = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> startMap;
 
+    PedestrianCell(){}
+    PedestrianCell(State state) {
+        super(state);
+    }
+
     @Override
     public boolean getIsPedestrian() {
         return true;
@@ -119,11 +124,15 @@ public class PedestrianCell extends Cell {
         Pair<Integer, Integer> current_goal = goalList.getFirst();
         if (row == current_goal.getFirst() && col == current_goal.getSecond()) {
 
+
+            goalList.removeFirst();
+            if(!goalList.isEmpty()) {
+                loadGoalMap();
+            }
+
             for (Pair<Integer, Integer> goal : goalList) {
                 System.out.println("goal x: " + goal.getFirst() + " y: " + goal.getSecond());
             }
-            goalList.remove(0);
-            loadGoalMap();
             return goalList.isEmpty();
         }
         return false;

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import static model.State.EMPTY;
+import static model.State.EXIT;
 
 public class Board {
 
@@ -58,14 +59,11 @@ public class Board {
     }
 
     public void removePedestrian(int row, int col) {
-        board.get(row).set(col, new Cell());
-        tmp_board.get(row).set(col, new Cell());
+
+        board.get(row).set(col, new Cell(EXIT));
+        tmp_board.get(row).set(col, new Cell(EXIT));
     }
 
-    public void addWall(int row, int col) {
-        board.get(row).get(col).setState(State.OBSTRUCTION);
-        tmp_board.get(row).get(col).setState(State.OBSTRUCTION);
-    }
 //    public void movePedestrian(int row, int col) {
 //        //System.out.println(row + " " + col);
 //        //tmp_board.get(row).get(col).setState(State.PEDESTRIAN);
@@ -136,8 +134,10 @@ public class Board {
 
         //System.out.println(next_row + " " + next_col + " " +up_value + " " + down_value + " " + left_value + " " + right_value);
 
+        //пешеход и куда он хочет пойти
         Pair<Cell, Pair<Integer, Integer>> pedestrian_wish =
                 new Pair<>(tmp_pedestrian, new Pair<>(row, col));
+
 
         Pair key_next = new Pair(next_row, next_col);
         if (wish_list.containsKey(key_next)) {
@@ -198,7 +198,7 @@ public class Board {
             if (value.size() == 1) {
                 int row = value.get(0).getSecond().getFirst();
                 int col = value.get(0).getSecond().getSecond();
-                Cell newCell = tmp_board.get(next_row).get(next_col);
+                Cell newCell = new Cell();//tmp_board.get(next_row).get(next_col);
                 tmp_board.get(next_row).set(next_col, value.get(0).getFirst());
                 tmp_board.get(row).set(col, newCell);
                 //System.out.println("swap");
