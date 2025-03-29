@@ -38,9 +38,22 @@ public class Board {
     public void addPedestrian(int row, int col) {
         PedestrianCell pedestrianCell = new PedestrianCell();
         pedestrianCell.initGoalMap(start_map);
+        ArrayList<Pair<Integer, Integer>> tmp_list = new ArrayList() {
+            {
+                addLast(new Pair<>(5,9));
+                addLast(new Pair<>(8,2));
+            }
+        };
 
-        board.get(row).set(col, new PedestrianCell());
-        tmp_board.get(row).set(col, new PedestrianCell());
+
+        pedestrianCell.setGoalList(tmp_list);
+        pedestrianCell.setExitGoal(10, 5);
+
+
+        pedestrianCell.loadGoalMap();
+
+        board.get(row).set(col, pedestrianCell);
+        tmp_board.get(row).set(col, pedestrianCell);
 
     }
 
@@ -48,6 +61,7 @@ public class Board {
         board.get(row).set(col, new Cell());
         tmp_board.get(row).set(col, new Cell());
     }
+
     public void addWall(int row, int col) {
         board.get(row).get(col).setState(State.OBSTRUCTION);
         tmp_board.get(row).get(col).setState(State.OBSTRUCTION);
@@ -67,6 +81,7 @@ public class Board {
         board.get(row).get(col).setState(EMPTY);
         tmp_board.get(row).get(col).setState(EMPTY);
     }
+
     public void pedestrianStep(int row, int col) {
         //printBoard();
         //System.out.println(row + " " + col);
@@ -81,12 +96,27 @@ public class Board {
         int left_value = tmp_pedestrian.getProximityToExit(row, col - 1);
         int right_value = tmp_pedestrian.getProximityToExit(row, col + 1);
 
-        int[] arr = {up_value, down_value, left_value, right_value};
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        if(up.getAvailable()){
+            arr.add(up_value);
+        }
+
+        if(down.getAvailable()){
+            arr.add(down_value);
+        }
+        if(left.getAvailable()){
+            arr.add(left_value);
+        }
+        if(right.getAvailable()){
+            arr.add(right_value);
+        }
+
 
         ArrayList<Pair<Integer, Integer>> min_list = new ArrayList<>();
         int min = 100000000;
-        for (int i = 0; i < 4; i++) {
-            if (arr[i] >= 0 && min > arr[i]) min = arr[i];
+        for (int i = 0; i < arr.size(); i++) {
+            if (arr.get(i) >= 0 && min > arr.get(i)) min = arr.get(i);
         }
 
         if (up.getAvailable() && //!up.getIsPedestrian() &&
@@ -98,9 +128,9 @@ public class Board {
         if (right.getAvailable() &&//!right.getIsPedestrian() &&
                 right_value == min) min_list.add(new Pair<>(row, col + 1));
 
-        if(min_list.isEmpty()) return;
+        if (min_list.isEmpty()) return;
 
-        int next = (int) ((Math.random()*100) % min_list.size());
+        int next = (int) ((Math.random() * 100) % min_list.size());
         int next_row = min_list.get(next).getFirst();
         int next_col = min_list.get(next).getSecond();
 
@@ -172,9 +202,9 @@ public class Board {
                 tmp_board.get(next_row).set(next_col, value.get(0).getFirst());
                 tmp_board.get(row).set(col, newCell);
                 //System.out.println("swap");
-            }else{
+            } else {
                 System.out.println("conflict");
-                int next = (int) ((Math.random()*100) % value.size());
+                int next = (int) ((Math.random() * 100) % value.size());
                 int row = value.get(next).getSecond().getFirst();
                 int col = value.get(next).getSecond().getSecond();
                 Cell newCell = tmp_board.get(next_row).get(next_col);
@@ -196,8 +226,8 @@ public class Board {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 board.get(i).set(j, tmp_board.get(i).get(j));
-                if(board.get(i).get(j).achievedGoal(i,j)){
-                    this.removePedestrian(i,j);
+                if (board.get(i).get(j).achievedGoal(i, j)) {
+                    this.removePedestrian(i, j);
                 }
             }
 
@@ -223,8 +253,6 @@ public class Board {
             System.out.println();
         }
     }
-
-
 
 
 }

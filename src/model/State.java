@@ -20,7 +20,7 @@ public enum State {
             case 1 -> ENTRY;
             case 2 -> EXIT;
             case 3 -> PEDESTRIAN;
-            default -> EMPTY;
+            default -> OBSTRUCTION;
         };
     }
 }

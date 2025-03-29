@@ -11,7 +11,7 @@ public class Panel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
+        //System.out.println("paint");
         //board.printBoard();
         for (int i = 0; i < board.getAmountOfRows(); i++) {
             for (int j = 0; j < board.getAmountOfCols(); j++) {
@@ -41,9 +41,9 @@ public class Panel extends JPanel {
                 }
 
 
-                //System.out.print(i + " "+j+"; ");
+              //  System.out.print(i + " "+j+"; ");
             }
-            //System.out.println();
+           // System.out.println();
         }
 
     }

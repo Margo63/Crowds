@@ -5,7 +5,6 @@ import presentation.Screen;
 
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,20 +13,24 @@ import java.util.ArrayList;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        ArrayList<ArrayList<Integer>> tmp = readFile("C:/Users/User/Documents/IntelijIdea/Crowds/src/map.txt");
+        ArrayList<ArrayList<Integer>> tmp = readFile("map.txt");
 
         Board board = new Board(tmp);
         Analyze analyze = new Analyze();
         board.addPedestrian(2,3);
 
+
         //System.out.println(board.getCell(0,5).getAvailable());
         Panel panel = new Panel();
-
         panel.addBoard(board);
+
         JButton button = new JButton("Step");
+
         JLabel label = new JLabel();
+
         panel.add(button);
         panel.add(label);
+
         Screen screen = new Screen(panel);
         button.addActionListener(e -> {
             try {
@@ -39,6 +42,7 @@ public class Main {
             }
             panel.repaint();
         });
+
 
 
     }
