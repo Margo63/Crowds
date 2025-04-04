@@ -1,10 +1,13 @@
 import analyze.Analyze;
 import model.Board;
+import presentation.DrawPanel;
 import presentation.InputPanel;
 import presentation.BoardPanel;
 import presentation.Screen;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,9 +17,9 @@ import java.util.ArrayList;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        InputPanel inputPanel = new InputPanel();
 
-        /*
+        Screen screen = new Screen();
+
         ArrayList<ArrayList<Integer>> tmp = readFile("map.txt");
 
         Board board = new Board(tmp);
@@ -26,18 +29,14 @@ public class Main {
 
         //System.out.println(board.getCell(0,5).getAvailable());
 
-        BoardPanel panel = new BoardPanel();
-        panel.addBoard(board);
-
-
-
-
+        BoardPanel boardPanel = new BoardPanel();
+        boardPanel.addBoard(board);
         JButton button = new JButton("Step");
 
         JLabel label = new JLabel();
 
-        panel.add(button);
-        panel.add(label);
+        boardPanel.add(button);
+        boardPanel.add(label);
 
 
         button.addActionListener(e -> {
@@ -48,11 +47,32 @@ public class Main {
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
-            panel.repaint();
+            boardPanel.repaint();
         });
-*/
-        Screen screen = new Screen(inputPanel);
 
+        InputPanel inputPanel = new InputPanel();
+        JButton buttonNext = new JButton("draw");
+        buttonNext.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                screen.changePanel("draw");
+                System.out.println("changed");
+            }
+        });
+        inputPanel.add(buttonNext);
+
+        DrawPanel drawPanel = new DrawPanel();
+
+        screen.addPanel(inputPanel, "input");
+        screen.addPanel(boardPanel,"board");
+        screen.addPanel(drawPanel,"draw");
+
+        screen.changePanel("input");
+    }
+
+    private static Object buttonAction(Object o) {
+        System.out.println("button Action");
+        return null;
     }
 
     static ArrayList<ArrayList<Integer>> readFile(String filename) {
@@ -77,4 +97,5 @@ public class Main {
         }
         return tmp;
     }
+
 }
