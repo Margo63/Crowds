@@ -5,7 +5,7 @@ import model.Board;
 import javax.swing.*;
 import java.awt.*;
 
-public class Panel extends JPanel {
+public class BoardPanel extends JPanel {
     private Board board;
 
     @Override

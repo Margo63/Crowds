@@ -1,6 +1,7 @@
 import analyze.Analyze;
 import model.Board;
-import presentation.Panel;
+import presentation.InputPanel;
+import presentation.BoardPanel;
 import presentation.Screen;
 
 import javax.swing.*;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        InputPanel inputPanel = new InputPanel();
+
+        /*
         ArrayList<ArrayList<Integer>> tmp = readFile("map.txt");
 
         Board board = new Board(tmp);
@@ -21,8 +25,12 @@ public class Main {
 
 
         //System.out.println(board.getCell(0,5).getAvailable());
-        Panel panel = new Panel();
+
+        BoardPanel panel = new BoardPanel();
         panel.addBoard(board);
+
+
+
 
         JButton button = new JButton("Step");
 
@@ -31,7 +39,7 @@ public class Main {
         panel.add(button);
         panel.add(label);
 
-        Screen screen = new Screen(panel);
+
         button.addActionListener(e -> {
             try {
                 board.step();
@@ -42,8 +50,8 @@ public class Main {
             }
             panel.repaint();
         });
-
-
+*/
+        Screen screen = new Screen(inputPanel);
 
     }
 
