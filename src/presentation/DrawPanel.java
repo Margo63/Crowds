@@ -8,6 +8,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,7 +18,7 @@ public class DrawPanel extends JPanel {
     private int sizeRows = 0;
     private int sizeCols = 0;
     // board to draw
-    private ArrayList<ArrayList<State>> board = new ArrayList<>();
+    private ArrayList<ArrayList<DrawRect>> board = new ArrayList<>();
     // what draw
     private State currentState = State.EMPTY;
 
@@ -29,31 +31,34 @@ public class DrawPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        //System.out.println(board);
         for (int i = 0; i < sizeRows; i++) {
             for (int j = 0; j < sizeCols; j++) {
+                board.get(i).get(j).paint(g);
                 //TODO
                 //draw according array
-                switch (board.get(i).get(j)) {
-                    case EMPTY:
-                        g.drawRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-                        break;
-                    case EXIT:
-                        g.setColor(Color.RED);
-                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-                        g.setColor(Color.BLACK);
-                        break;
-                    case ENTRY:
-                        g.setColor(Color.BLUE);
-                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-                        g.setColor(Color.BLACK);
-                        break;
-                    case OBSTRUCTION:
-                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-                        break;
-
-                }
+//                switch (board.get(i).get(j).getState()) {
+//                    case EMPTY:
+//                        g.drawRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
+//                        break;
+//                    case EXIT:
+//                        g.setColor(Color.RED);
+//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
+//                        g.setColor(Color.BLACK);
+//                        break;
+//                    case ENTRY:
+//                        g.setColor(Color.BLUE);
+//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
+//                        g.setColor(Color.BLACK);
+//                        break;
+//                    case OBSTRUCTION:
+//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
+//                        break;
+//
+//                }
 
             }
+            //System.out.println();
         }
     }
 
@@ -117,7 +122,7 @@ public class DrawPanel extends JPanel {
     }
 
     void resize() {
-        ArrayList<State> resized = new ArrayList<>();
+        //ArrayList<State> resized = new ArrayList<>();
         //System.out.println("in resize");
         try {
             int rows = board.size();
@@ -135,7 +140,14 @@ public class DrawPanel extends JPanel {
             if (rows < sizeRows) {
                 //System.out.println("add row:");
                 while (rows < sizeRows) {
-                    board.add(new ArrayList<>(Collections.nCopies(sizeCols, State.EMPTY)));
+
+                    board.add(new ArrayList<>());
+                    for (int i = 0; i < sizeCols; i++) {
+                        DrawRect rect = new DrawRect(i, rows);
+                        System.out.print(i+" "+rows+"; ");
+                        board.getLast().add(rect);
+                    }
+                    System.out.println();
                     rows++;
                 }
 
@@ -169,8 +181,13 @@ public class DrawPanel extends JPanel {
                 //System.out.println("add col:");
                 while (cols < sizeCols) {
                     for (int i = 0; i < sizeRows; i++) {
-                        board.get(i).add(State.EMPTY);
+                        DrawRect rect = new DrawRect(cols,i);
+                        board.get(i).add(rect);
+                        //board.get(i).getLast().setPosition(cols,i);
+                        this.add(rect);
+                        System.out.print(cols+" "+i+"; ");
                     }
+                    System.out.println();
                     cols++;
                 }
             }
