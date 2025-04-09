@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class DrawPanel extends JPanel {
+public class DrawPanel extends JPanel{
     // size of board
     private int sizeRows = 0;
     private int sizeCols = 0;
@@ -34,28 +34,32 @@ public class DrawPanel extends JPanel {
         //System.out.println(board);
         for (int i = 0; i < sizeRows; i++) {
             for (int j = 0; j < sizeCols; j++) {
-                board.get(i).get(j).paint(g);
+
                 //TODO
                 //draw according array
-//                switch (board.get(i).get(j).getState()) {
-//                    case EMPTY:
-//                        g.drawRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-//                        break;
-//                    case EXIT:
-//                        g.setColor(Color.RED);
-//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-//                        g.setColor(Color.BLACK);
-//                        break;
-//                    case ENTRY:
-//                        g.setColor(Color.BLUE);
-//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-//                        g.setColor(Color.BLACK);
-//                        break;
-//                    case OBSTRUCTION:
-//                        g.fillRect(j * sizeToDraw, i * sizeToDraw, sizeToDraw, sizeToDraw);
-//                        break;
-//
-//                }
+                switch (board.get(i).get(j).getState()) {
+                    case EMPTY:
+                        g.drawRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
+                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
+                        break;
+                    case EXIT:
+                        g.setColor(Color.RED);
+                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
+                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
+                        g.setColor(Color.BLACK);
+                        break;
+                    case ENTRY:
+                        g.setColor(Color.BLUE);
+                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
+                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
+                        g.setColor(Color.BLACK);
+                        break;
+                    case OBSTRUCTION:
+                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
+                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
+                        break;
+
+                }
 
             }
             //System.out.println();
@@ -85,6 +89,7 @@ public class DrawPanel extends JPanel {
         emptyButton.addActionListener(e -> {
             currentState = State.EMPTY;
         });
+
 
         JSpinner rowsSpinner = new JSpinner(new SpinnerNumberModel(sizeRows, 0, 100, 1));
         rowsSpinner.addChangeListener(new ChangeListener() {
@@ -118,7 +123,39 @@ public class DrawPanel extends JPanel {
             }
         });
         this.add(colsSpinner);
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                for (int i = 0; i  < sizeRows; i++) {
+                    for (int j = 0; j < sizeCols; j++) {
+                        if(board.get(i).get(j).contains(e.getX(), e.getY())){
+                            board.get(i).get(j).changeState(currentState);
+                            repaint();
+                        }
+                    }
+                }
+            }
 
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
 
     void resize() {
@@ -144,10 +181,11 @@ public class DrawPanel extends JPanel {
                     board.add(new ArrayList<>());
                     for (int i = 0; i < sizeCols; i++) {
                         DrawRect rect = new DrawRect(i, rows);
-                        System.out.print(i+" "+rows+"; ");
+
+                        //System.out.print(i+" "+rows+"; ");
                         board.getLast().add(rect);
                     }
-                    System.out.println();
+                    //System.out.println();
                     rows++;
                 }
 
@@ -184,10 +222,10 @@ public class DrawPanel extends JPanel {
                         DrawRect rect = new DrawRect(cols,i);
                         board.get(i).add(rect);
                         //board.get(i).getLast().setPosition(cols,i);
-                        this.add(rect);
-                        System.out.print(cols+" "+i+"; ");
+                        //this.add(rect);
+                        //System.out.print(cols+" "+i+"; ");
                     }
-                    System.out.println();
+                    //System.out.println();
                     cols++;
                 }
             }

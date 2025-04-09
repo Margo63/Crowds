@@ -1,9 +1,6 @@
 import analyze.Analyze;
 import model.Board;
-import presentation.DrawPanel;
-import presentation.InputPanel;
-import presentation.BoardPanel;
-import presentation.Screen;
+import presentation.*;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -19,7 +16,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         Screen screen = new Screen();
-
+/*
         ArrayList<ArrayList<Integer>> tmp = readFile("map.txt");
 
         Board board = new Board(tmp);
@@ -60,14 +57,14 @@ public class Main {
             }
         });
         inputPanel.add(buttonNext);
-
+*/
         DrawPanel drawPanel = new DrawPanel();
 
-        screen.addPanel(inputPanel, "input");
-        screen.addPanel(boardPanel,"board");
+      //  screen.addPanel(inputPanel, "input");
+      //  screen.addPanel(boardPanel,"board");
         screen.addPanel(drawPanel,"draw");
 
-        screen.changePanel("input");
+        screen.changePanel("draw");
     }
 
     private static Object buttonAction(Object o) {
