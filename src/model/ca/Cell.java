@@ -1,5 +1,7 @@
-package model;
+package model.ca;
 
+
+import model.State;
 
 public class Cell{
 //    private boolean isAvailable = true;

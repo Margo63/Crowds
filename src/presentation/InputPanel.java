@@ -6,8 +6,7 @@ import java.util.function.Function;
 
 public class InputPanel extends JPanel {
 
-    public InputPanel(
-    ){
+    public InputPanel(){
 
         JButton buttonChooseFile = new JButton("Choose File");
         this.add(buttonChooseFile);
@@ -21,6 +20,7 @@ public class InputPanel extends JPanel {
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 System.out.println("You chose to open this file: " +
                         chooser.getSelectedFile().getAbsolutePath());
+
             }
         });
     }

@@ -1,6 +1,6 @@
 package presentation;
 
-import model.Board;
+import model.ca.Board;
 
 import javax.swing.*;
 import java.awt.*;

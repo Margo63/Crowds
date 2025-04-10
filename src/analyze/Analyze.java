@@ -1,7 +1,6 @@
 package analyze;
 
-import model.Board;
-import model.Cell;
+import model.ca.Board;
 
 public class Analyze {
     private int conflict = 0;

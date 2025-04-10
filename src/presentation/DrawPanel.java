@@ -6,10 +6,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -123,7 +120,7 @@ public class DrawPanel extends JPanel{
             }
         });
         this.add(colsSpinner);
-        this.addMouseListener(new MouseListener() {
+        this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 for (int i = 0; i  < sizeRows; i++) {
@@ -134,26 +131,6 @@ public class DrawPanel extends JPanel{
                         }
                     }
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
             }
         });
     }

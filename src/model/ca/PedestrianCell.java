@@ -1,11 +1,11 @@
-package model;
+package model.ca;
 
 import kotlin.Pair;
+import model.State;
 
 import java.util.ArrayList;
 
 import static model.State.EMPTY;
-import static model.State.OBSTRUCTION;
 
 public class PedestrianCell extends Cell {
 
