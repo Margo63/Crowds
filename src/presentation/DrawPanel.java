@@ -10,7 +10,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class DrawPanel extends JPanel{
+public class DrawPanel extends ViewModelPanel{
     // size of board
     private int sizeRows = 0;
     private int sizeCols = 0;
@@ -64,6 +64,10 @@ public class DrawPanel extends JPanel{
     }
 
     public DrawPanel() {
+
+        //System.out.println(this.getViewModel().getBoard());
+
+
         JButton wallButton = new JButton("Wall");
         JButton exitButton = new JButton("Exit");
         JButton entryButton = new JButton("Entry");

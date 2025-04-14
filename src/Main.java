@@ -30,12 +30,9 @@ public class Main {
         BoardPanel boardPanel = new BoardPanel();
         boardPanel.addBoard(board);
         JButton button = new JButton("Step");
-
         JLabel label = new JLabel();
-
         boardPanel.add(button);
         boardPanel.add(label);
-
 
         button.addActionListener(e -> {
             try {
@@ -49,16 +46,6 @@ public class Main {
         });
 
         InputPanel inputPanel = new InputPanel();
-        JButton buttonDraw = new JButton("draw");
-        buttonDraw.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                screen.changePanel("draw");
-                System.out.println("changed");
-            }
-        });
-        inputPanel.add(buttonDraw);
-
         DrawPanel drawPanel = new DrawPanel();
 
         screen.addPanel(inputPanel, "input");

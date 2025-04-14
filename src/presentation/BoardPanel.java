@@ -5,7 +5,7 @@ import model.ca.Board;
 import javax.swing.*;
 import java.awt.*;
 
-public class BoardPanel extends JPanel {
+public class BoardPanel extends ViewModelPanel {
     private Board board;
 
     @Override
@@ -45,6 +45,10 @@ public class BoardPanel extends JPanel {
             }
            // System.out.println();
         }
+
+    }
+
+    public BoardPanel() {
 
     }
 
