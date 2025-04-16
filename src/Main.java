@@ -1,14 +1,13 @@
 import analyze.Analyze;
 import model.ca.Board;
 import presentation.*;
+import presentation.input.InputDrawPanel;
+import presentation.input.InputFilePanel;
+import presentation.input.InputZonePanel;
+import utils.Constants;
 import utils.ReadFile;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -45,14 +44,16 @@ public class Main {
             boardPanel.repaint();
         });
 
-        InputPanel inputPanel = new InputPanel();
-        DrawPanel drawPanel = new DrawPanel();
+        InputFilePanel inputPanel = new InputFilePanel();
+        InputDrawPanel drawPanel = new InputDrawPanel();
+        InputZonePanel zonePanel = new InputZonePanel();
 
-        screen.addPanel(inputPanel, "input");
-        screen.addPanel(boardPanel,"board");
-        screen.addPanel(drawPanel,"draw");
+        screen.addPanel(inputPanel, Constants.INPUT_FILE);
+        screen.addPanel(boardPanel,Constants.BOARD);
+        screen.addPanel(drawPanel,Constants.INPUT_DRAW);
+        screen.addPanel(zonePanel,Constants.INPUT_ZONE);
 
-        screen.changePanel("input");
+        screen.changePanel(Constants.INPUT_FILE);
     }
 
     private static Object buttonAction(Object o) {

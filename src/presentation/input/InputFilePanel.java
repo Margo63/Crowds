@@ -1,25 +1,20 @@
-package presentation;
+package presentation.input;
 
+import presentation.ViewModelPanel;
+import utils.Constants;
 import utils.ReadFile;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.function.Function;
 
-public class InputPanel extends ViewModelPanel {
+public class InputFilePanel extends ViewModelPanel {
 
-    public InputPanel() {
+    public InputFilePanel() {
         JLabel label = new JLabel("chooose file: ");
-        this.add(label);
 
         JButton buttonChooseFile = new JButton("Choose File");
-        this.add(buttonChooseFile);
-
-
         buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -33,7 +28,8 @@ public class InputPanel extends ViewModelPanel {
                 ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
                 if(!result.isEmpty()){
                     label.setText("chooose file: " + path);
-                    this.getViewModel().setBoard(result);
+                    System.out.println("load int");
+                    this.getViewModel().loadBoardFromInteger(result);
                     repaint();
                 }
             }
@@ -41,13 +37,12 @@ public class InputPanel extends ViewModelPanel {
 
 
         JButton buttonNext = new JButton("Next");
-
-        this.add(buttonNext);
         buttonNext.addActionListener(e -> {
-            this.getScreen().changePanel("draw");
+            this.getScreen().changePanel(Constants.INPUT_DRAW);
         });
 
-        this.setLayout(new GridLayout(2, 1)); // 2 строки, 1 столбец
+
+        this.setLayout(new GridLayout(2, 1));
 
 
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));

@@ -1,6 +1,8 @@
-package presentation;
+package presentation.input;
 
 import model.State;
+import presentation.ViewModelPanel;
+import utils.Constants;
 import utils.DrawCell;
 
 import javax.swing.*;
@@ -9,9 +11,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class DrawPanel extends ViewModelPanel{
+public class InputDrawPanel extends ViewModelPanel {
     // size of board
     private int sizeRows = 0;
     private int sizeCols = 0;
@@ -30,40 +31,16 @@ public class DrawPanel extends ViewModelPanel{
         super.paint(g);
 
         //System.out.println(board);
-        for (int i = 0; i < sizeRows; i++) {
-            for (int j = 0; j < sizeCols; j++) {
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.getFirst().size(); j++) {
                 drawCell.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
-/*
-                switch (board.get(i).get(j).getState()) {
-                    case EMPTY:
-                        g.drawRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
-                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
-                        break;
-                    case EXIT:
-                        g.setColor(Color.RED);
-                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
-                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
-                        g.setColor(Color.BLACK);
-                        break;
-                    case ENTRY:
-                        g.setColor(Color.BLUE);
-                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
-                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
-                        g.setColor(Color.BLACK);
-                        break;
-                    case OBSTRUCTION:
-                        g.fillRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
-                                (int) board.get(i).get(j).getWidth(), (int) board.get(i).get(j).getHeight());
-                        break;
 
-                }
-*/
             }
             //System.out.println();
         }
     }
 
-    public DrawPanel() {
+    public InputDrawPanel() {
 
         //System.out.println(this.getViewModel().getBoard());
 
@@ -85,13 +62,13 @@ public class DrawPanel extends ViewModelPanel{
 
         JButton buttonPrev = new JButton("prev");
         buttonPrev.addActionListener(e-> {
-            this.getScreen().changePanel("input");
+            this.getScreen().changePanel(Constants.INPUT_FILE);
         });
         this.add(buttonPrev);
 
         JButton buttonNext = new JButton("next");
         buttonNext.addActionListener(e-> {
-            this.getScreen().changePanel("board");
+            this.getScreen().changePanel(Constants.INPUT_ZONE);
         });
         this.add(buttonNext);
 
@@ -165,6 +142,9 @@ public class DrawPanel extends ViewModelPanel{
                 }
             }
         });
+
+
+
     }
 
     void resize() {
@@ -246,31 +226,28 @@ public class DrawPanel extends ViewModelPanel{
 
     private void loadBoard() {
         if(this.getViewModel().checkBoard()){
-            ArrayList<ArrayList<Integer>> board = this.getViewModel().getBoard();
+            ArrayList<ArrayList<DrawRect>> board = this.getViewModel().getBoard();
             sizeRows = board.size();
             rowsSpinner.setValue(sizeRows);
             if(sizeRows > 0){
                 sizeCols = board.getFirst().size();
                 colsSpinner.setValue(sizeCols);
             }
-            resize();
+            this.board = board;
+            //resize();
 
-            for (int i = 0; i < board.size(); i++) {
-                for (int j = 0; j < board.get(i).size(); j++) {
-                    this.board.get(i).get(j).changeState(State.getFromInt(board.get(i).get(j)));
-                }
-            }
+//            for (int i = 0; i < board.size(); i++) {
+//                for (int j = 0; j < board.get(i).size(); j++) {
+//                    this.board.get(i).get(j).changeState(State.getFromInt(board.get(i).get(j)));
+//                }
+//            }
             repaint();
         }
     }
 
     private void saveBoard(){
-        ArrayList<ArrayList<Integer>> board = new ArrayList<>();
-        for (int i = 0; i < sizeRows; i++) {
-            for (int j = 0; j < sizeCols; j++) {
-
-            }
-        }
+        //System.out.println("load from draw");
+        getViewModel().setBoard(board);
     }
 
 }

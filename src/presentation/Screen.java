@@ -29,6 +29,7 @@ public class Screen {
         this.cards.add(panel, name);
     }
     public void changePanel(String name){
+        //System.out.println("name = " + name);
         cardLayout.show(cards,name);
     }
 
