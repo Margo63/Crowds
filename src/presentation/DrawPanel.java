@@ -1,6 +1,7 @@
 package presentation;
 
 import model.State;
+import utils.DrawCell;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,9 +20,7 @@ public class DrawPanel extends ViewModelPanel{
     // what draw
     private State currentState = State.EMPTY;
 
-    //size to draw
-    private int sizeToDraw = 10;
-
+    DrawCell drawCell = new DrawCell();
 
     // painting board accroding to size
     @Override
@@ -31,9 +30,8 @@ public class DrawPanel extends ViewModelPanel{
         //System.out.println(board);
         for (int i = 0; i < sizeRows; i++) {
             for (int j = 0; j < sizeCols; j++) {
+                drawCell.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
 
-                //TODO
-                //draw according array
                 switch (board.get(i).get(j).getState()) {
                     case EMPTY:
                         g.drawRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
@@ -72,6 +70,11 @@ public class DrawPanel extends ViewModelPanel{
         JButton exitButton = new JButton("Exit");
         JButton entryButton = new JButton("Entry");
         JButton emptyButton = new JButton("Empty");
+//        JButton check = new JButton("Check");
+//        this.add(check);
+//        check.addActionListener(e ->{
+//            System.out.println(this.getViewModel().getBoard());
+//        });
 
         this.add(wallButton);
         this.add(exitButton);

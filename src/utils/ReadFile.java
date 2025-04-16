@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReadFile {
+
+
     public ArrayList<ArrayList<Integer>> readFile(String filename) {
         ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(filename)))

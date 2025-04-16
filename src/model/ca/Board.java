@@ -36,6 +36,21 @@ public class Board {
 
     }
 
+    public void loadMap(ArrayList<ArrayList<Integer>> start_map){
+        this.start_map = start_map;
+        //board = new Cell[size][size];
+        board = new ArrayList<ArrayList<Cell>>();
+        for (int i = 0; i < start_map.size(); i++) {
+            board.add(new ArrayList<Cell>(start_map.size()));
+            tmp_board.add(new ArrayList<Cell>(start_map.size()));
+            for (int j = 0; j < start_map.size(); j++) {
+                Cell cell = new Cell();
+                cell.setState(State.getFromInt(start_map.get(i).get(j)));
+                board.get(i).add(cell);
+                tmp_board.get(i).add(cell);
+            }
+        }
+    }
     public void addPedestrian(int row, int col) {
         PedestrianCell pedestrianCell = new PedestrianCell();
         pedestrianCell.initGoalMap(start_map);

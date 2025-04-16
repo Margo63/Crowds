@@ -1,6 +1,7 @@
 package presentation;
 
 import model.State;
+import utils.Constants;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,7 @@ import java.awt.event.MouseListener;
 
 public class DrawRect extends Rectangle {
     private State state;
-    private int sizeToDraw = 20;
+    private int sizeToDraw = Constants.SIZE_OF_CELL;
 
     public DrawRect (int x, int y){
         this.state = State.EMPTY;

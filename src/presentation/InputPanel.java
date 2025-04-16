@@ -6,13 +6,18 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.function.Function;
 
 public class InputPanel extends ViewModelPanel {
 
     public InputPanel(){
+        JLabel label = new JLabel("chooose file: ");
+        this.add(label);
+
         JButton buttonChooseFile = new JButton("Choose File");
         this.add(buttonChooseFile);
+
 
         buttonChooseFile.addActionListener(e->{
             JFileChooser chooser = new JFileChooser();
@@ -23,7 +28,14 @@ public class InputPanel extends ViewModelPanel {
             if(returnVal == JFileChooser.APPROVE_OPTION) {
                 //System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 ReadFile readFile = new ReadFile();
-                this.getViewModel().setBoard(readFile.readFile(chooser.getSelectedFile().getAbsolutePath()));
+                String path = chooser.getSelectedFile().getAbsolutePath();
+                ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
+                if(!result.isEmpty()){
+                    label.setText("chooose file: " + path);
+                    this.getViewModel().setBoard(result);
+                    repaint();
+                }
+
             }
         });
 
@@ -37,7 +49,10 @@ public class InputPanel extends ViewModelPanel {
 
         this.add(buttonNext);
         buttonNext.addActionListener(e->{
-           this.getScreen().changePanel("board");
+            if(this.getViewModel().checkBoard()){
+                this.getScreen().changePanel("board");
+            }
+
         });
 
     }
