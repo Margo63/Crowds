@@ -21,6 +21,8 @@ public class DrawPanel extends ViewModelPanel{
     private State currentState = State.EMPTY;
 
     DrawCell drawCell = new DrawCell();
+    JSpinner colsSpinner = new JSpinner(new SpinnerNumberModel(sizeCols, 0, 100, 1));
+    JSpinner rowsSpinner = new JSpinner(new SpinnerNumberModel(sizeRows, 0, 100, 1));
 
     // painting board accroding to size
     @Override
@@ -31,7 +33,7 @@ public class DrawPanel extends ViewModelPanel{
         for (int i = 0; i < sizeRows; i++) {
             for (int j = 0; j < sizeCols; j++) {
                 drawCell.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
-
+/*
                 switch (board.get(i).get(j).getState()) {
                     case EMPTY:
                         g.drawRect((int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY(),
@@ -55,7 +57,7 @@ public class DrawPanel extends ViewModelPanel{
                         break;
 
                 }
-
+*/
             }
             //System.out.println();
         }
@@ -65,11 +67,34 @@ public class DrawPanel extends ViewModelPanel{
 
         //System.out.println(this.getViewModel().getBoard());
 
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadBoard();
+            }
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                saveBoard();
+            }
+        });
 
         JButton wallButton = new JButton("Wall");
         JButton exitButton = new JButton("Exit");
         JButton entryButton = new JButton("Entry");
         JButton emptyButton = new JButton("Empty");
+
+        JButton buttonPrev = new JButton("prev");
+        buttonPrev.addActionListener(e-> {
+            this.getScreen().changePanel("input");
+        });
+        this.add(buttonPrev);
+
+        JButton buttonNext = new JButton("next");
+        buttonNext.addActionListener(e-> {
+            this.getScreen().changePanel("board");
+        });
+        this.add(buttonNext);
+
 //        JButton check = new JButton("Check");
 //        this.add(check);
 //        check.addActionListener(e ->{
@@ -95,7 +120,7 @@ public class DrawPanel extends ViewModelPanel{
         });
 
 
-        JSpinner rowsSpinner = new JSpinner(new SpinnerNumberModel(sizeRows, 0, 100, 1));
+
         rowsSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -111,7 +136,7 @@ public class DrawPanel extends ViewModelPanel{
         });
         this.add(rowsSpinner);
 
-        JSpinner colsSpinner = new JSpinner(new SpinnerNumberModel(sizeCols, 0, 100, 1));
+
         colsSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -218,4 +243,34 @@ public class DrawPanel extends ViewModelPanel{
         }
 
     }
+
+    private void loadBoard() {
+        if(this.getViewModel().checkBoard()){
+            ArrayList<ArrayList<Integer>> board = this.getViewModel().getBoard();
+            sizeRows = board.size();
+            rowsSpinner.setValue(sizeRows);
+            if(sizeRows > 0){
+                sizeCols = board.getFirst().size();
+                colsSpinner.setValue(sizeCols);
+            }
+            resize();
+
+            for (int i = 0; i < board.size(); i++) {
+                for (int j = 0; j < board.get(i).size(); j++) {
+                    this.board.get(i).get(j).changeState(State.getFromInt(board.get(i).get(j)));
+                }
+            }
+            repaint();
+        }
+    }
+
+    private void saveBoard(){
+        ArrayList<ArrayList<Integer>> board = new ArrayList<>();
+        for (int i = 0; i < sizeRows; i++) {
+            for (int j = 0; j < sizeCols; j++) {
+
+            }
+        }
+    }
+
 }

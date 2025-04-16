@@ -4,6 +4,7 @@ import utils.ReadFile;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.function.Function;
 
 public class InputPanel extends ViewModelPanel {
 
-    public InputPanel(){
+    public InputPanel() {
         JLabel label = new JLabel("chooose file: ");
         this.add(label);
 
@@ -19,13 +20,13 @@ public class InputPanel extends ViewModelPanel {
         this.add(buttonChooseFile);
 
 
-        buttonChooseFile.addActionListener(e->{
+        buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                     "txt", "txt");
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
                 //System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 ReadFile readFile = new ReadFile();
                 String path = chooser.getSelectedFile().getAbsolutePath();
@@ -35,28 +36,34 @@ public class InputPanel extends ViewModelPanel {
                     this.getViewModel().setBoard(result);
                     repaint();
                 }
-
             }
         });
 
-        JButton buttonDraw = new JButton("draw");
-        buttonDraw.addActionListener(e-> {
-            this.getScreen().changePanel("draw");
-        });
 
-        this.add(buttonDraw);
         JButton buttonNext = new JButton("Next");
 
         this.add(buttonNext);
-        buttonNext.addActionListener(e->{
-            if(this.getViewModel().checkBoard()){
-                this.getScreen().changePanel("board");
-            }
-
+        buttonNext.addActionListener(e -> {
+            this.getScreen().changePanel("draw");
         });
 
-    }
+        this.setLayout(new GridLayout(2, 1)); // 2 строки, 1 столбец
 
+
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row1.add(label);
+        row1.add(buttonChooseFile);
+
+        // Вторая строка: 4 кнопки
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row2.add(buttonNext);
+
+
+        this.add(row1);
+        this.add(row2);
+
+
+    }
 
 
 }
