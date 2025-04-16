@@ -6,6 +6,8 @@ import utils.DrawCell;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class BoardPanel extends ViewModelPanel {
     private Board board;
@@ -15,7 +17,7 @@ public class BoardPanel extends ViewModelPanel {
         super.paint(g);
         //System.out.println("paint");
         //board.printBoard();
-        if(this.getViewModel().checkBoard()){
+        if(this.getViewModel().checkBoard() && board != null) {
             for (int i = 0; i < board.getAmountOfRows(); i++) {
                 for (int j = 0; j < board.getAmountOfCols(); j++) {
                     drawCell.draw(g,board.getCell(i,j).getState(), j* Constants.SIZE_OF_CELL, i* Constants.SIZE_OF_CELL);
@@ -55,10 +57,20 @@ public class BoardPanel extends ViewModelPanel {
     }
 
     public BoardPanel() {
-
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadBoard();
+            }
+        });
     }
 
+    private void loadBoard() {
+        if(getViewModel().checkBoard())
+            this.board = new Board(this.getViewModel().getBoardInteger());
+        repaint();
 
+    }
     public void addBoard(Board board) {
         this.board = board;
     }

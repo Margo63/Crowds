@@ -27,7 +27,7 @@ public class Main {
         //System.out.println(board.getCell(0,5).getAvailable());
 
         BoardPanel boardPanel = new BoardPanel();
-        boardPanel.addBoard(board);
+        //boardPanel.addBoard(board);
         JButton button = new JButton("Step");
         JLabel label = new JLabel();
         boardPanel.add(button);

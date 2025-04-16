@@ -3,13 +3,15 @@ package presentation;
 import model.State;
 import model.ca.Cell;
 import presentation.input.DrawRect;
+import utils.Constants;
 
 import java.util.ArrayList;
 
 public class ViewModel {
     private ArrayList<ArrayList<DrawRect>> board;
     private ArrayList<ArrayList<Integer>> zones;
-
+    private String[] pages = {Constants.INPUT_FILE,Constants.INPUT_DRAW, Constants.INPUT_ZONE, Constants.BOARD};
+    private int ind_page = 0;
     public void setBoard(ArrayList<ArrayList<DrawRect>> board) {
 
         this.board = board;
@@ -37,6 +39,16 @@ public class ViewModel {
     public ArrayList<ArrayList<DrawRect>> getBoard() {
         return board;
     }
+    public ArrayList<ArrayList<Integer>> getBoardInteger() {
+        ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
+        for (int i = 0; i < board.size(); i++) {
+            tmp.add(new ArrayList<>(board.size()));
+            for (int j = 0; j < board.get(i).size(); j++) {
+                tmp.get(i).add(board.get(i).get(j).getState().getValue());
+            }
+        }
+        return tmp;
+    }
 
     public ArrayList<ArrayList<Integer>> getZones() {
         return zones;
@@ -54,7 +66,7 @@ public class ViewModel {
     }
 
     private void loadZone(){
-        if(this.zones==null) {
+        if(this.zones==null || this.zones.size()!=board.size()) {
             this.zones = new ArrayList<>();
             for(int i = 0; i < board.size(); i++) {
                 this.zones.add(new ArrayList<>(board.size()));
@@ -63,6 +75,7 @@ public class ViewModel {
                 }
             }
         }
-        System.out.println("load:"+zones);
+        //System.out.println("load:"+zones);
     }
+
 }

@@ -7,6 +7,8 @@ import utils.Constants;
 import utils.DrawCell;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class InputZonePanel extends ViewModelPanel {
     private ArrayList<ArrayList<DrawRect>> board = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> zones = new ArrayList<>();
     private Point start, end;
-
+    private int zone=0;
 
     @Override
     public void paint(Graphics g) {
@@ -33,12 +35,29 @@ public class InputZonePanel extends ViewModelPanel {
             g.drawRect(x,y,width,height);
         }
 
+        for (int i = 0; i < zones.size(); i++) {
+            for (int j = 0; j < zones.get(i).size(); j++) {
+
+                FontMetrics fm = g.getFontMetrics();
+                int textWidth = fm.stringWidth(String.valueOf(zones.get(i).get(j)));
+                int textHeight = fm.getHeight();
+
+                // Центр текста по горизонтали и вертикали внутри прямоугольника
+                int textX = (int) (board.get(i).get(j).x + (board.get(i).get(j).getWidth() - textWidth) / 2);
+                int textY = (int) (board.get(i).get(j).y + (board.get(i).get(j).getHeight() + textHeight) / 2 - fm.getDescent());
+
+                // Рисуем текст
+                g.drawString(String.valueOf(zones.get(i).get(j)), textX, textY);
+            }
+        }
+
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
                 drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
             }
             //System.out.println();
         }
+
 
     }
 
@@ -52,25 +71,36 @@ public class InputZonePanel extends ViewModelPanel {
 
             @Override
             public void componentHidden(ComponentEvent e) {
-
+                save();
             }
         });
 
         JLabel label = new JLabel("zone: ");
         this.add(label);
 
-        TextField textField = new TextField("1");
-        this.add(textField);
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        spinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                try {
+                    zone = (int) spinner.getValue();
+                } catch (Exception err) {
+                    System.out.println(err.getMessage());
+                }
+
+            }
+        });
+        this.add(spinner);
 
         JButton buttonPrev = new JButton("prev");
         buttonPrev.addActionListener(e-> {
-
+            this.getScreen().changePanel(Constants.INPUT_DRAW);
         });
         this.add(buttonPrev);
 
         JButton buttonNext = new JButton("next");
         buttonNext.addActionListener(e-> {
-
+            this.getScreen().changePanel(Constants.BOARD);
         });
         this.add(buttonNext);
 
@@ -95,13 +125,13 @@ public class InputZonePanel extends ViewModelPanel {
 
                         if(rect.contains(board.get(i).get(j))){
 
-                            //zones.get(i).set(j,9);
+                            zones.get(i).set(j,zone);
 
                         }
                     }
                 }
 
-                System.out.println(zones);
+                //System.out.println(zones);
 
                 start = null;
                 end = null;
@@ -125,6 +155,11 @@ public class InputZonePanel extends ViewModelPanel {
             this.zones = this.getViewModel().getZones();
 
             repaint();
+        }
+    }
+    private void save(){
+        if(!this.zones.isEmpty()){
+            this.getViewModel().setZones(zones);
         }
     }
 }
