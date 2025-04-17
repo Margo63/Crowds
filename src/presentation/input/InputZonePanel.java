@@ -67,6 +67,7 @@ public class InputZonePanel extends ViewModelPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 loadBoard();
+                loadButtons();
             }
 
             @Override
@@ -92,17 +93,6 @@ public class InputZonePanel extends ViewModelPanel {
         });
         this.add(spinner);
 
-        JButton buttonPrev = new JButton("prev");
-        buttonPrev.addActionListener(e-> {
-            this.getScreen().changePanel(Constants.INPUT_DRAW);
-        });
-        this.add(buttonPrev);
-
-        JButton buttonNext = new JButton("next");
-        buttonNext.addActionListener(e-> {
-            this.getScreen().changePanel(Constants.BOARD);
-        });
-        this.add(buttonNext);
 
         this.addMouseListener(new MouseAdapter() {
             @Override

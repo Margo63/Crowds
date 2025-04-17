@@ -24,8 +24,9 @@ public class Screen {
     }
 
     public void addPanel(ViewModelPanel panel, String name){
+        this.viewModel.addScreen(this);
         panel.addViewModel(this.viewModel);
-        panel.addScreen(this);
+
         this.cards.add(panel, name);
     }
     public void changePanel(String name){

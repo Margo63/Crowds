@@ -48,6 +48,7 @@ public class InputDrawPanel extends ViewModelPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 loadBoard();
+                loadButtons();
             }
             @Override
             public void componentHidden(ComponentEvent e) {
@@ -60,17 +61,6 @@ public class InputDrawPanel extends ViewModelPanel {
         JButton entryButton = new JButton("Entry");
         JButton emptyButton = new JButton("Empty");
 
-        JButton buttonPrev = new JButton("prev");
-        buttonPrev.addActionListener(e-> {
-            this.getScreen().changePanel(Constants.INPUT_FILE);
-        });
-        this.add(buttonPrev);
-
-        JButton buttonNext = new JButton("next");
-        buttonNext.addActionListener(e-> {
-            this.getScreen().changePanel(Constants.INPUT_ZONE);
-        });
-        this.add(buttonNext);
 
 //        JButton check = new JButton("Check");
 //        this.add(check);

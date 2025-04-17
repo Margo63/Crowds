@@ -13,8 +13,9 @@ public class InputFilePanel extends ViewModelPanel {
 
     public InputFilePanel() {
         JLabel label = new JLabel("chooose file: ");
-
+        this.add(label);
         JButton buttonChooseFile = new JButton("Choose File");
+        this.add(buttonChooseFile);
         buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -36,26 +37,20 @@ public class InputFilePanel extends ViewModelPanel {
         });
 
 
-        JButton buttonNext = new JButton("Next");
-        buttonNext.addActionListener(e -> {
-            this.getScreen().changePanel(Constants.INPUT_DRAW);
-        });
 
 
-        this.setLayout(new GridLayout(2, 1));
+//        this.setLayout(new GridLayout(2, 1));
+//
+//
+//        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+//        row1.add(label);
+//        row1.add(buttonChooseFile);
 
 
-        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        row1.add(label);
-        row1.add(buttonChooseFile);
-
-        // Вторая строка: 4 кнопки
-        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        row2.add(buttonNext);
 
 
-        this.add(row1);
-        this.add(row2);
+ //       this.add(row1);
+//        this.add(row2);
 
 
     }

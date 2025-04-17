@@ -61,6 +61,7 @@ public class BoardPanel extends ViewModelPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 loadBoard();
+                loadButtons();
             }
         });
     }
