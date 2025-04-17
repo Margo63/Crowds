@@ -3,6 +3,7 @@ import model.ca.Board;
 import presentation.*;
 import presentation.input.InputDrawPanel;
 import presentation.input.InputFilePanel;
+import presentation.input.pedestrian.InputPedestrianPanel;
 import presentation.input.InputZonePanel;
 import utils.Constants;
 import utils.ReadFile;
@@ -47,11 +48,13 @@ public class Main {
         InputFilePanel inputPanel = new InputFilePanel();
         InputDrawPanel drawPanel = new InputDrawPanel();
         InputZonePanel zonePanel = new InputZonePanel();
+        InputPedestrianPanel pedestrianPanel = new InputPedestrianPanel();
 
         screen.addPanel(inputPanel, Constants.INPUT_FILE);
         screen.addPanel(boardPanel,Constants.BOARD);
         screen.addPanel(drawPanel,Constants.INPUT_DRAW);
         screen.addPanel(zonePanel,Constants.INPUT_ZONE);
+        screen.addPanel(pedestrianPanel,Constants.INPUT_PEDESTRIAN);
 
         screen.changePanel(Constants.INPUT_FILE);
     }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ViewModel {
     private ArrayList<ArrayList<DrawRect>> board;
     private ArrayList<ArrayList<Integer>> zones;
-    private String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE, Constants.BOARD};
+    private String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
     private int ind_page = 0;
     private Screen screen;
 
@@ -21,7 +21,6 @@ public class ViewModel {
     }
 
     public void loadBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
-
 
         ArrayList<ArrayList<DrawRect>> tmp = new ArrayList<>();
         for (int i = 0; i < board.size(); i++) {
@@ -93,7 +92,7 @@ public class ViewModel {
         if (ind_page < pages.length - 1) {
             ind_page++;
             screen.changePanel(pages[ind_page]);
-            System.out.println("clicked on next: " + ind_page);
+            //System.out.println("clicked on next: " + ind_page);
         }
     }
 
@@ -105,14 +104,14 @@ public class ViewModel {
     }
 
     public boolean checkNextButton() {
-        System.out.println("check next: " + ind_page);
+        //System.out.println("check next: " + ind_page);
         if (ind_page == pages.length - 1)
             return false;
         return true;
     }
 
     public boolean checkPreviousButton() {
-        System.out.println("check prev: " + ind_page);
+        //System.out.println("check prev: " + ind_page);
         if (ind_page == 0 || ind_page == pages.length - 1)
             return false;
         return true;

@@ -67,7 +67,6 @@ public class InputZonePanel extends ViewModelPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 loadBoard();
-                loadButtons();
             }
 
             @Override

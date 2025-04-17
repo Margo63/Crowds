@@ -48,7 +48,6 @@ public class InputDrawPanel extends ViewModelPanel {
             @Override
             public void componentShown(ComponentEvent e) {
                 loadBoard();
-                loadButtons();
             }
             @Override
             public void componentHidden(ComponentEvent e) {

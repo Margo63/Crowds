@@ -3,6 +3,8 @@ package presentation;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class ViewModelPanel extends JPanel {
     private ViewModel viewModel;
@@ -23,7 +25,12 @@ public class ViewModelPanel extends JPanel {
             viewModel.previous();
         });
 
-
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadButtons();
+            }
+        });
 
 
     }
@@ -38,7 +45,7 @@ public class ViewModelPanel extends JPanel {
     public ViewModel getViewModel() {
         return viewModel;
     }
-    public void loadButtons() {
+    private void loadButtons() {
         next.setVisible(viewModel.checkNextButton());
         previous.setVisible(viewModel.checkPreviousButton());
         repaint();
