@@ -101,7 +101,7 @@ public class PedestrianCell extends Cell {
         }
         Pair<Integer, Integer> current_goal = goalList.getFirst();
         goalMap.get(current_goal.getFirst()).set(current_goal.getSecond(), 0);
-        printMap();
+        //printMap();
     }
 
     public void printMap() {

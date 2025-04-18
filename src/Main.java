@@ -57,6 +57,7 @@ public class Main {
         screen.addPanel(pedestrianPanel,Constants.INPUT_PEDESTRIAN);
 
         screen.changePanel(Constants.INPUT_FILE);
+
     }
 
     private static Object buttonAction(Object o) {

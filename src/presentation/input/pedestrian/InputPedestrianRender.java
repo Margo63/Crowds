@@ -8,7 +8,7 @@ public class InputPedestrianRender extends JLabel implements ListCellRenderer<Pe
     @Override
     public Component getListCellRendererComponent(JList<? extends PedestrianInput> list, PedestrianInput value, int index, boolean isSelected, boolean cellHasFocus) {
         if (value != null) {
-            setText("точка столбец: " + value.pedestrianEntry.x + ", ряд: " + value.pedestrianEntry.y);
+            setText("вход столбец: " + value.pedestrianEntry.x + ", ряд: " + value.pedestrianEntry.y);
         } else {
             setText("");
         }
