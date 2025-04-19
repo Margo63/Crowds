@@ -9,5 +9,5 @@ public class PedestrianInput {
     public Point pedestrianExit;
     public int amountOfPedestrian = 0;
     public long timeIn = 0;
-    public ArrayList<Point> way;
+    public ArrayList<Point> way = new ArrayList<>();
 }
