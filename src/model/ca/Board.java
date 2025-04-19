@@ -3,6 +3,7 @@ package model.ca;
 import kotlin.Pair;
 import model.State;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,20 +21,20 @@ public class Board {
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
     public Board(ArrayList<ArrayList<Integer>> start_map) {
-        this.start_map = start_map;
-        //board = new Cell[size][size];
-        board = new ArrayList<ArrayList<Cell>>();
-        for (int i = 0; i < start_map.size(); i++) {
-            board.add(new ArrayList<Cell>(start_map.size()));
-            tmp_board.add(new ArrayList<Cell>(start_map.size()));
-            for (int j = 0; j < start_map.size(); j++) {
-                Cell cell = new Cell();
-                cell.setState(State.getFromInt(start_map.get(i).get(j)));
-                board.get(i).add(cell);
-                tmp_board.get(i).add(cell);
-            }
-        }
-
+//        this.start_map = start_map;
+//        //board = new Cell[size][size];
+//        board = new ArrayList<ArrayList<Cell>>();
+//        for (int i = 0; i < start_map.size(); i++) {
+//            board.add(new ArrayList<Cell>(start_map.size()));
+//            tmp_board.add(new ArrayList<Cell>(start_map.size()));
+//            for (int j = 0; j < start_map.getFirst().size(); j++) {
+//                Cell cell = new Cell();
+//                cell.setState(State.getFromInt(start_map.get(i).get(j)));
+//                board.get(i).add(cell);
+//                tmp_board.get(i).add(cell);
+//            }
+//        }
+        loadMap(start_map);
     }
 
     public void loadMap(ArrayList<ArrayList<Integer>> start_map){
@@ -43,7 +44,7 @@ public class Board {
         for (int i = 0; i < start_map.size(); i++) {
             board.add(new ArrayList<Cell>(start_map.size()));
             tmp_board.add(new ArrayList<Cell>(start_map.size()));
-            for (int j = 0; j < start_map.size(); j++) {
+            for (int j = 0; j < start_map.getFirst().size(); j++) {
                 Cell cell = new Cell();
                 cell.setState(State.getFromInt(start_map.get(i).get(j)));
                 board.get(i).add(cell);
@@ -51,19 +52,13 @@ public class Board {
             }
         }
     }
-    public void addPedestrian(int row, int col) {
+
+    public void addPedestrian(int row, int col, ArrayList<Pair<Integer, Integer>> way, Point exit) {
         PedestrianCell pedestrianCell = new PedestrianCell();
         pedestrianCell.initGoalMap(start_map);
-        ArrayList<Pair<Integer, Integer>> tmp_list = new ArrayList() {
-            {
-                addLast(new Pair<>(5,9));
-                addLast(new Pair<>(8,2));
-            }
-        };
 
-
-        pedestrianCell.setGoalList(tmp_list);
-        pedestrianCell.setExitGoal(10, 5);
+        pedestrianCell.setGoalList(way);
+        pedestrianCell.setExitGoal(exit.y, exit.x);
 
 
         pedestrianCell.loadGoalMap();

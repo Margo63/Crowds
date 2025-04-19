@@ -1,7 +1,7 @@
 package model;
 
 public enum State {
-    ENTRY(1), EXIT(2), PEDESTRIAN(3), OBSTRUCTION(-1), EMPTY(0);
+    ENTRY(-3), EXIT(-2), PEDESTRIAN(3), OBSTRUCTION(-1), EMPTY(0);
 
     private final int id;
 

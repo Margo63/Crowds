@@ -209,7 +209,13 @@ public class InputPedestrianPanel extends ViewModelPanel {
     }
 
     private void saveBoard() {
-
+        if (this.getViewModel()!=null) {
+            ArrayList<PedestrianInput> items = new ArrayList<>();
+            for (int i = 0; i < comboBox.getItemCount(); i++) {
+                items.add(comboBox.getItemAt(i));
+            }
+            this.getViewModel().setPedestrians(items);
+        }
     }
 
     private void loadExits() {

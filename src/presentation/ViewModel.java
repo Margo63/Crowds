@@ -3,6 +3,7 @@ package presentation;
 import model.State;
 import model.ca.Cell;
 import presentation.input.DrawRect;
+import presentation.input.pedestrian.PedestrianInput;
 import utils.Constants;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class ViewModel {
     private String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
     private int ind_page = 0;
     private Screen screen;
+    private ArrayList<PedestrianInput> pedestrians;
 
     public void setBoard(ArrayList<ArrayList<DrawRect>> board) {
 
@@ -45,8 +47,10 @@ public class ViewModel {
         for (int i = 0; i < board.size(); i++) {
             tmp.add(new ArrayList<>(board.size()));
             for (int j = 0; j < board.get(i).size(); j++) {
+                //System.out.print(board.get(i).get(j).getState()+" :"+ board.get(i).get(j).getState().getValue() +"; ");
                 tmp.get(i).add(board.get(i).get(j).getState().getValue());
             }
+            //System.out.println();
         }
         return tmp;
     }
@@ -75,6 +79,15 @@ public class ViewModel {
         return !board.isEmpty();
     }
 
+    public ArrayList<PedestrianInput> getPedestrians() {
+        return pedestrians;
+    }
+
+    public void setPedestrians(ArrayList<PedestrianInput> pedestrians) {
+        this.pedestrians = pedestrians;
+    }
+
+    //init zones on panel
     private void loadZone() {
         if (this.zones == null || this.zones.size() != board.size()) {
             this.zones = new ArrayList<>();

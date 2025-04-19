@@ -18,32 +18,16 @@ public class Main {
 
         Screen screen = new Screen();
 
-        ArrayList<ArrayList<Integer>> tmp = new ReadFile().readFile("map.txt");
 
-        Board board = new Board(tmp);
-        Analyze analyze = new Analyze();
-        board.addPedestrian(2,3);
+
+
 
 
         //System.out.println(board.getCell(0,5).getAvailable());
 
         BoardPanel boardPanel = new BoardPanel();
         //boardPanel.addBoard(board);
-        JButton button = new JButton("Step");
-        JLabel label = new JLabel();
-        boardPanel.add(button);
-        boardPanel.add(label);
 
-        button.addActionListener(e -> {
-            try {
-                board.step();
-                analyze.analyze_board(board);
-                label.setText("количество конфликтов: " + analyze.getConflict());
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
-            boardPanel.repaint();
-        });
 
         InputFilePanel inputPanel = new InputFilePanel();
         InputDrawPanel drawPanel = new InputDrawPanel();

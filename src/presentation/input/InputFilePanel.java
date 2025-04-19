@@ -29,7 +29,7 @@ public class InputFilePanel extends ViewModelPanel {
                 ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
                 if(!result.isEmpty()){
                     label.setText("chooose file: " + path);
-                    System.out.println("load int");
+                    //System.out.println("load int");
                     this.getViewModel().loadBoardFromInteger(result);
                     repaint();
                 }
