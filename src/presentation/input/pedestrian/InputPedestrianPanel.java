@@ -3,6 +3,7 @@ package presentation.input.pedestrian;
 import model.State;
 import presentation.ViewModelPanel;
 import presentation.input.DrawRect;
+import presentation.models.PedestrianInput;
 import utils.Constants;
 import utils.DrawCell;
 
@@ -12,9 +13,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class InputPedestrianPanel extends ViewModelPanel {
@@ -68,6 +67,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
     public InputPedestrianPanel() {
         this.add(Box.createVerticalStrut(500));
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {

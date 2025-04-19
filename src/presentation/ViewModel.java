@@ -1,9 +1,8 @@
 package presentation;
 
 import model.State;
-import model.ca.Cell;
 import presentation.input.DrawRect;
-import presentation.input.pedestrian.PedestrianInput;
+import presentation.models.PedestrianInput;
 import utils.Constants;
 
 import java.util.ArrayList;

@@ -1,5 +1,7 @@
 package presentation.input.pedestrian;
 
+import presentation.models.PedestrianInput;
+
 import javax.swing.*;
 import java.awt.*;
 

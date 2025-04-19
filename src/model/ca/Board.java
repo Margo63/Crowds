@@ -37,7 +37,7 @@ public class Board {
         loadMap(start_map);
     }
 
-    public void loadMap(ArrayList<ArrayList<Integer>> start_map){
+    public void loadMap(ArrayList<ArrayList<Integer>> start_map) {
         this.start_map = start_map;
         //board = new Cell[size][size];
         board = new ArrayList<ArrayList<Cell>>();
@@ -53,7 +53,7 @@ public class Board {
         }
     }
 
-    public void addPedestrian(int row, int col, ArrayList<Pair<Integer, Integer>> way, Point exit) {
+    public void addPedestrian(Point entry, ArrayList<Pair<Integer, Integer>> way, Point exit) {
         PedestrianCell pedestrianCell = new PedestrianCell();
         pedestrianCell.initGoalMap(start_map);
 
@@ -63,8 +63,34 @@ public class Board {
 
         pedestrianCell.loadGoalMap();
 
-        board.get(row).set(col, pedestrianCell);
-        tmp_board.get(row).set(col, pedestrianCell);
+        //check up
+        if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
+            board.get(entry.y - 1).set(entry.x, pedestrianCell);
+            tmp_board.get(entry.y - 1).set(entry.x, pedestrianCell);
+            return;
+        }
+
+        //check down
+        if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
+            board.get(entry.y + 1).set(entry.x, pedestrianCell);
+            tmp_board.get(entry.y + 1).set(entry.x, pedestrianCell);
+            return;
+        }
+
+        //check left
+        if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
+            board.get(entry.y).set(entry.x - 1, pedestrianCell);
+            tmp_board.get(entry.y).set(entry.x - 1, pedestrianCell);
+            return;
+        }
+
+        //check right
+        if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
+            board.get(entry.y).set(entry.x + 1, pedestrianCell);
+            tmp_board.get(entry.y).set(entry.x + 1, pedestrianCell);
+            return;
+        }
+
 
     }
 
@@ -106,17 +132,17 @@ public class Board {
 
         ArrayList<Integer> arr = new ArrayList<>();
 
-        if(up.getAvailable()){
+        if (up.getAvailable()) {
             arr.add(up_value);
         }
 
-        if(down.getAvailable()){
+        if (down.getAvailable()) {
             arr.add(down_value);
         }
-        if(left.getAvailable()){
+        if (left.getAvailable()) {
             arr.add(left_value);
         }
-        if(right.getAvailable()){
+        if (right.getAvailable()) {
             arr.add(right_value);
         }
 
