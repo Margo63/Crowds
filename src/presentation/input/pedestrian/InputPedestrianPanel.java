@@ -2,7 +2,7 @@ package presentation.input.pedestrian;
 
 import model.State;
 import presentation.ViewModelPanel;
-import presentation.input.DrawRect;
+import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
 import utils.Constants;
 import utils.DrawCell;
@@ -18,7 +18,7 @@ import java.util.Date;
 
 public class InputPedestrianPanel extends ViewModelPanel {
     // board to draw
-    private ArrayList<ArrayList<DrawRect>> board = new ArrayList<>();
+    private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     //list of entery
     private ArrayList<PedestrianInput> enteries = new ArrayList<>();
 

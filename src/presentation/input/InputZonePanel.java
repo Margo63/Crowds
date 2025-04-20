@@ -1,9 +1,8 @@
 package presentation.input;
 
-import model.State;
 import presentation.ViewModel;
 import presentation.ViewModelPanel;
-import utils.Constants;
+import presentation.models.InputCell;
 import utils.DrawCell;
 
 import javax.swing.*;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 public class InputZonePanel extends ViewModelPanel {
 
     DrawCell drawCell = new DrawCell();
-    private ArrayList<ArrayList<DrawRect>> board = new ArrayList<>();
+    private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> zones = new ArrayList<>();
     private Point start, end;
     private int zone=0;

@@ -1,21 +1,21 @@
 package presentation;
 
 import model.State;
-import presentation.input.DrawRect;
+import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
 import utils.Constants;
 
 import java.util.ArrayList;
 
 public class ViewModel {
-    private ArrayList<ArrayList<DrawRect>> board;
+    private ArrayList<ArrayList<InputCell>> board;
     private ArrayList<ArrayList<Integer>> zones;
     private String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
     private int ind_page = 0;
     private Screen screen;
     private ArrayList<PedestrianInput> pedestrians;
 
-    public void setBoard(ArrayList<ArrayList<DrawRect>> board) {
+    public void setBoard(ArrayList<ArrayList<InputCell>> board) {
 
         this.board = board;
         loadZone();
@@ -23,11 +23,11 @@ public class ViewModel {
 
     public void loadBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
 
-        ArrayList<ArrayList<DrawRect>> tmp = new ArrayList<>();
+        ArrayList<ArrayList<InputCell>> tmp = new ArrayList<>();
         for (int i = 0; i < board.size(); i++) {
             tmp.add(new ArrayList<>(board.size()));
             for (int j = 0; j < board.get(i).size(); j++) {
-                DrawRect rect = new DrawRect(j, i);
+                InputCell rect = new InputCell(j, i);
                 rect.changeState(State.getFromInt(board.get(i).get(j)));
                 tmp.get(i).add(rect);
             }
@@ -37,7 +37,7 @@ public class ViewModel {
         loadZone();
     }
 
-    public ArrayList<ArrayList<DrawRect>> getBoard() {
+    public ArrayList<ArrayList<InputCell>> getBoard() {
         return board;
     }
 

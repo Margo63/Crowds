@@ -2,7 +2,7 @@ package presentation.input;
 
 import model.State;
 import presentation.ViewModelPanel;
-import utils.Constants;
+import presentation.models.InputCell;
 import utils.DrawCell;
 
 import javax.swing.*;
@@ -17,7 +17,7 @@ public class InputDrawPanel extends ViewModelPanel {
     private int sizeRows = 0;
     private int sizeCols = 0;
     // board to draw
-    private ArrayList<ArrayList<DrawRect>> board = new ArrayList<>();
+    private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     // what draw
     private State currentState = State.EMPTY;
 
@@ -158,7 +158,7 @@ public class InputDrawPanel extends ViewModelPanel {
 
                     board.add(new ArrayList<>());
                     for (int i = 0; i < sizeCols; i++) {
-                        DrawRect rect = new DrawRect(i, rows);
+                        InputCell rect = new InputCell(i, rows);
 
                         //System.out.print(i+" "+rows+"; ");
                         board.getLast().add(rect);
@@ -197,7 +197,7 @@ public class InputDrawPanel extends ViewModelPanel {
                 //System.out.println("add col:");
                 while (cols < sizeCols) {
                     for (int i = 0; i < sizeRows; i++) {
-                        DrawRect rect = new DrawRect(cols,i);
+                        InputCell rect = new InputCell(cols,i);
                         board.get(i).add(rect);
                         //board.get(i).getLast().setPosition(cols,i);
                         //this.add(rect);
@@ -215,7 +215,7 @@ public class InputDrawPanel extends ViewModelPanel {
 
     private void loadBoard() {
         if(this.getViewModel().checkBoard()){
-            ArrayList<ArrayList<DrawRect>> board = this.getViewModel().getBoard();
+            ArrayList<ArrayList<InputCell>> board = this.getViewModel().getBoard();
             sizeRows = board.size();
             rowsSpinner.setValue(sizeRows);
             if(sizeRows > 0){
