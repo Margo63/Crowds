@@ -115,6 +115,8 @@ public class BoardPanel extends ViewModelPanel {
 
     private void loadBoard() {
         if (getViewModel().checkBoard()) {
+            analyze.loadZones(getViewModel().getZones());
+
             queue = new ArrayList<>();
             this.board = new Board(this.getViewModel().getBoardInteger());
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrians();
@@ -159,7 +161,7 @@ public class BoardPanel extends ViewModelPanel {
         try {
             board.step();
             analyze.analyze_board(board);
-            label.setText("количество конфликтов: " + analyze.getConflict());
+            label.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getAmountPedestrianInZone());
 
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
