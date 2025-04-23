@@ -1,5 +1,6 @@
 package presentation.input;
 
+import model.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import utils.Constants;
@@ -33,7 +34,12 @@ public class InputZonePanel extends ViewModelPanel {
 
             g.drawRect(x, y, width, height);
         }
-
+        //draw board
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.getFirst().size(); j++) {
+                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
+            }
+        }
         //draw zone index on board
         for (int i = 0; i < zones.size(); i++) {
             for (int j = 0; j < zones.get(i).size(); j++) {
@@ -46,13 +52,6 @@ public class InputZonePanel extends ViewModelPanel {
                 int textY = (int) (board.get(i).get(j).getY() + (board.get(i).get(j).getHeight() + textHeight) / 2 - fm.getDescent());
 
                 g.drawString(String.valueOf(zones.get(i).get(j)), textX, textY);
-            }
-        }
-
-        //draw board
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.getFirst().size(); j++) {
-                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
             }
         }
 
@@ -111,7 +110,7 @@ public class InputZonePanel extends ViewModelPanel {
                     for (int j = 0; j < board.get(i).size(); j++) {
                         Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
                                 board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
-                        if (rect.contains(cellRectangle)) {
+                        if (rect.contains(cellRectangle) && board.get(i).get(j).getState() == State.EMPTY) {
                             zones.get(i).set(j, zoneIndex);
 
                         }
