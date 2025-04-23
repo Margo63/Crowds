@@ -28,7 +28,7 @@ public class ViewModel {
             tmp.add(new ArrayList<>(board.size()));
             for (int j = 0; j < board.get(i).size(); j++) {
                 InputCell rect = new InputCell(j, i);
-                rect.changeState(State.getFromInt(board.get(i).get(j)));
+                rect.setState(State.getFromInt(board.get(i).get(j)));
                 tmp.get(i).add(rect);
             }
         }

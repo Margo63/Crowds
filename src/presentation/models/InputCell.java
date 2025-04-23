@@ -3,17 +3,14 @@ package presentation.models;
 import model.State;
 import utils.Constants;
 
-import java.awt.*;
-
 public class InputCell {
     private State state;
-    private int sizeToDraw = Constants.SIZE_OF_CELL;
     private int x,y,width = Constants.SIZE_OF_CELL,height=Constants.SIZE_OF_CELL;
 
     public InputCell(int x, int y){
         this.state = State.EMPTY;
-        this.x = x * sizeToDraw;
-        this.y = y * sizeToDraw;
+        this.x = x * Constants.SIZE_OF_CELL;
+        this.y = y * Constants.SIZE_OF_CELL;
 
     }
 
@@ -21,7 +18,7 @@ public class InputCell {
         return state;
     }
 
-    public void changeState(State state){
+    public void setState(State state){
         this.state = state;
     }
 

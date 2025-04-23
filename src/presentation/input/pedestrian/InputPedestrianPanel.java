@@ -21,7 +21,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
     private ArrayList<PedestrianInput> enteries = new ArrayList<>();
 
     //
-    JComboBox<PedestrianInput> comboBox;
+    JComboBox<PedestrianInput> comboBoxEntries;
     JComboBox<Point> comboBoxExits;
     DrawCell drawCell = new DrawCell();
 
@@ -38,7 +38,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             //System.out.println();
         }
         g.setColor(Color.RED);
-        PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+        PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
         if (pedestrianInput != null) {
             Point selectedPoint = pedestrianInput.pedestrianEntry;
             if (selectedPoint != null) {
@@ -78,9 +78,9 @@ public class InputPedestrianPanel extends ViewModelPanel {
 //            }
 //        });
 
-        comboBox = new JComboBox();
-        comboBox.setRenderer(new EntryRender());
-        this.add(comboBox);
+        comboBoxEntries = new JComboBox();
+        comboBoxEntries.setRenderer(new EntryRender());
+        this.add(comboBoxEntries);
 
 
         JLabel labelWay = new JLabel(Constants.WAY_LABEL);
@@ -106,7 +106,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         JSpinner spinnerAmount = new JSpinner();
         this.add(spinnerAmount);
         spinnerAmount.addChangeListener(e -> {
-            PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+            PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
             if (pedestrianInput != null) {
                 pedestrianInput.amountOfPedestrian = (int) spinnerAmount.getValue();
             }
@@ -123,7 +123,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         this.add(spinnerTime);
 
         spinnerTime.addChangeListener(e -> {
-            PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+            PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
             if (pedestrianInput != null && spinnerTime.getValue() != null) {
                 SpinnerDateModel model = (SpinnerDateModel) spinnerTime.getModel();
                 Date dateValue = (Date) model.getValue();
@@ -136,16 +136,16 @@ public class InputPedestrianPanel extends ViewModelPanel {
         comboBoxExits.setRenderer(new ExitRender());
         this.add(comboBoxExits);
         comboBoxExits.addActionListener(e -> {
-            PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+            PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
             if (pedestrianInput != null)
                 pedestrianInput.pedestrianExit = (Point) comboBoxExits.getSelectedItem();
             repaint();
         });
 
 
-        comboBox.addActionListener(e -> {
+        comboBoxEntries.addActionListener(e -> {
             //System.out.println("Выбран: " + comboBox.getSelectedItem());
-            PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+            PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
             if (pedestrianInput != null) {
                 labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
                 spinnerAmount.setValue(pedestrianInput.amountOfPedestrian);
@@ -158,7 +158,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
+                PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
                 if (pedestrianInput != null) {
                     if (!addWay.isEnabled())
                         for (int i = 0; i < board.size(); i++) {
@@ -213,8 +213,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
     }
 
-    private void loadEnteries() {
-        comboBox.removeAllItems();
+    private void loadEntries() {
+        comboBoxEntries.removeAllItems();
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
                 if (board.get(i).get(j).getState() == State.ENTRY) {
@@ -225,7 +225,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
                         pedestrianInput.pedestrianExit = (Point) comboBoxExits.getSelectedItem();
                     }
                     enteries.add(pedestrianInput);
-                    comboBox.addItem(pedestrianInput);
+                    comboBoxEntries.addItem(pedestrianInput);
 
                 }
 
@@ -239,7 +239,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         if (this.getViewModel().checkBoard()) {
             this.board = this.getViewModel().getBoard();
             loadExits();
-            loadEnteries();
+            loadEntries();
 
             repaint();
         }
@@ -249,8 +249,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
     public void panelHidden() {
         if (this.getViewModel()!=null) {
             ArrayList<PedestrianInput> items = new ArrayList<>();
-            for (int i = 0; i < comboBox.getItemCount(); i++) {
-                items.add(comboBox.getItemAt(i));
+            for (int i = 0; i < comboBoxEntries.getItemCount(); i++) {
+                items.add(comboBoxEntries.getItemAt(i));
             }
             this.getViewModel().setPedestrianInputs(items);
         }

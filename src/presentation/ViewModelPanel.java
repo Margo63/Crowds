@@ -8,21 +8,21 @@ import java.awt.event.ComponentEvent;
 
 public class ViewModelPanel extends JPanel {
     private ViewModel viewModel;
-    JButton next;
-    JButton previous;
+    private JButton nextButton;
+    private JButton previousButton;
 
     public ViewModelPanel() {
         super();
-        next = new JButton(Constants.NEXT);
-        previous = new JButton(Constants.PREVIOUS);
-        this.add(previous);
-        this.add(next);
+        nextButton = new JButton(Constants.NEXT);
+        previousButton = new JButton(Constants.PREVIOUS);
+        this.add(previousButton);
+        this.add(nextButton);
 
-        next.addActionListener(e -> {
+        nextButton.addActionListener(e -> {
             viewModel.nextPage();
 
         });
-        previous.addActionListener(e -> {
+        previousButton.addActionListener(e -> {
             viewModel.previousPage();
         });
 
@@ -53,8 +53,8 @@ public class ViewModelPanel extends JPanel {
     }
 
     private void loadButtons() {
-        next.setVisible(viewModel.checkNextPage());
-        previous.setVisible(viewModel.checkPreviousPage());
+        nextButton.setVisible(viewModel.checkNextPage());
+        previousButton.setVisible(viewModel.checkPreviousPage());
         repaint();
     }
 

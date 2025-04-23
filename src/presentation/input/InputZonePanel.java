@@ -1,6 +1,5 @@
 package presentation.input;
 
-import presentation.ViewModel;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import utils.Constants;
@@ -18,7 +17,7 @@ public class InputZonePanel extends ViewModelPanel {
     DrawCell drawCell = new DrawCell();
     private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> zones = new ArrayList<>();
-    private Point start, end;
+    private Point startZonePoint, endZonePoint;
     private int zoneIndex = 0;
 
     @Override
@@ -26,11 +25,11 @@ public class InputZonePanel extends ViewModelPanel {
         super.paint(g);
 
         //draw selected zone
-        if (start != null && end != null) {
-            int x = Math.min(start.x, end.x);
-            int y = Math.min(start.y, end.y);
-            int width = Math.abs(start.x - end.x);
-            int height = Math.abs(start.y - end.y);
+        if (startZonePoint != null && endZonePoint != null) {
+            int x = Math.min(startZonePoint.x, endZonePoint.x);
+            int y = Math.min(startZonePoint.y, endZonePoint.y);
+            int width = Math.abs(startZonePoint.x - endZonePoint.x);
+            int height = Math.abs(startZonePoint.y - endZonePoint.y);
 
             g.drawRect(x, y, width, height);
         }
@@ -95,17 +94,17 @@ public class InputZonePanel extends ViewModelPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                start = e.getPoint();
-                end = start;
+                startZonePoint = e.getPoint();
+                endZonePoint = startZonePoint;
                 //System.out.println(start);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                int x = Math.min(start.x, end.x);
-                int y = Math.min(start.y, end.y);
-                int width = Math.abs(start.x - end.x);
-                int height = Math.abs(start.y - end.y);
+                int x = Math.min(startZonePoint.x, endZonePoint.x);
+                int y = Math.min(startZonePoint.y, endZonePoint.y);
+                int width = Math.abs(startZonePoint.x - endZonePoint.x);
+                int height = Math.abs(startZonePoint.y - endZonePoint.y);
                 Rectangle rect = new Rectangle(x, y, width, height);
 
                 for (int i = 0; i < board.size(); i++) {
@@ -121,8 +120,8 @@ public class InputZonePanel extends ViewModelPanel {
 
                 //System.out.println(zones);
 
-                start = null;
-                end = null;
+                startZonePoint = null;
+                endZonePoint = null;
                 repaint();
             }
         });
@@ -130,7 +129,7 @@ public class InputZonePanel extends ViewModelPanel {
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                end = e.getPoint();
+                endZonePoint = e.getPoint();
                 //System.out.println("end: " + end);
                 repaint();
             }

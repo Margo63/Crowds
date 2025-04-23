@@ -127,7 +127,7 @@ public class InputDrawPanel extends ViewModelPanel {
                         Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
                                 board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
                         if(cellRectangle.contains(e.getX(), e.getY())){
-                            board.get(i).get(j).changeState(currentState);
+                            board.get(i).get(j).setState(currentState);
                             repaint();
                         }
                     }

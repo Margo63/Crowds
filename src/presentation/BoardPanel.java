@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -24,9 +23,9 @@ public class BoardPanel extends ViewModelPanel {
     private int hour = 0;
     private int minute = 0;
     private boolean loaded = false;
-    private ArrayList<PedestrianInput> queue;
+    private ArrayList<PedestrianInput> pedestrianEntryQueue;
     private JLabel timerLabel;
-    private JLabel label;
+    private JLabel conflictLabel;
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -97,9 +96,9 @@ public class BoardPanel extends ViewModelPanel {
         });
 
         JButton button = new JButton("Step");
-        label = new JLabel();
+        conflictLabel = new JLabel();
         add(button);
-        add(label);
+        add(conflictLabel);
 
         button.addActionListener(e -> {
             step();
@@ -111,7 +110,7 @@ public class BoardPanel extends ViewModelPanel {
         if (getViewModel().checkBoard()) {
             analyze.loadZones(getViewModel().getZones());
 
-            queue = new ArrayList<>();
+            pedestrianEntryQueue = new ArrayList<>();
             this.board = new Board(this.getViewModel().getBoardInteger());
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();
             Comparator<PedestrianInput> byTimeIn = Comparator.comparingLong(PedestrianInput::getTimeIn);
@@ -119,7 +118,7 @@ public class BoardPanel extends ViewModelPanel {
 
             for (int i = 0; i < pedestrian.size(); i++) {
                 for (int j = 0; j < pedestrian.get(i).amountOfPedestrian; j++) {
-                    queue.addLast( pedestrian.get(i));
+                    pedestrianEntryQueue.addLast( pedestrian.get(i));
                 }
 //                System.out.println(pedestrian.get(i).getTimeIn());
 //                ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
@@ -152,23 +151,23 @@ public class BoardPanel extends ViewModelPanel {
         try {
             board.step();
             analyze.analyze_board(board);
-            label.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getAmountPedestrianInZone());
+            conflictLabel.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getAmountPedestrianInZone());
 
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
 
-        if(!queue.isEmpty()){
+        if(!pedestrianEntryQueue.isEmpty()){
 
-            Date date = new Date(queue.getFirst().timeIn);
+            Date date = new Date(pedestrianEntryQueue.getFirst().timeIn);
 
             if(date.getHours()*60 + date.getMinutes() <= hour*60+minute ){
                 ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
-                for (Point point : queue.getFirst().way) {
+                for (Point point : pedestrianEntryQueue.getFirst().way) {
                     way.add(new Pair<>(point.y, point.x));
                 }
-                this.board.addPedestrian(queue.getFirst().pedestrianEntry, way, queue.getFirst().pedestrianExit);
-                queue.removeFirst();
+                this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit);
+                pedestrianEntryQueue.removeFirst();
             }
 
         }
