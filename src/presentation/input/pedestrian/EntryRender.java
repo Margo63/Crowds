@@ -5,7 +5,7 @@ import presentation.models.PedestrianInput;
 import javax.swing.*;
 import java.awt.*;
 
-public class InputPedestrianRender extends JLabel implements ListCellRenderer<PedestrianInput> {
+public class EntryRender extends JLabel implements ListCellRenderer<PedestrianInput> {
 
     @Override
     public Component getListCellRendererComponent(JList<? extends PedestrianInput> list, PedestrianInput value, int index, boolean isSelected, boolean cellHasFocus) {

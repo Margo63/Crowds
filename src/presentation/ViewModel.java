@@ -10,10 +10,10 @@ import java.util.ArrayList;
 public class ViewModel {
     private ArrayList<ArrayList<InputCell>> board;
     private ArrayList<ArrayList<Integer>> zones;
-    private String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
-    private int ind_page = 0;
+    private final String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
+    private int pageIndex = 0;
     private Screen screen;
-    private ArrayList<PedestrianInput> pedestrians;
+    private ArrayList<PedestrianInput> pedestrianInputs;
 
     public void setBoard(ArrayList<ArrayList<InputCell>> board) {
 
@@ -21,7 +21,7 @@ public class ViewModel {
         loadZone();
     }
 
-    public void loadBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
+    public void setBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
 
         ArrayList<ArrayList<InputCell>> tmp = new ArrayList<>();
         for (int i = 0; i < board.size(); i++) {
@@ -55,13 +55,10 @@ public class ViewModel {
     }
 
     //to navigation inside panel
-    public void addScreen(Screen screen) {
+    public void setScreen(Screen screen) {
         this.screen = screen;
     }
 
-    public Screen getScreen() {
-        return screen;
-    }
 
     public ArrayList<ArrayList<Integer>> getZones() {
         return zones;
@@ -78,12 +75,12 @@ public class ViewModel {
         return !board.isEmpty();
     }
 
-    public ArrayList<PedestrianInput> getPedestrians() {
-        return pedestrians;
+    public ArrayList<PedestrianInput> getPedestrianInputs() {
+        return pedestrianInputs;
     }
 
-    public void setPedestrians(ArrayList<PedestrianInput> pedestrians) {
-        this.pedestrians = pedestrians;
+    public void setPedestrianInputs(ArrayList<PedestrianInput> pedestrianInputs) {
+        this.pedestrianInputs = pedestrianInputs;
     }
 
     //init zones on panel
@@ -100,31 +97,31 @@ public class ViewModel {
         //System.out.println("load:"+zones);
     }
 
-    public void next() {
-        if (ind_page < pages.length - 1) {
-            ind_page++;
-            screen.changePanel(pages[ind_page]);
+    public void nextPage() {
+        if (pageIndex < pages.length - 1) {
+            pageIndex++;
+            screen.changePanel(pages[pageIndex]);
             //System.out.println("clicked on next: " + ind_page);
         }
     }
 
-    public void previous() {
-        if (ind_page > 0) {
-            ind_page--;
-            screen.changePanel(pages[ind_page]);
+    public void previousPage() {
+        if (pageIndex > 0) {
+            pageIndex--;
+            screen.changePanel(pages[pageIndex]);
         }
     }
 
-    public boolean checkNextButton() {
+    public boolean checkNextPage() {
         //System.out.println("check next: " + ind_page);
-        if (ind_page == pages.length - 1)
+        if (pageIndex == pages.length - 1)
             return false;
         return true;
     }
 
-    public boolean checkPreviousButton() {
+    public boolean checkPreviousPage() {
         //System.out.println("check prev: " + ind_page);
-        if (ind_page == 0 || ind_page == pages.length - 1)
+        if (pageIndex == 0 || pageIndex == pages.length - 1)
             return false;
         return true;
     }

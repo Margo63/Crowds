@@ -8,4 +8,24 @@ public class Constants {
     public static final String BOARD = "board";
     public static final String INPUT_PEDESTRIAN = "pedestrian";
 
+    //strings
+    public static final String PREVIOUS = "previous";
+    public static final String NEXT = "next";
+    //input file
+    public static final String CHOSEN_FILE = "chosen file: ";
+    public static final String CHOOSE_FILE_BUTTON = "choose file";
+    //input zone
+    public static final String INPUT_ZONE_LABEL = "zone: ";
+    //input draw
+    public static final String WALL_BUTTON = "Wall";
+    public static final String EXIT_BUTTON = "Exit";
+    public static final String ENTRY_BUTTON = "Entry";
+    public static final String EMPTY_BUTTON = "Empty";
+    //input pedestrian data
+    public static final String ADD_WAY_BUTTON = "Add Way";
+    public static final String REMOVE_WAY_BUTTON = "Remove Way";
+    public static final String WAY_LABEL = "way: ";
+    public static final String AMOUNT_PEDESTRIAN_LABEL = "amount pedestrian: ";
+    public static final String TIME_LABEL = "time: ";
+
 }

@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -31,8 +30,6 @@ public class BoardPanel extends ViewModelPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        //System.out.println("paint");
-        //board.printBoard();
         if (this.getViewModel().checkBoard() && board != null) {
             for (int i = 0; i < board.getAmountOfRows(); i++) {
                 for (int j = 0; j < board.getAmountOfCols(); j++) {
@@ -76,30 +73,27 @@ public class BoardPanel extends ViewModelPanel {
         timerLabel = new JLabel("00:00");
         add(timerLabel);
 
-
-
-
         addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                loadBoard();
-                minute = 0;
-                hour = 0;
-                Timer timer = new Timer(1000, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        step();
-
-                    }
-                });
-
-                timer.start();
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                loaded = false;
-            }
+//            @Override
+//            public void componentShown(ComponentEvent e) {
+//                loadBoard();
+//                minute = 0;
+//                hour = 0;
+//                Timer timer = new Timer(1000, new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        step();
+//
+//                    }
+//                });
+//
+//                timer.start();
+//            }
+//
+//            @Override
+//            public void componentHidden(ComponentEvent e) {
+//                loaded = false;
+//            }
         });
 
         JButton button = new JButton("Step");
@@ -119,7 +113,7 @@ public class BoardPanel extends ViewModelPanel {
 
             queue = new ArrayList<>();
             this.board = new Board(this.getViewModel().getBoardInteger());
-            ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrians();
+            ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();
             Comparator<PedestrianInput> byTimeIn = Comparator.comparingLong(PedestrianInput::getTimeIn);
             pedestrian.sort(byTimeIn);
 
@@ -144,9 +138,6 @@ public class BoardPanel extends ViewModelPanel {
 
     }
 
-    public void addBoard(Board board) {
-        this.board = board;
-    }
 
     private void step(){
         minute+=5;
@@ -168,16 +159,8 @@ public class BoardPanel extends ViewModelPanel {
         }
 
         if(!queue.isEmpty()){
-//            Calendar calendar = Calendar.getInstance();
-//
-//            calendar.set(Calendar.HOUR_OF_DAY, hour);
-//            calendar.set(Calendar.MINUTE, minute);
-//
-//            Date date = calendar.getTime();
 
             Date date = new Date(queue.getFirst().timeIn);
-
-            //System.out.println("size: "+queue.size()+" time in: "+(date.getHours()*60 + date.getMinutes()) + "current time: "+(hour*60+minute));
 
             if(date.getHours()*60 + date.getMinutes() <= hour*60+minute ){
                 ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
@@ -193,4 +176,24 @@ public class BoardPanel extends ViewModelPanel {
 
     }
 
+    @Override
+    public void panelShown() {
+        loadBoard();
+        minute = 0;
+        hour = 0;
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                step();
+
+            }
+        });
+
+        timer.start();
+    }
+
+    @Override
+    public void panelHidden() {
+        loaded = false;
+    }
 }

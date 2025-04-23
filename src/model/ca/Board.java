@@ -13,14 +13,14 @@ import static model.State.EXIT;
 
 public class Board {
 
-    private ArrayList<ArrayList<Integer>> start_map;
+    private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<ArrayList<Cell>> board;
-    private ArrayList<ArrayList<Cell>> tmp_board = new ArrayList<>();
+    private ArrayList<ArrayList<Cell>> tmpBoard = new ArrayList<>();
     //cell from_x, from_y to_x to_y
-    public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> wish_list = new HashMap<>();
+    public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> pedestriansWishList = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
-    public Board(ArrayList<ArrayList<Integer>> start_map) {
+    public Board(ArrayList<ArrayList<Integer>> startMap) {
 //        this.start_map = start_map;
 //        //board = new Cell[size][size];
 //        board = new ArrayList<ArrayList<Cell>>();
@@ -34,28 +34,28 @@ public class Board {
 //                tmp_board.get(i).add(cell);
 //            }
 //        }
-        loadMap(start_map);
+        loadMap(startMap);
     }
 
-    public void loadMap(ArrayList<ArrayList<Integer>> start_map) {
-        this.start_map = start_map;
+    public void loadMap(ArrayList<ArrayList<Integer>> startMap) {
+        this.startMap = startMap;
         //board = new Cell[size][size];
         board = new ArrayList<ArrayList<Cell>>();
-        for (int i = 0; i < start_map.size(); i++) {
-            board.add(new ArrayList<Cell>(start_map.size()));
-            tmp_board.add(new ArrayList<Cell>(start_map.size()));
-            for (int j = 0; j < start_map.getFirst().size(); j++) {
+        for (int i = 0; i < startMap.size(); i++) {
+            board.add(new ArrayList<Cell>(startMap.size()));
+            tmpBoard.add(new ArrayList<Cell>(startMap.size()));
+            for (int j = 0; j < startMap.getFirst().size(); j++) {
                 Cell cell = new Cell();
-                cell.setState(State.getFromInt(start_map.get(i).get(j)));
+                cell.setState(State.getFromInt(startMap.get(i).get(j)));
                 board.get(i).add(cell);
-                tmp_board.get(i).add(cell);
+                tmpBoard.get(i).add(cell);
             }
         }
     }
 
     public void addPedestrian(Point entry, ArrayList<Pair<Integer, Integer>> way, Point exit) {
         PedestrianCell pedestrianCell = new PedestrianCell();
-        pedestrianCell.initGoalMap(start_map);
+        pedestrianCell.initGoalMap(startMap);
 
         pedestrianCell.setGoalList(way);
         pedestrianCell.setExitGoal(exit.y, exit.x);
@@ -66,28 +66,28 @@ public class Board {
         //check up
         if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
             board.get(entry.y - 1).set(entry.x, pedestrianCell);
-            tmp_board.get(entry.y - 1).set(entry.x, pedestrianCell);
+            tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
             return;
         }
 
         //check down
         if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
             board.get(entry.y + 1).set(entry.x, pedestrianCell);
-            tmp_board.get(entry.y + 1).set(entry.x, pedestrianCell);
+            tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
             return;
         }
 
         //check left
         if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
             board.get(entry.y).set(entry.x - 1, pedestrianCell);
-            tmp_board.get(entry.y).set(entry.x - 1, pedestrianCell);
+            tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
             return;
         }
 
         //check right
         if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
             board.get(entry.y).set(entry.x + 1, pedestrianCell);
-            tmp_board.get(entry.y).set(entry.x + 1, pedestrianCell);
+            tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
             return;
         }
 
@@ -97,7 +97,7 @@ public class Board {
     public void removePedestrian(int row, int col) {
 
         board.get(row).set(col, new Cell(EXIT));
-        tmp_board.get(row).set(col, new Cell(EXIT));
+        tmpBoard.get(row).set(col, new Cell(EXIT));
     }
 
 //    public void movePedestrian(int row, int col) {
@@ -113,22 +113,22 @@ public class Board {
 
     public void cleanCell(int row, int col) {
         board.get(row).get(col).setState(EMPTY);
-        tmp_board.get(row).get(col).setState(EMPTY);
+        tmpBoard.get(row).get(col).setState(EMPTY);
     }
 
     public void pedestrianStep(int row, int col) {
         //printBoard();
         //System.out.println(row + " " + col);
-        PedestrianCell tmp_pedestrian = (PedestrianCell) tmp_board.get(row).get(col);
-        Cell up = tmp_board.get(row - 1).get(col);
-        Cell down = tmp_board.get(row + 1).get(col);
-        Cell left = tmp_board.get(row).get(col - 1);
-        Cell right = tmp_board.get(row).get(col + 1);
+        PedestrianCell tmpPedestrian = (PedestrianCell) tmpBoard.get(row).get(col);
+        Cell up = tmpBoard.get(row - 1).get(col);
+        Cell down = tmpBoard.get(row + 1).get(col);
+        Cell left = tmpBoard.get(row).get(col - 1);
+        Cell right = tmpBoard.get(row).get(col + 1);
 
-        int up_value = tmp_pedestrian.getProximityToExit(row - 1, col);
-        int down_value = tmp_pedestrian.getProximityToExit(row + 1, col);
-        int left_value = tmp_pedestrian.getProximityToExit(row, col - 1);
-        int right_value = tmp_pedestrian.getProximityToExit(row, col + 1);
+        int up_value = tmpPedestrian.getProximityToExit(row - 1, col);
+        int down_value = tmpPedestrian.getProximityToExit(row + 1, col);
+        int left_value = tmpPedestrian.getProximityToExit(row, col - 1);
+        int right_value = tmpPedestrian.getProximityToExit(row, col + 1);
 
         ArrayList<Integer> arr = new ArrayList<>();
 
@@ -172,19 +172,19 @@ public class Board {
 
         //пешеход и куда он хочет пойти
         Pair<Cell, Pair<Integer, Integer>> pedestrian_wish =
-                new Pair<>(tmp_pedestrian, new Pair<>(row, col));
+                new Pair<>(tmpPedestrian, new Pair<>(row, col));
 
 
         Pair key_next = new Pair(next_row, next_col);
-        if (wish_list.containsKey(key_next)) {
+        if (pedestriansWishList.containsKey(key_next)) {
             ArrayList tmp = new ArrayList();
-            tmp.addAll(wish_list.get(key_next));
+            tmp.addAll(pedestriansWishList.get(key_next));
             tmp.add(pedestrian_wish);
-            wish_list.replace(key_next, tmp);
+            pedestriansWishList.replace(key_next, tmp);
         } else {
             ArrayList tmp = new ArrayList();
             tmp.add(pedestrian_wish);
-            wish_list.put(key_next, tmp);
+            pedestriansWishList.put(key_next, tmp);
         }
 
         //wish_list.add(pedestrian_wish);
@@ -216,7 +216,7 @@ public class Board {
 
     public void step() throws InterruptedException {
         //Thread.sleep(1000);
-        wish_list.clear();
+        pedestriansWishList.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                 //System.out.print(this.getCell(i,j).getAvailable()+" ");
@@ -227,7 +227,7 @@ public class Board {
             //System.out.println();
         }
         //System.out.println(wish_list);
-        wish_list.forEach((key, value) -> {
+        pedestriansWishList.forEach((key, value) -> {
             int next_row = key.getFirst();
             int next_col = key.getSecond();
 
@@ -235,17 +235,17 @@ public class Board {
                 int row = value.get(0).getSecond().getFirst();
                 int col = value.get(0).getSecond().getSecond();
                 Cell newCell = new Cell();//tmp_board.get(next_row).get(next_col);
-                tmp_board.get(next_row).set(next_col, value.get(0).getFirst());
-                tmp_board.get(row).set(col, newCell);
+                tmpBoard.get(next_row).set(next_col, value.get(0).getFirst());
+                tmpBoard.get(row).set(col, newCell);
                 //System.out.println("swap");
             } else {
                 System.out.println("conflict");
                 int next = (int) ((Math.random() * 100) % value.size());
                 int row = value.get(next).getSecond().getFirst();
                 int col = value.get(next).getSecond().getSecond();
-                Cell newCell = tmp_board.get(next_row).get(next_col);
-                tmp_board.get(next_row).set(next_col, value.get(next).getFirst());
-                tmp_board.get(row).set(col, newCell);
+                Cell newCell = tmpBoard.get(next_row).get(next_col);
+                tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
+                tmpBoard.get(row).set(col, newCell);
             }
 
         });
@@ -261,7 +261,7 @@ public class Board {
     void updateBoard() {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
-                board.get(i).set(j, tmp_board.get(i).get(j));
+                board.get(i).set(j, tmpBoard.get(i).get(j));
                 if (board.get(i).get(j).achievedGoal(i, j)) {
                     this.removePedestrian(i, j);
                 }
@@ -283,7 +283,7 @@ public class Board {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
 
-                System.out.print(tmp_board.get(i).get(j).printCell() + " ");
+                System.out.print(tmpBoard.get(i).get(j).printCell() + " ");
 
             }
             System.out.println();

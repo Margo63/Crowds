@@ -9,8 +9,6 @@ import utils.DrawCell;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.Date;
 public class InputPedestrianPanel extends ViewModelPanel {
     // board to draw
     private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
-    //list of entery
+    //list of entry
     private ArrayList<PedestrianInput> enteries = new ArrayList<>();
 
     //
@@ -68,33 +66,33 @@ public class InputPedestrianPanel extends ViewModelPanel {
     public InputPedestrianPanel() {
         this.add(Box.createVerticalStrut(500));
 
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                loadBoard();
-            }
-
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                saveBoard();
-            }
-        });
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentShown(ComponentEvent e) {
+//                loadBoard();
+//            }
+//
+//            @Override
+//            public void componentHidden(ComponentEvent e) {
+//                saveBoard();
+//            }
+//        });
 
         comboBox = new JComboBox();
-        comboBox.setRenderer(new InputPedestrianRender());
+        comboBox.setRenderer(new EntryRender());
         this.add(comboBox);
 
 
-        JLabel labelWay = new JLabel("way: ");
+        JLabel labelWay = new JLabel(Constants.WAY_LABEL);
         this.add(labelWay);
-        JButton addWay = new JButton("Add Way");
+        JButton addWay = new JButton(Constants.ADD_WAY_BUTTON);
         this.add(addWay);
         addWay.addActionListener(e -> {
             addWay.setEnabled(false);
 
             repaint();
         });
-        JButton removeWay = new JButton("remove Way");
+        JButton removeWay = new JButton(Constants.REMOVE_WAY_BUTTON);
         this.add(removeWay);
         removeWay.addActionListener(e -> {
             removeWay.setEnabled(false);
@@ -103,7 +101,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         });
 
 
-        JLabel labelAmountPedestrian = new JLabel("amount pedestrian: ");
+        JLabel labelAmountPedestrian = new JLabel(Constants.AMOUNT_PEDESTRIAN_LABEL);
         this.add(labelAmountPedestrian);
         JSpinner spinnerAmount = new JSpinner();
         this.add(spinnerAmount);
@@ -114,7 +112,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             }
         });
 
-        JLabel time = new JLabel("time: ");
+        JLabel time = new JLabel(Constants.TIME_LABEL);
         this.add(time);
 
         Date date = new Date();
@@ -149,7 +147,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             //System.out.println("Выбран: " + comboBox.getSelectedItem());
             PedestrianInput pedestrianInput = (PedestrianInput) comboBox.getSelectedItem();
             if (pedestrianInput != null) {
-                labelWay.setText("way: " + pedestrianInput.way);
+                labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
                 spinnerAmount.setValue(pedestrianInput.amountOfPedestrian);
                 comboBoxExits.setSelectedItem(pedestrianInput.pedestrianExit);
                 spinnerTime.setValue(new Date(pedestrianInput.timeIn));
@@ -165,7 +163,9 @@ public class InputPedestrianPanel extends ViewModelPanel {
                     if (!addWay.isEnabled())
                         for (int i = 0; i < board.size(); i++) {
                             for (int j = 0; j < board.getFirst().size(); j++) {
-                                if (board.get(i).get(j).contains(e.getX(), e.getY())) {
+                                Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+                                        board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+                                if (cellRectangle.contains(e.getX(), e.getY())) {
 
 
                                     pedestrianInput.way.add(new Point(j, i));
@@ -189,7 +189,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
                             }
                         }
 
-                    labelWay.setText("way: " + pedestrianInput.way);
+                    labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
                     repaint();
                 }
 
@@ -198,25 +198,6 @@ public class InputPedestrianPanel extends ViewModelPanel {
         });
     }
 
-    private void loadBoard() {
-        if (this.getViewModel().checkBoard()) {
-            this.board = this.getViewModel().getBoard();
-            loadExits();
-            loadEnteries();
-
-            repaint();
-        }
-    }
-
-    private void saveBoard() {
-        if (this.getViewModel()!=null) {
-            ArrayList<PedestrianInput> items = new ArrayList<>();
-            for (int i = 0; i < comboBox.getItemCount(); i++) {
-                items.add(comboBox.getItemAt(i));
-            }
-            this.getViewModel().setPedestrians(items);
-        }
-    }
 
     private void loadExits() {
         comboBoxExits.removeAllItems();
@@ -253,4 +234,25 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
     }
 
+    @Override
+    public void panelShown() {
+        if (this.getViewModel().checkBoard()) {
+            this.board = this.getViewModel().getBoard();
+            loadExits();
+            loadEnteries();
+
+            repaint();
+        }
+    }
+
+    @Override
+    public void panelHidden() {
+        if (this.getViewModel()!=null) {
+            ArrayList<PedestrianInput> items = new ArrayList<>();
+            for (int i = 0; i < comboBox.getItemCount(); i++) {
+                items.add(comboBox.getItemAt(i));
+            }
+            this.getViewModel().setPedestrianInputs(items);
+        }
+    }
 }

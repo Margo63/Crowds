@@ -51,56 +51,56 @@ public class PedestrianCell extends Cell {
             }
         }
 
-        ArrayList<Pair<Integer, Integer>> current_wave = new ArrayList<>();
-        ArrayList<Pair<Integer, Integer>> next_wave = new ArrayList<>();
+        ArrayList<Pair<Integer, Integer>> currentWave = new ArrayList<>();
+        ArrayList<Pair<Integer, Integer>> nextWave = new ArrayList<>();
 
-        current_wave.add(this.goalList.getFirst());
+        currentWave.add(this.goalList.getFirst());
 
         int height = goalMap.size();
         if (height == 0) return;
         int width = goalMap.getFirst().size();
-        int num_wave = 1;
+        int waveIndex = 1;
         //printMap();
 
-        while (current_wave.size() != 0) {
-            for (Pair<Integer, Integer> p : current_wave) {
-                int cur_x = p.getFirst();
-                int cur_y = p.getSecond();
+        while (currentWave.size() != 0) {
+            for (Pair<Integer, Integer> p : currentWave) {
+                int currentX = p.getFirst();
+                int currentY = p.getSecond();
 
-                if (cur_x - 1 >= 0 && State.getFromInt(goalMap.get(cur_x - 1).get(cur_y)) == EMPTY) {
-                    next_wave.add(new Pair<>(cur_x - 1, cur_y));
-                    goalMap.get(cur_x - 1).set(cur_y, num_wave);
+                if (currentX - 1 >= 0 && State.getFromInt(goalMap.get(currentX - 1).get(currentY)) == EMPTY) {
+                    nextWave.add(new Pair<>(currentX - 1, currentY));
+                    goalMap.get(currentX - 1).set(currentY, waveIndex);
                 }
 
-                if (cur_x + 1 < height && State.getFromInt(goalMap.get(cur_x + 1).get(cur_y)) == EMPTY) {
+                if (currentX + 1 < height && State.getFromInt(goalMap.get(currentX + 1).get(currentY)) == EMPTY) {
                     //System.out.println("down: x= "+cur_x+" y= "+(cur_y+1));
-                    next_wave.add(new Pair<>(cur_x + 1, cur_y));
-                    goalMap.get(cur_x + 1).set(cur_y, num_wave);
+                    nextWave.add(new Pair<>(currentX + 1, currentY));
+                    goalMap.get(currentX + 1).set(currentY, waveIndex);
                 }
-                if (cur_y - 1 >= 0 && State.getFromInt(goalMap.get(cur_x).get(cur_y - 1)) == EMPTY) {
-                    next_wave.add(new Pair<>(cur_x, cur_y - 1));
-                    goalMap.get(cur_x).set(cur_y - 1, num_wave);
+                if (currentY - 1 >= 0 && State.getFromInt(goalMap.get(currentX).get(currentY - 1)) == EMPTY) {
+                    nextWave.add(new Pair<>(currentX, currentY - 1));
+                    goalMap.get(currentX).set(currentY - 1, waveIndex);
                 }
-                if (cur_y + 1 < width && State.getFromInt(goalMap.get(cur_x).get(cur_y + 1)) == EMPTY) {
+                if (currentY + 1 < width && State.getFromInt(goalMap.get(currentX).get(currentY + 1)) == EMPTY) {
 
-                    next_wave.add(new Pair<>(cur_x, cur_y + 1));
-                    goalMap.get(cur_x).set(cur_y + 1, num_wave);
+                    nextWave.add(new Pair<>(currentX, currentY + 1));
+                    goalMap.get(currentX).set(currentY + 1, waveIndex);
                 }
 
             }
 
-            current_wave = new ArrayList<>(next_wave);
+            currentWave = new ArrayList<>(nextWave);
 //            if(current_wave.contains(new Pair(pedestrianX,pedestrianY))){
 //                isGoalReached = true;
 //            }
 
-            next_wave.clear();
-            num_wave++;
+            nextWave.clear();
+            waveIndex++;
 
             //printMap();
         }
-        Pair<Integer, Integer> current_goal = goalList.getFirst();
-        goalMap.get(current_goal.getFirst()).set(current_goal.getSecond(), 0);
+        Pair<Integer, Integer> currentGoal = goalList.getFirst();
+        goalMap.get(currentGoal.getFirst()).set(currentGoal.getSecond(), 0);
         //printMap();
     }
 
@@ -121,8 +121,8 @@ public class PedestrianCell extends Cell {
 
     @Override
     public boolean achievedGoal(int row, int col) {
-        Pair<Integer, Integer> current_goal = goalList.getFirst();
-        if (row == current_goal.getFirst() && col == current_goal.getSecond()) {
+        Pair<Integer, Integer> currentGoal = goalList.getFirst();
+        if (row == currentGoal.getFirst() && col == currentGoal.getSecond()) {
 
 
             goalList.removeFirst();
@@ -130,9 +130,9 @@ public class PedestrianCell extends Cell {
                 loadGoalMap();
             }
 
-            for (Pair<Integer, Integer> goal : goalList) {
-                System.out.println("goal x: " + goal.getFirst() + " y: " + goal.getSecond());
-            }
+//            for (Pair<Integer, Integer> goal : goalList) {
+//                System.out.println("goal x: " + goal.getFirst() + " y: " + goal.getSecond());
+//            }
             return goalList.isEmpty();
         }
         return false;

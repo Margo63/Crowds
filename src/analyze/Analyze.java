@@ -16,7 +16,7 @@ public class Analyze {
 
 
     public void analyze_board(Board board) {
-        board.wish_list.forEach((key, value) -> {
+        board.pedestriansWishList.forEach((key, value) -> {
             if (value.size() > 1) {
                 conflict++;
             }

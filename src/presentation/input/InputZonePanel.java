@@ -3,6 +3,7 @@ package presentation.input;
 import presentation.ViewModel;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
+import utils.Constants;
 import utils.DrawCell;
 
 import javax.swing.*;
@@ -18,22 +19,23 @@ public class InputZonePanel extends ViewModelPanel {
     private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> zones = new ArrayList<>();
     private Point start, end;
-    private int zone=0;
+    private int zoneIndex = 0;
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        ViewModel viewModel = getViewModel();
-        //System.out.println(board);
-        if(start!=null && end!=null) {
+
+        //draw selected zone
+        if (start != null && end != null) {
             int x = Math.min(start.x, end.x);
             int y = Math.min(start.y, end.y);
             int width = Math.abs(start.x - end.x);
             int height = Math.abs(start.y - end.y);
 
-            g.drawRect(x,y,width,height);
+            g.drawRect(x, y, width, height);
         }
 
+        //draw zone index on board
         for (int i = 0; i < zones.size(); i++) {
             for (int j = 0; j < zones.get(i).size(); j++) {
 
@@ -41,20 +43,18 @@ public class InputZonePanel extends ViewModelPanel {
                 int textWidth = fm.stringWidth(String.valueOf(zones.get(i).get(j)));
                 int textHeight = fm.getHeight();
 
-                // Центр текста по горизонтали и вертикали внутри прямоугольника
-                int textX = (int) (board.get(i).get(j).x + (board.get(i).get(j).getWidth() - textWidth) / 2);
-                int textY = (int) (board.get(i).get(j).y + (board.get(i).get(j).getHeight() + textHeight) / 2 - fm.getDescent());
+                int textX = (int) (board.get(i).get(j).getX() + (board.get(i).get(j).getWidth() - textWidth) / 2);
+                int textY = (int) (board.get(i).get(j).getY() + (board.get(i).get(j).getHeight() + textHeight) / 2 - fm.getDescent());
 
-                // Рисуем текст
                 g.drawString(String.valueOf(zones.get(i).get(j)), textX, textY);
             }
         }
 
+        //draw board
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
                 drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
             }
-            //System.out.println();
         }
 
 
@@ -62,19 +62,19 @@ public class InputZonePanel extends ViewModelPanel {
 
 
     public InputZonePanel() {
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                loadBoard();
-            }
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentShown(ComponentEvent e) {
+//                loadBoard();
+//            }
+//
+//            @Override
+//            public void componentHidden(ComponentEvent e) {
+//                save();
+//            }
+//        });
 
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                save();
-            }
-        });
-
-        JLabel label = new JLabel("zone: ");
+        JLabel label = new JLabel(Constants.INPUT_ZONE_LABEL);
         this.add(label);
 
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
@@ -82,7 +82,7 @@ public class InputZonePanel extends ViewModelPanel {
             @Override
             public void stateChanged(ChangeEvent e) {
                 try {
-                    zone = (int) spinner.getValue();
+                    zoneIndex = (int) spinner.getValue();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
                 }
@@ -108,12 +108,12 @@ public class InputZonePanel extends ViewModelPanel {
                 int height = Math.abs(start.y - end.y);
                 Rectangle rect = new Rectangle(x, y, width, height);
 
-                for (int i = 0; i  < board.size(); i++) {
+                for (int i = 0; i < board.size(); i++) {
                     for (int j = 0; j < board.get(i).size(); j++) {
-
-                        if(rect.contains(board.get(i).get(j))){
-
-                            zones.get(i).set(j,zone);
+                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+                        if (rect.contains(cellRectangle)) {
+                            zones.get(i).set(j, zoneIndex);
 
                         }
                     }
@@ -137,7 +137,8 @@ public class InputZonePanel extends ViewModelPanel {
         });
     }
 
-    private void loadBoard() {
+    @Override
+    public void panelShown() {
         if (this.getViewModel().checkBoard()) {
             this.board = this.getViewModel().getBoard();
             this.zones = this.getViewModel().getZones();
@@ -145,9 +146,12 @@ public class InputZonePanel extends ViewModelPanel {
             repaint();
         }
     }
-    private void save(){
-        if(!this.zones.isEmpty()){
+
+    @Override
+    public void panelHidden() {
+        if (!this.zones.isEmpty()) {
             this.getViewModel().setZones(zones);
         }
     }
+
 }

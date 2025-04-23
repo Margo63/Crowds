@@ -12,25 +12,19 @@ public class Screen {
     public Screen() {
         frame = new JFrame();
         viewModel = new ViewModel();
-        //frame.add(panel);
         frame.setSize(1000,1000);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         cards = new JPanel(cardLayout);
-    //    cards.add(panel1,"input");
-
         frame.add(cards);
     }
 
     public void addPanel(ViewModelPanel panel, String name){
-        this.viewModel.addScreen(this);
-        panel.addViewModel(this.viewModel);
-
+        this.viewModel.setScreen(this);
+        panel.setViewModel(this.viewModel);
         this.cards.add(panel, name);
     }
     public void changePanel(String name){
-        //System.out.println("name = " + name);
         cardLayout.show(cards,name);
     }
 

@@ -18,10 +18,8 @@ public class ReadFile {
                 ArrayList<Integer> row = new ArrayList<>();
                 for (String value : values) {
                     row.add(Integer.parseInt(value.replaceAll(" ","")));
-                    //System.out.print(value.trim() + " | ");
                 }
                 tmp.add(row);
-                //System.out.println();
             }
         }
         catch(IOException ex){

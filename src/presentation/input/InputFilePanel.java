@@ -6,15 +6,14 @@ import utils.ReadFile;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class InputFilePanel extends ViewModelPanel {
 
     public InputFilePanel() {
-        JLabel label = new JLabel("chooose file: ");
+        JLabel label = new JLabel(Constants.CHOSEN_FILE);
         this.add(label);
-        JButton buttonChooseFile = new JButton("Choose File");
+        JButton buttonChooseFile = new JButton(Constants.CHOOSE_FILE_BUTTON);
         this.add(buttonChooseFile);
         buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
@@ -23,35 +22,16 @@ public class InputFilePanel extends ViewModelPanel {
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                //System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath());
                 ReadFile readFile = new ReadFile();
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
                 if(!result.isEmpty()){
-                    label.setText("chooose file: " + path);
-                    //System.out.println("load int");
-                    this.getViewModel().loadBoardFromInteger(result);
+                    label.setText(Constants.CHOSEN_FILE + path);
+                    this.getViewModel().setBoardFromInteger(result);
                     repaint();
                 }
             }
         });
-
-
-
-
-//        this.setLayout(new GridLayout(2, 1));
-//
-//
-//        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//        row1.add(label);
-//        row1.add(buttonChooseFile);
-
-
-
-
- //       this.add(row1);
-//        this.add(row2);
-
 
     }
 

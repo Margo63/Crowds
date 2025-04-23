@@ -3,6 +3,7 @@ package presentation.input;
 import model.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
+import utils.Constants;
 import utils.DrawCell;
 
 import javax.swing.*;
@@ -25,7 +26,7 @@ public class InputDrawPanel extends ViewModelPanel {
     JSpinner colsSpinner = new JSpinner(new SpinnerNumberModel(sizeCols, 0, 100, 1));
     JSpinner rowsSpinner = new JSpinner(new SpinnerNumberModel(sizeRows, 0, 100, 1));
 
-    // painting board accroding to size
+    // painting board according to size
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -44,21 +45,21 @@ public class InputDrawPanel extends ViewModelPanel {
 
         //System.out.println(this.getViewModel().getBoard());
 
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentShown(ComponentEvent e) {
-                loadBoard();
-            }
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                saveBoard();
-            }
-        });
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentShown(ComponentEvent e) {
+//                loadBoard();
+//            }
+//            @Override
+//            public void componentHidden(ComponentEvent e) {
+//                saveBoard();
+//            }
+//        });
 
-        JButton wallButton = new JButton("Wall");
-        JButton exitButton = new JButton("Exit");
-        JButton entryButton = new JButton("Entry");
-        JButton emptyButton = new JButton("Empty");
+        JButton wallButton = new JButton(Constants.WALL_BUTTON);
+        JButton exitButton = new JButton(Constants.EXIT_BUTTON);
+        JButton entryButton = new JButton(Constants.ENTRY_BUTTON);
+        JButton emptyButton = new JButton(Constants.EMPTY_BUTTON);
 
 
 //        JButton check = new JButton("Check");
@@ -92,7 +93,7 @@ public class InputDrawPanel extends ViewModelPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     sizeRows = (int) rowsSpinner.getValue();
-                    resize();
+                    resizeBoard();
                     repaint();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
@@ -109,7 +110,7 @@ public class InputDrawPanel extends ViewModelPanel {
                 try {
                     sizeCols = (int) colsSpinner.getValue();
 
-                    resize();
+                    resizeBoard();
                     repaint();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
@@ -123,7 +124,9 @@ public class InputDrawPanel extends ViewModelPanel {
             public void mouseClicked(MouseEvent e) {
                 for (int i = 0; i  < sizeRows; i++) {
                     for (int j = 0; j < sizeCols; j++) {
-                        if(board.get(i).get(j).contains(e.getX(), e.getY())){
+                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+                        if(cellRectangle.contains(e.getX(), e.getY())){
                             board.get(i).get(j).changeState(currentState);
                             repaint();
                         }
@@ -136,7 +139,7 @@ public class InputDrawPanel extends ViewModelPanel {
 
     }
 
-    void resize() {
+    void resizeBoard() {
         //ArrayList<State> resized = new ArrayList<>();
         //System.out.println("in resize");
         try {
@@ -213,7 +216,9 @@ public class InputDrawPanel extends ViewModelPanel {
 
     }
 
-    private void loadBoard() {
+
+    @Override
+    public void panelShown() {
         if(this.getViewModel().checkBoard()){
             ArrayList<ArrayList<InputCell>> board = this.getViewModel().getBoard();
             sizeRows = board.size();
@@ -234,9 +239,8 @@ public class InputDrawPanel extends ViewModelPanel {
         }
     }
 
-    private void saveBoard(){
-        //System.out.println("load from draw");
+    @Override
+    public void panelHidden() {
         getViewModel().setBoard(board);
     }
-
 }
