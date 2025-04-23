@@ -19,11 +19,11 @@ public class ViewModelPanel extends JPanel {
         this.add(nextButton);
 
         nextButton.addActionListener(e -> {
-            viewModel.nextPage();
+            viewModel.loadNextPage();
 
         });
         previousButton.addActionListener(e -> {
-            viewModel.previousPage();
+            viewModel.loadPreviousPage();
         });
 
         addComponentListener(new ComponentAdapter() {

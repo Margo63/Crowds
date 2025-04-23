@@ -17,7 +17,14 @@ public class ReadFile {
                 String[] values = line.split(",");
                 ArrayList<Integer> row = new ArrayList<>();
                 for (String value : values) {
-                    row.add(Integer.parseInt(value.replaceAll(" ","")));
+                    try {
+                        row.add(Integer.parseInt(value.replaceAll(" ","")));
+
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println(e.getMessage());
+                        return null;
+                    }
                 }
                 tmp.add(row);
             }

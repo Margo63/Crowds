@@ -97,7 +97,7 @@ public class ViewModel {
         //System.out.println("load:"+zones);
     }
 
-    public void nextPage() {
+    public void loadNextPage() {
         if (pageIndex < pages.length - 1) {
             pageIndex++;
             screen.changePanel(pages[pageIndex]);
@@ -105,7 +105,7 @@ public class ViewModel {
         }
     }
 
-    public void previousPage() {
+    public void loadPreviousPage() {
         if (pageIndex > 0) {
             pageIndex--;
             screen.changePanel(pages[pageIndex]);
@@ -113,16 +113,10 @@ public class ViewModel {
     }
 
     public boolean checkNextPage() {
-        //System.out.println("check next: " + ind_page);
-        if (pageIndex == pages.length - 1)
-            return false;
-        return true;
+        return  !(pageIndex == pages.length - 1);
     }
 
     public boolean checkPreviousPage() {
-        //System.out.println("check prev: " + ind_page);
-        if (pageIndex == 0 || pageIndex == pages.length - 1)
-            return false;
-        return true;
+        return  !(pageIndex == 0 || pageIndex == pages.length - 1);
     }
 }

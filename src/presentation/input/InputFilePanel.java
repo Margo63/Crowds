@@ -25,7 +25,7 @@ public class InputFilePanel extends ViewModelPanel {
                 ReadFile readFile = new ReadFile();
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
-                if(!result.isEmpty()){
+                if(result!=null && !result.isEmpty()){
                     label.setText(Constants.CHOSEN_FILE + path);
                     this.getViewModel().setBoardFromInteger(result);
                     repaint();
