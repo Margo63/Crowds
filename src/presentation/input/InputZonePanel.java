@@ -34,12 +34,7 @@ public class InputZonePanel extends ViewModelPanel {
 
             g.drawRect(x, y, width, height);
         }
-        //draw board
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.getFirst().size(); j++) {
-                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
-            }
-        }
+
         //draw zone index on board
         for (int i = 0; i < zones.size(); i++) {
             for (int j = 0; j < zones.get(i).size(); j++) {
@@ -55,7 +50,12 @@ public class InputZonePanel extends ViewModelPanel {
             }
         }
 
-
+        //draw board
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.getFirst().size(); j++) {
+                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
+            }
+        }
     }
 
 

@@ -8,6 +8,8 @@ import utils.Constants;
 import utils.DrawCell;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +28,8 @@ public class BoardPanel extends ViewModelPanel {
     private ArrayList<PedestrianInput> pedestrianEntryQueue;
     private JLabel timerLabel;
     private JLabel conflictLabel;
+    private int conflictPercent = 0;
+    private double probabilityDeviation = 0.0;
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -72,28 +76,40 @@ public class BoardPanel extends ViewModelPanel {
         timerLabel = new JLabel("00:00");
         add(timerLabel);
 
-        addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentShown(ComponentEvent e) {
-//                loadBoard();
-//                minute = 0;
-//                hour = 0;
-//                Timer timer = new Timer(1000, new ActionListener() {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
-//                        step();
-//
-//                    }
-//                });
-//
-//                timer.start();
-//            }
-//
-//            @Override
-//            public void componentHidden(ComponentEvent e) {
-//                loaded = false;
-//            }
+        JLabel conflictPercentLabel = new JLabel("conflict percent: ");
+        this.add(conflictPercentLabel);
+        JSpinner conflictPercentSpinner = new JSpinner(new SpinnerNumberModel(conflictPercent, 0, 100, 1));
+        conflictPercentSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                try {
+                    conflictPercent = (int) conflictPercentSpinner.getValue();
+                    repaint();
+                } catch (Exception err) {
+                    System.out.println(err.getMessage());
+                }
+
+            }
         });
+        this.add(conflictPercentSpinner);
+
+        JLabel probabilityDeviationLabel  = new JLabel("probability deviation: ");
+        this.add(probabilityDeviationLabel);
+        JSpinner probabilityDeviationSpinner = new JSpinner(new SpinnerNumberModel(probabilityDeviation, 0.0, 1.0, 0.01));
+        probabilityDeviationSpinner.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                try {
+                    probabilityDeviation = (double) probabilityDeviationSpinner.getValue();
+                    repaint();
+                } catch (Exception err) {
+                    System.out.println(err.getMessage());
+                }
+
+            }
+        });
+        this.add(probabilityDeviationSpinner);
+
 
         JButton button = new JButton("Step");
         conflictLabel = new JLabel();
@@ -103,6 +119,7 @@ public class BoardPanel extends ViewModelPanel {
         button.addActionListener(e -> {
             step();
         });
+
 
     }
 
@@ -171,6 +188,8 @@ public class BoardPanel extends ViewModelPanel {
             }
 
         }
+
+
         repaint();
 
     }

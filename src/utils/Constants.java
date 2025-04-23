@@ -26,6 +26,7 @@ public class Constants {
     public static final String REMOVE_WAY_BUTTON = "Remove Way";
     public static final String WAY_LABEL = "way: ";
     public static final String AMOUNT_PEDESTRIAN_LABEL = "amount pedestrian: ";
-    public static final String TIME_LABEL = "time: ";
+    public static final String TIME_IN_LABEL = "time in: ";
+    public static final String TIME_OUT_LABEL = "time out: ";
 
 }

@@ -14,9 +14,6 @@ public class PedestrianCell extends Cell {
     private ArrayList<ArrayList<Integer>> startMap;
 
     PedestrianCell(){}
-    PedestrianCell(State state) {
-        super(state);
-    }
 
     @Override
     public boolean getIsPedestrian() {
@@ -62,7 +59,7 @@ public class PedestrianCell extends Cell {
         int waveIndex = 1;
         //printMap();
 
-        while (currentWave.size() != 0) {
+        while (!currentWave.isEmpty()) {
             for (Pair<Integer, Integer> p : currentWave) {
                 int currentX = p.getFirst();
                 int currentY = p.getSecond();
@@ -115,11 +112,6 @@ public class PedestrianCell extends Cell {
     }
 
     @Override
-    public String printCell() {
-        return "5";
-    }
-
-    @Override
     public boolean achievedGoal(int row, int col) {
         Pair<Integer, Integer> currentGoal = goalList.getFirst();
         if (row == currentGoal.getFirst() && col == currentGoal.getSecond()) {
@@ -147,5 +139,12 @@ public class PedestrianCell extends Cell {
 //        for (Pair<Integer,Integer> goal : goalList){
 //            System.out.println("goal x: "+goal.getFirst() +" y: "+ goal.getSecond());
 //        }
+    }
+    public void goToExit(){
+        if(!goalList.isEmpty()){
+            Pair<Integer, Integer> exit = goalList.getLast();
+            goalList.clear();
+            goalList.add(exit);
+        }
     }
 }

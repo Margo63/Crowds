@@ -9,6 +9,7 @@ public class PedestrianInput {
     public Point pedestrianExit;
     public int amountOfPedestrian = 0;
     public long timeIn = new Date(0).getTime();
+    public long timeOut = new Date(0).getTime();
     public ArrayList<Point> way = new ArrayList<>();
 
     public Point getPedestrianEntry() {

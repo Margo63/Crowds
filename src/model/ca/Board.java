@@ -197,11 +197,6 @@ public class Board {
 
     }
 
-    public void setCellGoal(int row, int col) {
-        //System.out.println(row + " " + col);
-        board.get(row).get(col).setGoal();
-    }
-
     public int getAmountOfRows() {
         return board.size();
     }
@@ -274,7 +269,7 @@ public class Board {
 
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
-                System.out.print(this.getCell(i, j).printCell() + " ");
+                System.out.print(this.getCell(i, j).getState() + " ");
             }
             System.out.println();
         }
@@ -283,7 +278,7 @@ public class Board {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
 
-                System.out.print(tmpBoard.get(i).get(j).printCell() + " ");
+                System.out.print(tmpBoard.get(i).get(j).getState() + " ");
 
             }
             System.out.println();

@@ -66,32 +66,20 @@ public class InputPedestrianPanel extends ViewModelPanel {
     public InputPedestrianPanel() {
         this.add(Box.createVerticalStrut(500));
 
-//        addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentShown(ComponentEvent e) {
-//                loadBoard();
-//            }
-//
-//            @Override
-//            public void componentHidden(ComponentEvent e) {
-//                saveBoard();
-//            }
-//        });
-
         comboBoxEntries = new JComboBox();
         comboBoxEntries.setRenderer(new EntryRender());
         this.add(comboBoxEntries);
 
-
         JLabel labelWay = new JLabel(Constants.WAY_LABEL);
         this.add(labelWay);
+
         JButton addWay = new JButton(Constants.ADD_WAY_BUTTON);
         this.add(addWay);
         addWay.addActionListener(e -> {
             addWay.setEnabled(false);
-
             repaint();
         });
+
         JButton removeWay = new JButton(Constants.REMOVE_WAY_BUTTON);
         this.add(removeWay);
         removeWay.addActionListener(e -> {
@@ -112,22 +100,41 @@ public class InputPedestrianPanel extends ViewModelPanel {
             }
         });
 
-        JLabel time = new JLabel(Constants.TIME_LABEL);
-        this.add(time);
+        JLabel timeIn = new JLabel(Constants.TIME_IN_LABEL);
+        this.add(timeIn);
 
-        Date date = new Date();
-        SpinnerDateModel sm = new SpinnerDateModel(date, null, null, 0);
-        JSpinner spinnerTime = new JSpinner(sm);
-        JSpinner.DateEditor te = new JSpinner.DateEditor(spinnerTime, "HH:mm");
-        spinnerTime.setEditor(te);
-        this.add(spinnerTime);
+        Date dateIn = new Date();
+        SpinnerDateModel smIn = new SpinnerDateModel(dateIn, null, null, 0);
+        JSpinner spinnerTimeIn = new JSpinner(smIn);
+        JSpinner.DateEditor te = new JSpinner.DateEditor(spinnerTimeIn, "HH:mm");
+        spinnerTimeIn.setEditor(te);
+        this.add(spinnerTimeIn);
 
-        spinnerTime.addChangeListener(e -> {
+        spinnerTimeIn.addChangeListener(e -> {
             PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
-            if (pedestrianInput != null && spinnerTime.getValue() != null) {
-                SpinnerDateModel model = (SpinnerDateModel) spinnerTime.getModel();
+            if (pedestrianInput != null && spinnerTimeIn.getValue() != null) {
+                SpinnerDateModel model = (SpinnerDateModel) spinnerTimeIn.getModel();
                 Date dateValue = (Date) model.getValue();
                 pedestrianInput.timeIn = dateValue.getTime();
+            }
+        });
+
+        JLabel timeOut = new JLabel(Constants.TIME_OUT_LABEL);
+        this.add(timeOut);
+
+        Date dateOut = new Date();
+        SpinnerDateModel smOut = new SpinnerDateModel(dateOut, null, null, 0);
+        JSpinner spinnerTimeOut = new JSpinner(smOut);
+        JSpinner.DateEditor teOut = new JSpinner.DateEditor(spinnerTimeOut, "HH:mm");
+        spinnerTimeOut.setEditor(teOut);
+        this.add(spinnerTimeOut);
+
+        spinnerTimeOut.addChangeListener(e -> {
+            PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
+            if (pedestrianInput != null && spinnerTimeOut.getValue() != null) {
+                SpinnerDateModel model = (SpinnerDateModel) spinnerTimeOut.getModel();
+                Date dateValue = (Date) model.getValue();
+                pedestrianInput.timeOut = dateValue.getTime();
             }
         });
 
@@ -150,7 +157,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
                 labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
                 spinnerAmount.setValue(pedestrianInput.amountOfPedestrian);
                 comboBoxExits.setSelectedItem(pedestrianInput.pedestrianExit);
-                spinnerTime.setValue(new Date(pedestrianInput.timeIn));
+                spinnerTimeIn.setValue(new Date(pedestrianInput.timeIn));
+                spinnerTimeOut.setValue(new Date(pedestrianInput.timeOut));
             }
             repaint();
         });
