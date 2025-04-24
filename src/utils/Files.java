@@ -46,7 +46,13 @@ public class Files {
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
-
+    }
+    public static void createFile(String filename) {
+        try {
+            new PrintWriter(filename).close();
+        }catch (FileNotFoundException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 }

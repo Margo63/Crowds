@@ -3,9 +3,13 @@ package analyze;
 import model.ca.Board;
 import model.ca.MapPoint;
 import observer.IObserver;
+import utils.Constants;
 import utils.Files;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +25,10 @@ public class Analyze implements IObserver {
     private List<ArrayList<MapPoint>> pedestrianWays = new ArrayList<>();
 
     public Analyze() {
-
-
+        Files.createFile(Constants.TBL_ZONE_AMOUNT);
+        Files.createFile(Constants.TBL_ZONE_DENSITY);
+        Files.createFile(Constants.TBL_WAY);
+        Files.writeToFile(Constants.TBL_WAY,"ways\n");
     }
 
 
@@ -56,13 +62,15 @@ public class Analyze implements IObserver {
             stringBuilderAmount.append(div);
             stringBuilderAmount.append(zoneData.get(key).amountOfPedestrian);
             stringBuilderDensity.append(div);
-            stringBuilderDensity.append(zoneData.get(key).amountOfPedestrian);
+            stringBuilderDensity.append(zoneData.get(key).densityOfPedestrian);
             div = ",";
         }
         stringBuilderAmount.append('\n');
         stringBuilderDensity.append('\n');
-        Files.writeToFile("tbl_zone_amount", stringBuilderAmount.toString());
-        Files.writeToFile("tbl_zone_density", stringBuilderDensity.toString());
+        Files.writeToFile(Constants.TBL_ZONE_AMOUNT, stringBuilderAmount.toString());
+        Files.writeToFile(Constants.TBL_ZONE_DENSITY, stringBuilderDensity.toString());
+
+
 
     }
 
@@ -80,6 +88,19 @@ public class Analyze implements IObserver {
             }
         }
         zoneData.remove(-1);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        String div = "";
+        for (Integer key: zoneData.keySet()) {
+            //System.out.println(zoneData.get(key).densityOfPedestrian+"/"+zoneData.get(key).size+"="+zoneData.get(key).densityOfPedestrian/(double)zoneData.get(key).size);
+            stringBuilder.append(div);
+            stringBuilder.append(key);
+            div = ",";
+        }
+        stringBuilder.append('\n');
+        Files.writeToFile(Constants.TBL_ZONE_AMOUNT, stringBuilder.toString());
+        Files.writeToFile(Constants.TBL_ZONE_DENSITY, stringBuilder.toString());
+
     }
 
     public int getConflict() {
@@ -89,13 +110,35 @@ public class Analyze implements IObserver {
         return zoneData;
     }
 
-    public void report(){
+    public void report() {
         System.out.println("amount of pedestrian = "+amountOfPedestrianOnBoard
                             + " amount of exited pedestrian = "+amountOfExitedPedestrian
                             + " amount of entered pedestrian = "+amountOfEnteredPedestrian
                             + "ways = " + pedestrianWays
         );
-        analizeWay();
+        for (ArrayList<MapPoint> way: pedestrianWays) {
+            Files.writeToFile(Constants.TBL_WAY, way.toString()+"\n");
+        }
+        try {
+            // Команда для запуска Python-скрипта
+            ProcessBuilder pb = new ProcessBuilder("python", "test.py");
+            Process process = pb.start();
+
+            // Читаем вывод скрипта
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+
+            int exitCode = process.waitFor();
+            System.out.println("Python script finished with exit code " + exitCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void analizeWay(){
@@ -110,12 +153,12 @@ public class Analyze implements IObserver {
                 matrix[j][i] = distance;
             }
         }
-        for (int i = 0; i < pedestrianWays.size(); i++) {
-            for (int j = 0; j < pedestrianWays.size(); j++) {
-                System.out.print(matrix[i][j]+"\t");
-            }
-            System.out.println();
-        }
+//        for (int i = 0; i < pedestrianWays.size(); i++) {
+//            for (int j = 0; j < pedestrianWays.size(); j++) {
+//                System.out.print(matrix[i][j]+"\t");
+//            }
+//            System.out.println();
+//        }
 
     }
 

@@ -29,4 +29,9 @@ public class Constants {
     public static final String TIME_IN_LABEL = "time in: ";
     public static final String TIME_OUT_LABEL = "time out: ";
 
+    //filenames
+    public static final String TBL_ZONE_AMOUNT = "ml/tbl_zone_amount.csv";
+    public static final String TBL_ZONE_DENSITY = "ml/tbl_zone_density.csv";
+    public static final String TBL_WAY = "ml/tbl_way.csv";
+
 }
