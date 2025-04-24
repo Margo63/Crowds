@@ -2,7 +2,7 @@ package presentation.input;
 
 import presentation.ViewModelPanel;
 import utils.Constants;
-import utils.ReadFile;
+import utils.Files;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,7 +22,7 @@ public class InputFilePanel extends ViewModelPanel {
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                ReadFile readFile = new ReadFile();
+                Files readFile = new Files();
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
                 if(result!=null && !result.isEmpty()){

@@ -3,7 +3,9 @@ package analyze;
 import model.ca.Board;
 import model.ca.MapPoint;
 import observer.IObserver;
+import utils.Files;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +19,14 @@ public class Analyze implements IObserver {
     private int amountOfPedestrianOnBoard = 0;
     private int amountOfExitedPedestrian = 0;
     private List<ArrayList<MapPoint>> pedestrianWays = new ArrayList<>();
+
     public Analyze() {
+
 
     }
 
 
-    public void analyze_board(Board board) {
+    public void analyze_board(Board board)  {
 
 
         for (Integer key: zoneData.keySet()) {
@@ -42,6 +46,23 @@ public class Analyze implements IObserver {
             zoneData.get(key).densityOfPedestrian = zoneData.get(key).amountOfPedestrian/(double)zoneData.get(key).size;
         }
 
+
+
+        StringBuilder stringBuilderAmount = new StringBuilder();
+        StringBuilder stringBuilderDensity = new StringBuilder();
+        String div = "";
+        for (Integer key: zoneData.keySet()) {
+            //System.out.println(zoneData.get(key).densityOfPedestrian+"/"+zoneData.get(key).size+"="+zoneData.get(key).densityOfPedestrian/(double)zoneData.get(key).size);
+            stringBuilderAmount.append(div);
+            stringBuilderAmount.append(zoneData.get(key).amountOfPedestrian);
+            stringBuilderDensity.append(div);
+            stringBuilderDensity.append(zoneData.get(key).amountOfPedestrian);
+            div = ",";
+        }
+        stringBuilderAmount.append('\n');
+        stringBuilderDensity.append('\n');
+        Files.writeToFile("tbl_zone_amount", stringBuilderAmount.toString());
+        Files.writeToFile("tbl_zone_density", stringBuilderDensity.toString());
 
     }
 

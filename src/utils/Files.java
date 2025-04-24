@@ -1,11 +1,9 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
-public class ReadFile {
+public class Files {
 
 
     public ArrayList<ArrayList<Integer>> readFile(String filename) {
@@ -34,5 +32,21 @@ public class ReadFile {
             System.out.println(ex.getMessage());
         }
         return tmp;
+    }
+
+    public static void writeToFile(String filename, String line) {
+        try {
+            FileWriter csvOutputFile = new FileWriter(filename,true);
+            PrintWriter printWriter = new PrintWriter(csvOutputFile);
+
+            printWriter.write(line);
+            printWriter.flush();
+            printWriter.close();
+
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
+
     }
 }
