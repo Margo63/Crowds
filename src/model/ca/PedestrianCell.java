@@ -4,14 +4,16 @@ import kotlin.Pair;
 import model.State;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static model.State.EMPTY;
 
 public class PedestrianCell extends Cell {
 
-    private ArrayList<Pair<Integer, Integer>> goalList;
+    private ArrayList<MapPoint> goalList;
     private ArrayList<ArrayList<Integer>> goalMap = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> startMap;
+    private ArrayList<MapPoint> way = new ArrayList();
 
     PedestrianCell(){}
 
@@ -48,8 +50,8 @@ public class PedestrianCell extends Cell {
             }
         }
 
-        ArrayList<Pair<Integer, Integer>> currentWave = new ArrayList<>();
-        ArrayList<Pair<Integer, Integer>> nextWave = new ArrayList<>();
+        ArrayList<MapPoint> currentWave = new ArrayList<>();
+        ArrayList<MapPoint> nextWave = new ArrayList<>();
 
         currentWave.add(this.goalList.getFirst());
 
@@ -60,27 +62,27 @@ public class PedestrianCell extends Cell {
         //printMap();
 
         while (!currentWave.isEmpty()) {
-            for (Pair<Integer, Integer> p : currentWave) {
-                int currentX = p.getFirst();
-                int currentY = p.getSecond();
+            for (MapPoint p : currentWave) {
+                int currentX = p.row();
+                int currentY = p.column();
 
                 if (currentX - 1 >= 0 && State.getFromInt(goalMap.get(currentX - 1).get(currentY)) == EMPTY) {
-                    nextWave.add(new Pair<>(currentX - 1, currentY));
+                    nextWave.add(new MapPoint(currentX - 1, currentY));
                     goalMap.get(currentX - 1).set(currentY, waveIndex);
                 }
 
                 if (currentX + 1 < height && State.getFromInt(goalMap.get(currentX + 1).get(currentY)) == EMPTY) {
-                    //System.out.println("down: x= "+cur_x+" y= "+(cur_y+1));
-                    nextWave.add(new Pair<>(currentX + 1, currentY));
+                    //System.out.println("down: row= "+cur_x+" column= "+(cur_y+1));
+                    nextWave.add(new MapPoint(currentX + 1, currentY));
                     goalMap.get(currentX + 1).set(currentY, waveIndex);
                 }
                 if (currentY - 1 >= 0 && State.getFromInt(goalMap.get(currentX).get(currentY - 1)) == EMPTY) {
-                    nextWave.add(new Pair<>(currentX, currentY - 1));
+                    nextWave.add(new MapPoint(currentX, currentY - 1));
                     goalMap.get(currentX).set(currentY - 1, waveIndex);
                 }
                 if (currentY + 1 < width && State.getFromInt(goalMap.get(currentX).get(currentY + 1)) == EMPTY) {
 
-                    nextWave.add(new Pair<>(currentX, currentY + 1));
+                    nextWave.add(new MapPoint(currentX, currentY + 1));
                     goalMap.get(currentX).set(currentY + 1, waveIndex);
                 }
 
@@ -96,10 +98,12 @@ public class PedestrianCell extends Cell {
 
             //printMap();
         }
-        Pair<Integer, Integer> currentGoal = goalList.getFirst();
-        goalMap.get(currentGoal.getFirst()).set(currentGoal.getSecond(), 0);
+        MapPoint currentGoal = goalList.getFirst();
+        goalMap.get(currentGoal.row()).set(currentGoal.column(), 0);
         //printMap();
     }
+
+
 
     public void printMap() {
         for (int i = 0; i < this.goalMap.size(); i++) {
@@ -111,10 +115,15 @@ public class PedestrianCell extends Cell {
         System.out.println("////////////////////////////////////////////////////");
     }
 
+    public ArrayList<MapPoint> getWay(){
+        return way;
+    }
+
     @Override
-    public boolean achievedGoal(int row, int col) {
-        Pair<Integer, Integer> currentGoal = goalList.getFirst();
-        if (row == currentGoal.getFirst() && col == currentGoal.getSecond()) {
+    public boolean isGoalAchieved(int row, int col) {
+        way.add(new MapPoint(row, col));
+        MapPoint currentGoal = goalList.getFirst();
+        if (row == currentGoal.row() && col == currentGoal.column()) {
 
 
             goalList.removeFirst();
@@ -123,26 +132,26 @@ public class PedestrianCell extends Cell {
             }
 
 //            for (Pair<Integer, Integer> goal : goalList) {
-//                System.out.println("goal x: " + goal.getFirst() + " y: " + goal.getSecond());
+//                System.out.println("goal row: " + goal.getFirst() + " column: " + goal.getSecond());
 //            }
             return goalList.isEmpty();
         }
         return false;
     }
 
-    public void setGoalList(ArrayList<Pair<Integer, Integer>> goalList) {
+    public void setGoalList(ArrayList<MapPoint> goalList) {
         this.goalList = new ArrayList<>(goalList);
     }
 
     public void setExitGoal(int rowGoal, int colGoal) {
-        this.goalList.addLast(new Pair<>(rowGoal, colGoal));
+        this.goalList.addLast(new MapPoint(rowGoal, colGoal));
 //        for (Pair<Integer,Integer> goal : goalList){
-//            System.out.println("goal x: "+goal.getFirst() +" y: "+ goal.getSecond());
+//            System.out.println("goal row: "+goal.getFirst() +" column: "+ goal.getSecond());
 //        }
     }
     public void goToExit(){
         if(!goalList.isEmpty()){
-            Pair<Integer, Integer> exit = goalList.getLast();
+            MapPoint exit = goalList.getLast();
             goalList.clear();
             goalList.add(exit);
         }

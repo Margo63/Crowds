@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ViewModel {
     private ArrayList<ArrayList<InputCell>> board;
     private ArrayList<ArrayList<Integer>> zones;
-    private final String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE,Constants.INPUT_PEDESTRIAN, Constants.BOARD};
+    private final String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE, Constants.INPUT_PEDESTRIAN, Constants.BOARD};
     private int pageIndex = 0;
     private Screen screen;
     private ArrayList<PedestrianInput> pedestrianInputs;
@@ -90,7 +90,10 @@ public class ViewModel {
             for (int i = 0; i < board.size(); i++) {
                 this.zones.add(new ArrayList<>(board.size()));
                 for (int j = 0; j < board.get(i).size(); j++) {
-                    this.zones.get(i).add(0);
+                    if (board.get(i).get(j).getState() == State.EMPTY)
+                        this.zones.get(i).add(0);
+                    else
+                        this.zones.get(i).add(-1);
                 }
             }
         }
@@ -113,10 +116,10 @@ public class ViewModel {
     }
 
     public boolean checkNextPage() {
-        return  !(pageIndex == pages.length - 1);
+        return !(pageIndex == pages.length - 1);
     }
 
     public boolean checkPreviousPage() {
-        return  !(pageIndex == 0 || pageIndex == pages.length - 1);
+        return !(pageIndex == 0 || pageIndex == pages.length - 1);
     }
 }

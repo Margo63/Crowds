@@ -1,6 +1,7 @@
 package model.ca;
 
 import kotlin.Pair;
+import model.Model;
 import model.State;
 
 import java.awt.*;
@@ -10,8 +11,7 @@ import java.util.Map;
 
 import static model.State.EMPTY;
 import static model.State.EXIT;
-
-public class Board {
+public class Board extends Model {
 
     private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<ArrayList<Cell>> board;
@@ -34,6 +34,7 @@ public class Board {
 //                tmp_board.get(i).add(cell);
 //            }
 //        }
+        super();
         loadMap(startMap);
     }
 
@@ -53,7 +54,7 @@ public class Board {
         }
     }
 
-    public void addPedestrian(Point entry, ArrayList<Pair<Integer, Integer>> way, Point exit) {
+    public void addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
         PedestrianCell pedestrianCell = new PedestrianCell();
         pedestrianCell.initGoalMap(startMap);
 
@@ -67,6 +68,7 @@ public class Board {
         if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
             board.get(entry.y - 1).set(entry.x, pedestrianCell);
             tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
+            notifyObserversAboutNewPedestrianOnBoard();
             return;
         }
 
@@ -74,6 +76,7 @@ public class Board {
         if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
             board.get(entry.y + 1).set(entry.x, pedestrianCell);
             tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
+            notifyObserversAboutNewPedestrianOnBoard();
             return;
         }
 
@@ -81,6 +84,7 @@ public class Board {
         if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
             board.get(entry.y).set(entry.x - 1, pedestrianCell);
             tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
+            notifyObserversAboutNewPedestrianOnBoard();
             return;
         }
 
@@ -88,6 +92,7 @@ public class Board {
         if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
             board.get(entry.y).set(entry.x + 1, pedestrianCell);
             tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
+            notifyObserversAboutNewPedestrianOnBoard();
             return;
         }
 
@@ -95,7 +100,9 @@ public class Board {
     }
 
     public void removePedestrian(int row, int col) {
-
+        notifyObserversAboutRemovePedestrianOffBoard();
+        notifyObserversAboutPedestrianWay(((PedestrianCell)board.get(row).get(col)).getWay());
+        // get path that pedestrian walk
         board.get(row).set(col, new Cell(EXIT));
         tmpBoard.get(row).set(col, new Cell(EXIT));
     }
@@ -234,7 +241,9 @@ public class Board {
                 tmpBoard.get(row).set(col, newCell);
                 //System.out.println("swap");
             } else {
-                System.out.println("conflict");
+                //System.out.println("conflict");
+                notifyObserversAboutConflict();
+
                 int next = (int) ((Math.random() * 100) % value.size());
                 int row = value.get(next).getSecond().getFirst();
                 int col = value.get(next).getSecond().getSecond();
@@ -257,7 +266,7 @@ public class Board {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 board.get(i).set(j, tmpBoard.get(i).get(j));
-                if (board.get(i).get(j).achievedGoal(i, j)) {
+                if (board.get(i).get(j).isGoalAchieved(i, j)) {
                     this.removePedestrian(i, j);
                 }
             }
@@ -284,6 +293,5 @@ public class Board {
             System.out.println();
         }
     }
-
 
 }

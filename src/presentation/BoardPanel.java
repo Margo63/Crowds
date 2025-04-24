@@ -3,6 +3,7 @@ package presentation;
 import analyze.Analyze;
 import kotlin.Pair;
 import model.ca.Board;
+import model.ca.MapPoint;
 import presentation.models.PedestrianInput;
 import utils.Constants;
 import utils.DrawCell;
@@ -13,7 +14,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -37,35 +37,7 @@ public class BoardPanel extends ViewModelPanel {
             for (int i = 0; i < board.getAmountOfRows(); i++) {
                 for (int j = 0; j < board.getAmountOfCols(); j++) {
                     drawCell.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
-//                    switch (board.getCell(i,j).getState()){
-//                        case EMPTY:
-//                            g.drawRect(j * 10, i * 10, 10, 10);
-//                            break;
-//                        case EXIT:
-//                            g.setColor(Color.RED);
-//                            g.fillRect(j * 10, i * 10, 10, 10);
-//                            g.setColor(Color.BLACK);
-//                            break;
-//                        case ENTRY:
-//                            g.setColor(Color.BLUE);
-//                            g.fillRect(j * 10, i * 10, 10, 10);
-//                            g.setColor(Color.BLACK);
-//                            break;
-//                        case PEDESTRIAN:
-//                            g.setColor(Color.GREEN);
-//                            g.fillRect(j * 10, i * 10, 10, 10);
-//                            g.setColor(Color.BLACK);
-//                            break;
-//                        case OBSTRUCTION:
-//                            g.fillRect(j * 10, i * 10, 10, 10);
-//                            break;
-//
-//                    }
-
-
-                    //  System.out.print(i + " "+j+"; ");
                 }
-                // System.out.println();
             }
         }
 
@@ -120,6 +92,13 @@ public class BoardPanel extends ViewModelPanel {
             step();
         });
 
+        JButton reportButton = new JButton("report");
+        add(reportButton);
+
+        reportButton.addActionListener(e -> {
+            analyze.report();
+        });
+
 
     }
 
@@ -129,6 +108,8 @@ public class BoardPanel extends ViewModelPanel {
 
             pedestrianEntryQueue = new ArrayList<>();
             this.board = new Board(this.getViewModel().getBoardInteger());
+            this.board.addObserver(this.analyze);
+
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();
             Comparator<PedestrianInput> byTimeIn = Comparator.comparingLong(PedestrianInput::getTimeIn);
             pedestrian.sort(byTimeIn);
@@ -140,7 +121,7 @@ public class BoardPanel extends ViewModelPanel {
 //                System.out.println(pedestrian.get(i).getTimeIn());
 //                ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
 //                for (Point point : pedestrian.get(i).way) {
-//                    way.add(new Pair<>(point.y, point.x));
+//                    way.add(new Pair<>(point.column, point.row));
 //                }
 //                this.board.addPedestrian(pedestrian.get(i).pedestrianEntry, way, pedestrian.get(i).pedestrianExit);
             }
@@ -168,7 +149,7 @@ public class BoardPanel extends ViewModelPanel {
         try {
             board.step();
             analyze.analyze_board(board);
-            conflictLabel.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getAmountPedestrianInZone());
+            conflictLabel.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getZoneData());
 
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
@@ -179,10 +160,12 @@ public class BoardPanel extends ViewModelPanel {
             Date date = new Date(pedestrianEntryQueue.getFirst().timeIn);
 
             if(date.getHours()*60 + date.getMinutes() <= hour*60+minute ){
-                ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
+                ArrayList<MapPoint> way = new ArrayList<>();
                 for (Point point : pedestrianEntryQueue.getFirst().way) {
-                    way.add(new Pair<>(point.y, point.x));
+                    way.add(new MapPoint(point.y, point.x));
                 }
+                //TODO
+                //check that exit exist
                 this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit);
                 pedestrianEntryQueue.removeFirst();
             }
