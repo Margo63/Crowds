@@ -19,10 +19,14 @@ public class Model implements IObservable {
         observers.remove(observer);
     }
 
+    @Override
+    public void notifyObserversAboutSize(int row, int column) {
+        observers.forEach(observer -> observer.updateSize(row, column));
+    }
 
     @Override
-    public void notifyObserversAboutConflict() {
-        observers.forEach(IObserver::updateConflict);
+    public void notifyObserversAboutConflict(int row, int column) {
+        observers.forEach(observer -> observer.updateConflict(row, column));
     }
 
     @Override

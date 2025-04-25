@@ -1,0 +1,6 @@
+rows board: 0
+columns board: 0
+amount of conflict: 8
+amount of exited pedestrian: 9
+amount of entered pedestrian: 9
+

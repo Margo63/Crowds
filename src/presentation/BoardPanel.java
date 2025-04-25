@@ -1,7 +1,6 @@
 package presentation;
 
 import analyze.Analyze;
-import kotlin.Pair;
 import model.ca.Board;
 import model.ca.MapPoint;
 import presentation.models.PedestrianInput;
@@ -149,7 +148,7 @@ public class BoardPanel extends ViewModelPanel {
         try {
             board.step();
             analyze.analyze_board(board);
-            conflictLabel.setText("количество конфликтов: " + analyze.getConflict()+"\n"+analyze.getZoneData());
+            conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);

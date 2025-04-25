@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 import numpy as np
 import pandas as pd
@@ -23,14 +23,32 @@ def plot(df, name):
     plt.savefig(name + "_hist.png")
     plt.clf()
 
+def clust(arr):
+    n = len(arr)
+    dist_matrix = np.zeros((n, n))
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            dist = similaritymeasures.frechet_dist(arr[i], arr[j])
+            dist_matrix[i, j] = dist
+            dist_matrix[j, i] = dist
+    #print(dist_matrix)
+    cl = DBSCAN(eps=2, min_samples=1, metric='precomputed')
+    dbscan_clust = cl.fit(dist_matrix)
+    clusters = cl.labels_
+    return clusters
 
 if __name__ == '__main__':
+
+
     df_amount = read("tbl_zone_amount.csv")
     plot(df_amount, "amount")
 
     df_density = read("tbl_zone_density.csv")
     plot(df_density, "density")
 
+    df_conflict = read("tbl_conflict_in_time.csv")
+    df_amount_pedestrian = read("tbl_amount_pedestrian_in_time.csv")
+    plot(df_conflict.join(df_amount_pedestrian),"amount_pedestrian_conflist")
     # df_way = read("tbl_way.csv")
 
     arr_ways = []
@@ -41,28 +59,43 @@ if __name__ == '__main__':
         lst = ast.literal_eval(nums[i])
         arr_ways.append(lst)
 
-    n = len(arr_ways)
-    dist_matrix = np.zeros((n, n))
-    for i in range(n - 1):
-        for j in range(i + 1, n):
-            dist = similaritymeasures.frechet_dist(arr_ways[i], arr_ways[j])
-            dist_matrix[i, j] = dist
-            dist_matrix[j, i] = dist
+    # clusters_ways = clust(arr_ways)
+    # print(clusters_ways)
 
-    cl = DBSCAN(eps=2, min_samples=1, metric='precomputed')
-    dbscan_clust = cl.fit(dist_matrix)
-    clusters = cl.labels_
+    df_conflict_point = read("tbl_conflict_point.csv")
+    list_point = df_conflict_point[['row', 'column']].values.tolist()
+    # conflict_points = [[point] for point in list_point]
+    # clusters_conflict = clust(conflict_points)
+    #
+    # print(clusters_conflict)
+    points = list(zip(df_conflict_point['column'], df_conflict_point['row']))
+    freq = Counter(points)
 
-    dict_clust = defaultdict(set)
-    for clust in clusters:
-        dict_clust[int(clust)]=[]
+    freq_df = pd.DataFrame(freq.items(), columns=['point', 'count'])
+    freq_df[['column', 'row']] = pd.DataFrame(freq_df['point'].tolist(), index=freq_df.index)
 
-    for route, clust in zip(arr_ways, clusters):
-        dict_clust[int(clust)].append(route)
+    plot = sns.scatterplot(data=freq_df, x='column', y='row', size='count', sizes=(50, 300), legend=False, alpha=0.7)
 
-    nrows, ncols = 11, 11
-    fig, ax = plt.subplots()
-    dict_clust = dict(dict_clust)
+    plt.title('Частота встречаемости точек конфликта')
+    plt.xlabel('column')
+    plt.ylabel('row')
+    plt.grid(True)
+    plot.invert_yaxis()
+    plt.show()
+
+    # sns.scatterplot(df_conflict_point, x=df_conflict_point["column"],y=df_conflict_point['row'])
+    # plt.show()
+
+    # dict_clust = defaultdict(set)
+    # for clust in clusters:
+    #     dict_clust[int(clust)]=[]
+    #
+    # for route, clust in zip(arr_ways, clusters):
+    #     dict_clust[int(clust)].append(route)
+    #
+    # nrows, ncols = 11, 11
+    # fig, ax = plt.subplots()
+    # dict_clust = dict(dict_clust)
     #
     # for i in range(nrows):
     #     for j in range(ncols):
@@ -77,5 +110,3 @@ if __name__ == '__main__':
     # ax.axis('off')  # Отключаем оси
     #
     # plt.show()
-
-    print(clusters)

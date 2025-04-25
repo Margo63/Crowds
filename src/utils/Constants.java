@@ -33,5 +33,9 @@ public class Constants {
     public static final String TBL_ZONE_AMOUNT = "ml/tbl_zone_amount.csv";
     public static final String TBL_ZONE_DENSITY = "ml/tbl_zone_density.csv";
     public static final String TBL_WAY = "ml/tbl_way.csv";
+    public static final String TBL_CONFLICT_POINT = "ml/tbl_conflict_point.csv";
+    public static final String TBL_CONFLICT_IN_TIME = "ml/tbl_conflict_in_time.csv";
+    public static final String TBL_AMOUNT_PEDESTRIAN_IN_TIME = "ml/tbl_amount_pedestrian_in_time.csv";
+    public static final String TBL_REPORT = "ml/tbl_report.txt";
 
 }

@@ -52,6 +52,7 @@ public class Board extends Model {
                 tmpBoard.get(i).add(cell);
             }
         }
+        notifyObserversAboutSize(getAmountOfRows(), getAmountOfCols());
     }
 
     public void addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
@@ -242,7 +243,7 @@ public class Board extends Model {
                 //System.out.println("swap");
             } else {
                 //System.out.println("conflict");
-                notifyObserversAboutConflict();
+
 
                 int next = (int) ((Math.random() * 100) % value.size());
                 int row = value.get(next).getSecond().getFirst();
@@ -250,6 +251,7 @@ public class Board extends Model {
                 Cell newCell = tmpBoard.get(next_row).get(next_col);
                 tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
                 tmpBoard.get(row).set(col, newCell);
+                notifyObserversAboutConflict(row, col);
             }
 
         });
