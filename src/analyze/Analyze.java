@@ -119,25 +119,22 @@ public class Analyze implements IObserver {
         for (ArrayList<MapPoint> way: pedestrianWays) {
             Files.writeToFile(Constants.TBL_WAY, way.toString()+"\n");
         }
-        try {
-            // Команда для запуска Python-скрипта
-            ProcessBuilder pb = new ProcessBuilder("python", "test.py");
-            Process process = pb.start();
-
-            // Читаем вывод скрипта
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-
-            int exitCode = process.waitFor();
-            System.out.println("Python script finished with exit code " + exitCode);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+//        try {
+//            ProcessBuilder pb = new ProcessBuilder("python", "test.py");
+//            Process process = pb.start();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                System.out.println(line);
+//            }
+//
+//            int exitCode = process.waitFor();
+//            System.out.println("Python script finished with exit code " + exitCode);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+            analizeWay();
 
     }
 
