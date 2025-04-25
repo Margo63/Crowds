@@ -106,8 +106,9 @@ public class BoardPanel extends ViewModelPanel {
             analyze.loadZones(getViewModel().getZones());
 
             pedestrianEntryQueue = new ArrayList<>();
-            this.board = new Board(this.getViewModel().getBoardInteger());
+            this.board = new Board();
             this.board.addObserver(this.analyze);
+            this.board.loadMap(getViewModel().getBoardInteger());
 
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();
             Comparator<PedestrianInput> byTimeIn = Comparator.comparingLong(PedestrianInput::getTimeIn);

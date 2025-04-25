@@ -21,6 +21,7 @@ public class Model implements IObservable {
 
     @Override
     public void notifyObserversAboutSize(int row, int column) {
+
         observers.forEach(observer -> observer.updateSize(row, column));
     }
 

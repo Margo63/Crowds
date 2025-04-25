@@ -20,7 +20,8 @@ public class Board extends Model {
     public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> pedestriansWishList = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
-    public Board(ArrayList<ArrayList<Integer>> startMap) {
+
+    public Board() {
 //        this.start_map = start_map;
 //        //board = new Cell[size][size];
 //        board = new ArrayList<ArrayList<Cell>>();
@@ -35,7 +36,6 @@ public class Board extends Model {
 //            }
 //        }
         super();
-        loadMap(startMap);
     }
 
     public void loadMap(ArrayList<ArrayList<Integer>> startMap) {
@@ -52,7 +52,8 @@ public class Board extends Model {
                 tmpBoard.get(i).add(cell);
             }
         }
-        notifyObserversAboutSize(getAmountOfRows(), getAmountOfCols());
+
+        notifyObserversAboutSize(board.size(), board.get(0).size());
     }
 
     public void addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {

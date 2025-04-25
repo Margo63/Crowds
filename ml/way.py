@@ -39,6 +39,12 @@ def clust(arr):
 
 if __name__ == '__main__':
 
+    with open('tbl_report.txt', 'r') as f:
+        report_lines = f.read().splitlines()
+
+    board_rows =int(report_lines[0].split(" ")[-1])
+    board_col = int(report_lines[1].split(" ")[-1])
+    print(board_rows, board_col)
 
     df_amount = read("tbl_zone_amount.csv")
     plot(df_amount, "amount")
@@ -74,14 +80,19 @@ if __name__ == '__main__':
     freq_df = pd.DataFrame(freq.items(), columns=['point', 'count'])
     freq_df[['column', 'row']] = pd.DataFrame(freq_df['point'].tolist(), index=freq_df.index)
 
+
     plot = sns.scatterplot(data=freq_df, x='column', y='row', size='count', sizes=(50, 300), legend=False, alpha=0.7)
+    plt.xlim(0, board_rows)
+    plt.ylim(0, board_col)
 
     plt.title('Частота встречаемости точек конфликта')
     plt.xlabel('column')
     plt.ylabel('row')
     plt.grid(True)
     plot.invert_yaxis()
-    plt.show()
+
+    plt.savefig("conflict_point.png")
+    plt.clf()
 
     # sns.scatterplot(df_conflict_point, x=df_conflict_point["column"],y=df_conflict_point['row'])
     # plt.show()
