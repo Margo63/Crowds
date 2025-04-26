@@ -7,6 +7,7 @@ import data.State;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,20 +25,6 @@ public class Board extends Model {
 
 
     public Board() {
-//        this.start_map = start_map;
-//        //board = new Cell[size][size];
-//        board = new ArrayList<ArrayList<Cell>>();
-//        for (int i = 0; i < start_map.size(); i++) {
-//            board.add(new ArrayList<Cell>(start_map.size()));
-//            tmp_board.add(new ArrayList<Cell>(start_map.size()));
-//            for (int j = 0; j < start_map.getFirst().size(); j++) {
-//                Cell cell = new Cell();
-//                cell.setState(State.getFromInt(start_map.get(i).get(j)));
-//                board.get(i).add(cell);
-//                tmp_board.get(i).add(cell);
-//            }
-//        }
-
         super();
         board = new ArrayList<ArrayList<Cell>>();
     }
@@ -46,6 +33,7 @@ public class Board extends Model {
         this.startMap = startMap;
         //board = new Cell[size][size];
 
+        //init map from input
         for (int i = 0; i < startMap.size(); i++) {
             board.add(new ArrayList<Cell>(startMap.size()));
             tmpBoard.add(new ArrayList<Cell>(startMap.size()));
@@ -57,7 +45,40 @@ public class Board extends Model {
             }
         }
 
-        notifyObserversAboutSize(board.size(), board.get(0).size());
+        notifyObserversAboutSize(board.size(), board.getFirst().size());
+
+        //add frame
+        board.add(new ArrayList<Cell>(startMap.size()));
+        tmpBoard.add(new ArrayList<Cell>(startMap.size()));
+        this.startMap.add(new ArrayList<Integer>(startMap.size()));
+        board.addFirst(new ArrayList<Cell>(startMap.size()));
+        tmpBoard.addFirst(new ArrayList<Cell>(startMap.size()));
+        this.startMap.add(new ArrayList<Integer>(startMap.size()));
+        for (int j = 0; j < startMap.getFirst().size(); j++) {
+            Cell cell = new Cell();
+            cell.setState(State.OBSTRUCTION);
+            board.getLast().add(cell);
+            tmpBoard.getLast().add(cell);
+            this.startMap.getLast().add(State.OBSTRUCTION.getValue());
+
+            board.getFirst().add(cell);
+            tmpBoard.getFirst().add(cell);
+            this.startMap.getFirst().add(State.OBSTRUCTION.getValue());
+        }
+
+        for (int i = 0; i < this.getAmountOfRows(); i++) {
+            Cell cell = new Cell();
+            cell.setState(State.OBSTRUCTION);
+            board.get(i).addFirst(cell);
+            tmpBoard.get(i).addFirst(cell);
+            this.startMap.get(i).addFirst(State.OBSTRUCTION.getValue());
+
+            board.get(i).addLast(cell);
+            tmpBoard.get(i).addLast(cell);
+            this.startMap.get(i).addLast(State.OBSTRUCTION.getValue());
+        }
+
+
     }
 
     public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
@@ -71,7 +92,7 @@ public class Board extends Model {
         pedestrianCell.loadGoalMap();
 
 
-        int addRow=-1, addColumn=-1;
+        int addRow, addColumn;
         //check up
         if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
             addRow = entry.y - 1;
@@ -120,7 +141,7 @@ public class Board extends Model {
         return true;
     }
 
-    public void removePedestrian(int row, int col) {
+    private void removePedestrian(int row, int col) {
         notifyObserversAboutRemovePedestrianOffBoard();
         notifyObserversAboutPedestrianWay(((PedestrianCell)board.get(row).get(col)).getWay());
         // get path that pedestrian walk
@@ -128,16 +149,6 @@ public class Board extends Model {
         tmpBoard.get(row).set(col, new Cell(EXIT));
     }
 
-//    public void movePedestrian(int row, int col) {
-//        //System.out.println(row + " " + col);
-//        //tmp_board.get(row).get(col).setState(State.PEDESTRIAN);
-//        tmp_board.get(row).set(col, new PedestrianCell());
-//    }
-//
-//    public void removePedestrian(int row, int col) {
-//        //System.out.println(row + " " + col);
-//        tmp_board.get(row).set(col, new PedestrianCell());
-//    }
 
     public void cleanCell(int row, int col) {
         board.get(row).get(col).setState(EMPTY);
@@ -225,15 +236,15 @@ public class Board extends Model {
 
     }
 
-    public int getAmountOfRows() {
+    private int getAmountOfRows() {
         return board.size();
     }
 
-    public int getAmountOfCols() {
+    private int getAmountOfCols() {
         return board.getFirst().size();
     }
 
-    public Cell getCell(int row, int col) {
+    private Cell getCell(int row, int col) {
         return board.get(row).get(col);
     }
 
@@ -284,7 +295,7 @@ public class Board extends Model {
         //printBoard();
     }
 
-    void updateBoard() {
+    private void updateBoard() {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 board.get(i).set(j, tmpBoard.get(i).get(j));
@@ -295,8 +306,19 @@ public class Board extends Model {
 
         }
     }
+    public ArrayList<ArrayList<Integer>> getBoardOfIntegers(){
+        ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
+        for (int i = 1; i < this.getAmountOfRows()-1; i++) {
+            tmp.add(new ArrayList<>());
+            for (int j = 1; j < this.getAmountOfCols()-1; j++) {
+                Cell cell = this.getCell(i, j);
+                tmp.get(i-1).add(cell.getState().getValue());
+            }
+        }
+        return tmp;
+    }
 
-    public void printBoard() {
+    private void printBoard() {
 
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {

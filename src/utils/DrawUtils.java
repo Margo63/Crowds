@@ -3,9 +3,17 @@ package utils;
 import data.State;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class DrawUtils {
     private DrawUtils(){}
+    public static void drawBoard(Graphics g, ArrayList<ArrayList<Integer>> board){
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.getFirst().size(); j++) {
+                draw(g, State.getFromInt(board.get(i).get(j)), j*Constants.SIZE_OF_CELL, i*Constants.SIZE_OF_CELL);
+            }
+        }
+    }
     public static void draw(Graphics g, State state, int x, int y){
         switch (state) {
             case EMPTY:

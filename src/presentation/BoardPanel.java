@@ -1,12 +1,9 @@
 package presentation;
 
 import analyze.Analyze;
-import data.State;
 import model.ca.Board;
 import data.MapPoint;
-import model.ca.PedestrianCell;
 import presentation.models.PedestrianInput;
-import utils.Constants;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -33,25 +30,26 @@ public class BoardPanel extends ViewModelPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (this.getViewModel().checkBoard() && board != null) {
-            for (int i = 0; i < board.getAmountOfRows(); i++) {
-                for (int j = 0; j < board.getAmountOfCols(); j++) {
-                    DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
-
-                    if(board.getCell(i, j).getState() == State.PEDESTRIAN){
-                        FontMetrics fm = g.getFontMetrics();
-                        PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
-                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
-                        int textHeight = fm.getHeight();
-
-                        int textX = (int) (j*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
-                        int textY = (int) (i*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
-
-                        g.drawString(String.valueOf(cell.num), textX, textY);
-                    }
-
-                }
-            }
+        if (this.getViewModel().checkBoard() && board != null && loaded) {
+            DrawUtils.drawBoard(g,board.getBoardOfIntegers());
+//            for (int i = 0; i < board.getAmountOfRows(); i++) {
+//                for (int j = 0; j < board.getAmountOfCols(); j++) {
+//                    DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
+//
+//                    if(board.getCell(i, j).getState() == State.PEDESTRIAN){
+//                        FontMetrics fm = g.getFontMetrics();
+//                        PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
+//                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
+//                        int textHeight = fm.getHeight();
+//
+//                        int textX = (int) (j*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
+//                        int textY = (int) (i*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
+//
+//                        g.drawString(String.valueOf(cell.num), textX, textY);
+//                    }
+//
+//                }
+//            }
         }
 
 
@@ -126,7 +124,7 @@ public class BoardPanel extends ViewModelPanel {
             analyze.loadZones(getViewModel().getZones());
 
             this.board.loadMap(getViewModel().getBoardInteger());
-
+            loaded = true;
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();
             Comparator<PedestrianInput> byTimeIn = Comparator.comparingLong(PedestrianInput::getTimeIn);
             pedestrian.sort(byTimeIn);
@@ -165,7 +163,7 @@ public class BoardPanel extends ViewModelPanel {
 
         try {
             board.step();
-            analyze.analyze_board(board);
+            analyze.analyze_board(board.getBoardOfIntegers());
             conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
         } catch (InterruptedException ex) {

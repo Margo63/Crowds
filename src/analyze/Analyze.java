@@ -1,5 +1,6 @@
 package analyze;
 
+import data.State;
 import model.ca.Board;
 import data.MapPoint;
 import observer.IObserver;
@@ -43,17 +44,19 @@ public class Analyze implements IObserver {
     }
 
 
-    public void analyze_board(Board board) {
+    public void analyze_board(ArrayList<ArrayList<Integer>> board) {
 
 
         for (Integer key : zoneData.keySet()) {
             zoneData.get(key).amountOfPedestrian = 0;
         }
-        for (int i = 0; i < board.getAmountOfRows(); i++) {
-            for (int j = 0; j < board.getAmountOfCols(); j++) {
-                if (board.getCell(i, j).getIsPedestrian()) {
+
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board.get(i).size(); j++) {
+                if (State.getFromInt(board.get(i).get(j)) == State.PEDESTRIAN) {
                     int zoneIndex = zones.get(i).get(j);
                     zoneData.get(zoneIndex).amountOfPedestrian++;
+
 
                 }
             }
