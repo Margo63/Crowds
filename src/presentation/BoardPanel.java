@@ -183,8 +183,8 @@ public class BoardPanel extends ViewModelPanel {
                 }
                 //TODO
                 //check that exit exist
-                this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit);
-                pedestrianEntryQueue.removeFirst();
+                if(this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit))
+                    pedestrianEntryQueue.removeFirst();
             }
 
         }

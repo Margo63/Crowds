@@ -60,7 +60,7 @@ public class Board extends Model {
         notifyObserversAboutSize(board.size(), board.get(0).size());
     }
 
-    public void addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
+    public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
         PedestrianCell pedestrianCell = new PedestrianCell(count);
         pedestrianCell.initGoalMap(startMap);
 
@@ -110,14 +110,14 @@ public class Board extends Model {
             addRow = entry.y;
             addColumn = entry.x+1;
         }else{
-            return;
+            return false;
         }
 
         board.get(addRow).set(addColumn, pedestrianCell);
         tmpBoard.get(addRow).set(addColumn, pedestrianCell);
         notifyObserversAboutNewPedestrianOnBoard();
         count++;
-
+        return true;
     }
 
     public void removePedestrian(int row, int col) {

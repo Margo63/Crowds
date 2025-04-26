@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
     board_rows =int(report_lines[0].split(" ")[-1])
     board_col = int(report_lines[1].split(" ")[-1])
-    print(board_rows, board_col)
+    #print(board_rows, board_col)
 
     df_amount = read("tbl_zone_amount.csv")
     plot(df_amount, "amount")
@@ -65,8 +65,8 @@ if __name__ == '__main__':
         lst = ast.literal_eval(nums[i])
         arr_ways.append(lst)
 
-    # clusters_ways = clust(arr_ways)
-    # print(clusters_ways)
+
+
 
     df_conflict_point = read("tbl_conflict_point.csv")
     list_point = df_conflict_point[['row', 'column']].values.tolist()
@@ -94,26 +94,51 @@ if __name__ == '__main__':
     plt.savefig("conflict_point.png")
     plt.clf()
 
+
+
     # sns.scatterplot(df_conflict_point, x=df_conflict_point["column"],y=df_conflict_point['row'])
     # plt.show()
 
-    # dict_clust = defaultdict(set)
-    # for clust in clusters:
-    #     dict_clust[int(clust)]=[]
-    #
-    # for route, clust in zip(arr_ways, clusters):
-    #     dict_clust[int(clust)].append(route)
-    #
+    clusters_ways = clust(arr_ways)
+    print(clusters_ways)
+
+    dict_clust = defaultdict(set)
+    for clust in clusters_ways:
+        dict_clust[int(clust)]=[]
+
+    for route, clust in zip(arr_ways, clusters_ways):
+        dict_clust[int(clust)].append(route)
+
     # nrows, ncols = 11, 11
     # fig, ax = plt.subplots()
-    # dict_clust = dict(dict_clust)
-    #
+    colors = ["red","green","blue","pink","magenta","black"]
+    dict_clust = dict(dict_clust)
+
+
+    for key,value in dict_clust.items():
+        data = pd.DataFrame(value[0], columns=["row", "column"])
+        #plot_way = sns.lineplot(data=data,x='column', y='row',marker='o')
+        way_plot = sns.scatterplot(data=data,  x='column', y='row',  sizes=(50, 300), legend=False, alpha=0.7, color=colors[key], markers="o")
+        plt.plot(data["column"],data["row"])
+        # print(key,colors[key], value[0])
+        # print(data)
+        plt.xlim(0, board_rows)
+        plt.ylim(0, board_col)
+        plt.grid(True)
+        way_plot.invert_yaxis()
+        plt.savefig("way_"+str(key)+".png")
+        plt.clf()
+
+
+
+    # plot.invert_yaxis()
+    # plt.show()
     # for i in range(nrows):
     #     for j in range(ncols):
     #         color = 'blue' if [i, j] in points else 'white'
     #         square = plt.Rectangle((j, nrows - 1 - i), 1, 1, facecolor=color, edgecolor='black')
     #         ax.add_patch(square)
-    #
+
     # # Настройка отображения
     # ax.set_xlim(0, ncols)
     # ax.set_ylim(0, nrows)
