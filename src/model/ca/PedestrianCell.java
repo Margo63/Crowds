@@ -13,6 +13,16 @@ public class PedestrianCell extends Cell {
     private ArrayList<ArrayList<Integer>> goalMap = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<MapPoint> way = new ArrayList();
+    private boolean isAgressor = false;
+
+    public boolean isAgressor() {
+        return isAgressor;
+    }
+
+    public void setAgressor(boolean agressor) {
+        isAgressor = agressor;
+    }
+
     public int num;
     PedestrianCell(int num){
         this.num = num;

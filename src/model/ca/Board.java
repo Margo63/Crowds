@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static data.State.EMPTY;
 import static data.State.EXIT;
+
 public class Board extends Model {
 
     private ArrayList<ArrayList<Integer>> startMap;
@@ -20,7 +21,7 @@ public class Board extends Model {
     private ArrayList<ArrayList<Cell>> tmpBoard = new ArrayList<>();
     private int count = 1;
     //cell from_x, from_y to_x to_y
-    public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> pedestriansWishList = new HashMap<>();
+    public Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
 
 
@@ -33,7 +34,7 @@ public class Board extends Model {
         this.startMap = startMap;
         //board = new Cell[size][size];
         int startAmountRows = startMap.size();
-        if(startAmountRows == 0) return;
+        if (startAmountRows == 0) return;
         int startAmountCols = startMap.getFirst().size();
 
         //init map from input
@@ -93,11 +94,11 @@ public class Board extends Model {
     }
 
     public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
-        MapPoint mapPointEntry = new MapPoint(entry.y+1, entry.x+1);
-        MapPoint mapPointExit = new MapPoint(exit.y+1, exit.x+1);
+        MapPoint mapPointEntry = new MapPoint(entry.y + 1, entry.x + 1);
+        MapPoint mapPointExit = new MapPoint(exit.y + 1, exit.x + 1);
 
         PedestrianCell pedestrianCell = new PedestrianCell(count);
-
+        if(count%2==0) pedestrianCell.setAgressor(true);
 
 
         int addRow, addColumn;
@@ -127,7 +128,7 @@ public class Board extends Model {
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
             addRow = mapPointEntry.row();
-            addColumn = mapPointEntry.column()-1;
+            addColumn = mapPointEntry.column() - 1;
         }
 
         //check right
@@ -137,8 +138,8 @@ public class Board extends Model {
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
             addRow = mapPointEntry.row();
-            addColumn = mapPointEntry.column()+1;
-        }else{
+            addColumn = mapPointEntry.column() + 1;
+        } else {
             return false;
         }
         pedestrianCell.initGoalMap(startMap);
@@ -156,7 +157,7 @@ public class Board extends Model {
 
     private void removePedestrian(int row, int col) {
         notifyObserversAboutRemovePedestrianOffBoard();
-        notifyObserversAboutPedestrianWay(((PedestrianCell)board.get(row).get(col)).getWay());
+        notifyObserversAboutPedestrianWay(((PedestrianCell) board.get(row).get(col)).getWay());
         // get path that pedestrian walk
         board.get(row).set(col, new Cell(EXIT));
         tmpBoard.get(row).set(col, new Cell(EXIT));
@@ -200,38 +201,44 @@ public class Board extends Model {
         }
 
 
-        ArrayList<Pair<Integer, Integer>> min_list = new ArrayList<>();
+        ArrayList<MapPoint> list_to_go = new ArrayList<>();
+
+        //TODO set min as current pedestrian proximity to exit???
         int min = 100000000;
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i) >= 0 && min > arr.get(i)) min = arr.get(i);
         }
 
         //check not to go back
-        if(min>tmpPedestrian.getProximityToExit(row, col)) return;
+        if (min > tmpPedestrian.getProximityToExit(row, col)) return;
 
-        if (up.getAvailable() && //!up.getIsPedestrian() &&
-                up_value == min) min_list.add(new Pair<>(row - 1, col));
-        if (down.getAvailable() &&//!down.getIsPedestrian() &&
-                down_value == min) min_list.add(new Pair<>(row + 1, col));
-        if (left.getAvailable() && //!left.getIsPedestrian() &&
-                left_value == min) min_list.add(new Pair<>(row, col - 1));
-        if (right.getAvailable() &&//!right.getIsPedestrian() &&
-                right_value == min) min_list.add(new Pair<>(row, col + 1));
+        if (up.getAvailable() && up_value == min)
+            list_to_go.add(new MapPoint(row - 1, col));
 
-        if (min_list.isEmpty()) return;
+        if (down.getAvailable() && down_value == min)
+            list_to_go.add(new MapPoint(row + 1, col));
 
-        int next = (int) ((Math.random() * 100) % min_list.size());
-        int next_row = min_list.get(next).getFirst();
-        int next_col = min_list.get(next).getSecond();
+        if (left.getAvailable() && left_value == min)
+            list_to_go.add(new MapPoint(row, col - 1));
+
+        if (right.getAvailable() && right_value == min)
+            list_to_go.add(new MapPoint(row, col + 1));
+
+
+        if (list_to_go.isEmpty()) return;
+
+        int next = (int) ((Math.random() * 100) % list_to_go.size());
+        int next_row = list_to_go.get(next).row();
+        int next_col = list_to_go.get(next).column();
 
         //System.out.println(next_row + " " + next_col + " " +up_value + " " + down_value + " " + left_value + " " + right_value);
 
         //пешеход и куда он хочет пойти
-        Pair<Cell, Pair<Integer, Integer>> pedestrian_wish =
-                new Pair<>(tmpPedestrian, new Pair<>(row, col));
+        Pair<Cell, MapPoint> pedestrian_wish =
+                new Pair<>(tmpPedestrian, new MapPoint(row, col));
 
 
-        Pair key_next = new Pair(next_row, next_col);
+        MapPoint key_next = new MapPoint(next_row, next_col);
         if (pedestriansWishList.containsKey(key_next)) {
             ArrayList tmp = new ArrayList();
             tmp.addAll(pedestriansWishList.get(key_next));
@@ -279,12 +286,13 @@ public class Board extends Model {
         }
         //System.out.println(wish_list);
         pedestriansWishList.forEach((key, value) -> {
-            int next_row = key.getFirst();
-            int next_col = key.getSecond();
+            int next_row = key.row();
+            int next_col = key.column();
 
+            //no conflict
             if (value.size() == 1) {
-                int row = value.get(0).getSecond().getFirst();
-                int col = value.get(0).getSecond().getSecond();
+                int row = value.get(0).getSecond().row();
+                int col = value.get(0).getSecond().column();
                 Cell newCell = new Cell();//tmp_board.get(next_row).get(next_col);
                 tmpBoard.get(next_row).set(next_col, value.get(0).getFirst());
                 tmpBoard.get(row).set(col, newCell);
@@ -294,8 +302,8 @@ public class Board extends Model {
 
 
                 int next = (int) ((Math.random() * 100) % value.size());
-                int row = value.get(next).getSecond().getFirst();
-                int col = value.get(next).getSecond().getSecond();
+                int row = value.get(next).getSecond().row();
+                int col = value.get(next).getSecond().column();
                 Cell newCell = tmpBoard.get(next_row).get(next_col);
                 tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
                 tmpBoard.get(row).set(col, newCell);
@@ -323,13 +331,14 @@ public class Board extends Model {
 
         }
     }
-    public ArrayList<ArrayList<Integer>> getBoardOfIntegers(){
+
+    public ArrayList<ArrayList<Integer>> getBoardOfIntegers() {
         ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
-        for (int i = 1; i < this.getAmountOfRows()-1; i++) {
+        for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             tmp.add(new ArrayList<>());
-            for (int j = 1; j < this.getAmountOfCols()-1; j++) {
+            for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                 Cell cell = this.getCell(i, j);
-                tmp.get(i-1).add(cell.getState().getValue());
+                tmp.get(i - 1).add(cell.getState().getValue());
             }
         }
         return tmp;

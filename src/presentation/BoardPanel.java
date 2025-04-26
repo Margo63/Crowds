@@ -149,7 +149,7 @@ public class BoardPanel extends ViewModelPanel {
 
 
     private void step(){
-        minute+=5;
+        minute++;
         if(minute==60){
             minute=0;
             hour++;
@@ -197,10 +197,10 @@ public class BoardPanel extends ViewModelPanel {
         loadBoard();
         minute = 0;
         hour = 0;
-        Timer timer = new Timer(1000, new ActionListener() {
+        Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //step();
+                step();
 
             }
         });
