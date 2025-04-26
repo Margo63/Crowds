@@ -32,12 +32,15 @@ public class Board extends Model {
     public void loadMap(ArrayList<ArrayList<Integer>> startMap) {
         this.startMap = startMap;
         //board = new Cell[size][size];
+        int startAmountRows = startMap.size();
+        if(startAmountRows == 0) return;
+        int startAmountCols = startMap.getFirst().size();
 
         //init map from input
-        for (int i = 0; i < startMap.size(); i++) {
-            board.add(new ArrayList<Cell>(startMap.size()));
-            tmpBoard.add(new ArrayList<Cell>(startMap.size()));
-            for (int j = 0; j < startMap.getFirst().size(); j++) {
+        for (int i = 0; i < startAmountRows; i++) {
+            board.add(new ArrayList<Cell>());
+            tmpBoard.add(new ArrayList<Cell>());
+            for (int j = 0; j < startAmountCols; j++) {
                 Cell cell = new Cell();
                 cell.setState(State.getFromInt(startMap.get(i).get(j)));
                 board.get(i).add(cell);
@@ -48,13 +51,15 @@ public class Board extends Model {
         notifyObserversAboutSize(board.size(), board.getFirst().size());
 
         //add frame
-        board.add(new ArrayList<Cell>(startMap.size()));
-        tmpBoard.add(new ArrayList<Cell>(startMap.size()));
-        this.startMap.add(new ArrayList<Integer>(startMap.size()));
-        board.addFirst(new ArrayList<Cell>(startMap.size()));
-        tmpBoard.addFirst(new ArrayList<Cell>(startMap.size()));
-        this.startMap.add(new ArrayList<Integer>(startMap.size()));
-        for (int j = 0; j < startMap.getFirst().size(); j++) {
+        board.addFirst(new ArrayList<Cell>());
+        tmpBoard.addFirst(new ArrayList<Cell>());
+        this.startMap.addFirst(new ArrayList<Integer>());
+
+        board.addLast(new ArrayList<Cell>());
+        tmpBoard.addLast(new ArrayList<Cell>());
+        this.startMap.addLast(new ArrayList<Integer>());
+
+        for (int j = 0; j < startAmountCols; j++) {
             Cell cell = new Cell();
             cell.setState(State.OBSTRUCTION);
             board.getLast().add(cell);
@@ -78,61 +83,69 @@ public class Board extends Model {
             this.startMap.get(i).addLast(State.OBSTRUCTION.getValue());
         }
 
-
+//        for (int i = 0; i < this.startMap.size(); i++) {
+//            for (int j = 0; j < this.startMap.get(i).size(); j++) {
+//                System.out.print(this.startMap.get(i).get(j)+"\t");
+//            }
+//            System.out.println();
+//        }
+//        printBoard();
     }
 
     public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
+        MapPoint mapPointEntry = new MapPoint(entry.y+1, entry.x+1);
+        MapPoint mapPointExit = new MapPoint(exit.y+1, exit.x+1);
+
         PedestrianCell pedestrianCell = new PedestrianCell(count);
-        pedestrianCell.initGoalMap(startMap);
 
-        pedestrianCell.setGoalList(way);
-        pedestrianCell.setExitGoal(exit.y, exit.x);
-
-
-        pedestrianCell.loadGoalMap();
 
 
         int addRow, addColumn;
         //check up
-        if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
-            addRow = entry.y - 1;
-            addColumn = entry.x;
+        if (mapPointEntry.row() - 1 >= 0 && board.get(mapPointEntry.row() - 1).get(mapPointEntry.column()).getAvailable()) {
+            addRow = mapPointEntry.row() - 1;
+            addColumn = mapPointEntry.column();
 //            board.get(entry.y - 1).set(entry.x, pedestrianCell);
 //            tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
         }
         //check down
-        else if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
+        else if (mapPointEntry.row() + 1 < board.size() && board.get(mapPointEntry.row() + 1).get(mapPointEntry.column()).getAvailable()) {
 //            board.get(entry.y + 1).set(entry.x, pedestrianCell);
 //            tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
-            addRow = entry.y + 1;
-            addColumn = entry.x;
+            addRow = mapPointEntry.row() + 1;
+            addColumn = mapPointEntry.column();
         }
 
         //check left
-        else if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
+        else if (mapPointEntry.column() - 1 >= 0 && board.get(mapPointEntry.row()).get(mapPointEntry.column() - 1).getAvailable()) {
 //            board.get(entry.y).set(entry.x - 1, pedestrianCell);
 //            tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
-            addRow = entry.y;
-            addColumn = entry.x-1;
+            addRow = mapPointEntry.row();
+            addColumn = mapPointEntry.column()-1;
         }
 
         //check right
-        else if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
+        else if (mapPointEntry.column() + 1 < board.getFirst().size() && board.get(mapPointEntry.row()).get(mapPointEntry.column() + 1).getAvailable()) {
 //            board.get(entry.y).set(entry.x + 1, pedestrianCell);
 //            tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
 //            notifyObserversAboutNewPedestrianOnBoard();
 //            return;
-            addRow = entry.y;
-            addColumn = entry.x+1;
+            addRow = mapPointEntry.row();
+            addColumn = mapPointEntry.column()+1;
         }else{
             return false;
         }
+        pedestrianCell.initGoalMap(startMap);
+        pedestrianCell.setGoalList(way);
+        pedestrianCell.setExitGoal(mapPointExit.row(), mapPointExit.column());
+        pedestrianCell.loadGoalMap();
+
 
         board.get(addRow).set(addColumn, pedestrianCell);
         tmpBoard.get(addRow).set(addColumn, pedestrianCell);
@@ -155,6 +168,7 @@ public class Board extends Model {
         tmpBoard.get(row).get(col).setState(EMPTY);
     }
 
+    // load wish list of pedestrian steps
     public void pedestrianStep(int row, int col) {
         //printBoard();
         //System.out.println(row + " " + col);
@@ -191,6 +205,9 @@ public class Board extends Model {
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i) >= 0 && min > arr.get(i)) min = arr.get(i);
         }
+
+        //check not to go back
+        if(min>tmpPedestrian.getProximityToExit(row, col)) return;
 
         if (up.getAvailable() && //!up.getIsPedestrian() &&
                 up_value == min) min_list.add(new Pair<>(row - 1, col));
@@ -236,15 +253,15 @@ public class Board extends Model {
 
     }
 
-    private int getAmountOfRows() {
+    public int getAmountOfRows() {
         return board.size();
     }
 
-    private int getAmountOfCols() {
+    public int getAmountOfCols() {
         return board.getFirst().size();
     }
 
-    private Cell getCell(int row, int col) {
+    public Cell getCell(int row, int col) {
         return board.get(row).get(col);
     }
 

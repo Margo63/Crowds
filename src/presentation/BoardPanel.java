@@ -1,9 +1,12 @@
 package presentation;
 
 import analyze.Analyze;
+import data.State;
 import model.ca.Board;
 import data.MapPoint;
+import model.ca.PedestrianCell;
 import presentation.models.PedestrianInput;
+import utils.Constants;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -32,24 +35,24 @@ public class BoardPanel extends ViewModelPanel {
         super.paint(g);
         if (this.getViewModel().checkBoard() && board != null && loaded) {
             DrawUtils.drawBoard(g,board.getBoardOfIntegers());
-//            for (int i = 0; i < board.getAmountOfRows(); i++) {
-//                for (int j = 0; j < board.getAmountOfCols(); j++) {
-//                    DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
-//
-//                    if(board.getCell(i, j).getState() == State.PEDESTRIAN){
-//                        FontMetrics fm = g.getFontMetrics();
-//                        PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
-//                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
-//                        int textHeight = fm.getHeight();
-//
-//                        int textX = (int) (j*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
-//                        int textY = (int) (i*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
-//
-//                        g.drawString(String.valueOf(cell.num), textX, textY);
-//                    }
-//
-//                }
-//            }
+            for (int i = 1; i < board.getAmountOfRows()-1; i++) {
+                for (int j = 1; j < board.getAmountOfCols()-1; j++) {
+                    //DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
+
+                    if(board.getCell(i, j).getState() == State.PEDESTRIAN){
+                        FontMetrics fm = g.getFontMetrics();
+                        PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
+                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
+                        int textHeight = fm.getHeight();
+
+                        int textX = (int) ((j-1)*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
+                        int textY = (int) ((i-1)*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
+
+                        g.drawString(String.valueOf(cell.num), textX, textY);
+                    }
+
+                }
+            }
         }
 
 
@@ -133,14 +136,8 @@ public class BoardPanel extends ViewModelPanel {
                 for (int j = 0; j < pedestrian.get(i).amountOfPedestrian; j++) {
                     pedestrianEntryQueue.addLast( pedestrian.get(i));
                 }
-//                System.out.println(pedestrian.get(i).getTimeIn());
-//                ArrayList<Pair<Integer, Integer>> way = new ArrayList<>();
-//                for (Point point : pedestrian.get(i).way) {
-//                    way.add(new Pair<>(point.column, point.row));
-//                }
-//                this.board.addPedestrian(pedestrian.get(i).pedestrianEntry, way, pedestrian.get(i).pedestrianExit);
             }
-            //System.out.println(queue);
+            //System.out.println(pedestrianEntryQueue);
             loaded = true;
 
         }
@@ -181,8 +178,11 @@ public class BoardPanel extends ViewModelPanel {
                 }
                 //TODO
                 //check that exit exist
-                if(this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit))
+                if(this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit)){
                     pedestrianEntryQueue.removeFirst();
+                    //System.out.println("added");
+                }
+
             }
 
         }
@@ -200,7 +200,7 @@ public class BoardPanel extends ViewModelPanel {
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                step();
+                //step();
 
             }
         });
