@@ -1,21 +1,23 @@
 package model.ca;
 
+import data.MapPoint;
 import kotlin.Pair;
 import model.Model;
-import model.State;
+import data.State;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static model.State.EMPTY;
-import static model.State.EXIT;
+import static data.State.EMPTY;
+import static data.State.EXIT;
 public class Board extends Model {
 
     private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<ArrayList<Cell>> board;
     private ArrayList<ArrayList<Cell>> tmpBoard = new ArrayList<>();
+    private int count = 1;
     //cell from_x, from_y to_x to_y
     public Map<Pair<Integer, Integer>, ArrayList<Pair<Cell, Pair<Integer, Integer>>>> pedestriansWishList = new HashMap<>();
     //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
@@ -35,13 +37,15 @@ public class Board extends Model {
 //                tmp_board.get(i).add(cell);
 //            }
 //        }
+
         super();
+        board = new ArrayList<ArrayList<Cell>>();
     }
 
     public void loadMap(ArrayList<ArrayList<Integer>> startMap) {
         this.startMap = startMap;
         //board = new Cell[size][size];
-        board = new ArrayList<ArrayList<Cell>>();
+
         for (int i = 0; i < startMap.size(); i++) {
             board.add(new ArrayList<Cell>(startMap.size()));
             tmpBoard.add(new ArrayList<Cell>(startMap.size()));
@@ -57,7 +61,7 @@ public class Board extends Model {
     }
 
     public void addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
-        PedestrianCell pedestrianCell = new PedestrianCell();
+        PedestrianCell pedestrianCell = new PedestrianCell(count);
         pedestrianCell.initGoalMap(startMap);
 
         pedestrianCell.setGoalList(way);
@@ -66,38 +70,53 @@ public class Board extends Model {
 
         pedestrianCell.loadGoalMap();
 
+
+        int addRow=-1, addColumn=-1;
         //check up
         if (entry.y - 1 >= 0 && board.get(entry.y - 1).get(entry.x).getAvailable()) {
-            board.get(entry.y - 1).set(entry.x, pedestrianCell);
-            tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
-            notifyObserversAboutNewPedestrianOnBoard();
-            return;
+            addRow = entry.y - 1;
+            addColumn = entry.x;
+//            board.get(entry.y - 1).set(entry.x, pedestrianCell);
+//            tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
+//            notifyObserversAboutNewPedestrianOnBoard();
+//            return;
         }
-
         //check down
-        if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
-            board.get(entry.y + 1).set(entry.x, pedestrianCell);
-            tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
-            notifyObserversAboutNewPedestrianOnBoard();
-            return;
+        else if (entry.y + 1 < board.size() && board.get(entry.y + 1).get(entry.x).getAvailable()) {
+//            board.get(entry.y + 1).set(entry.x, pedestrianCell);
+//            tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
+//            notifyObserversAboutNewPedestrianOnBoard();
+//            return;
+            addRow = entry.y + 1;
+            addColumn = entry.x;
         }
 
         //check left
-        if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
-            board.get(entry.y).set(entry.x - 1, pedestrianCell);
-            tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
-            notifyObserversAboutNewPedestrianOnBoard();
-            return;
+        else if (entry.x - 1 >= 0 && board.get(entry.y).get(entry.x - 1).getAvailable()) {
+//            board.get(entry.y).set(entry.x - 1, pedestrianCell);
+//            tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
+//            notifyObserversAboutNewPedestrianOnBoard();
+//            return;
+            addRow = entry.y;
+            addColumn = entry.x-1;
         }
 
         //check right
-        if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
-            board.get(entry.y).set(entry.x + 1, pedestrianCell);
-            tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
-            notifyObserversAboutNewPedestrianOnBoard();
+        else if (entry.x + 1 < board.getFirst().size() && board.get(entry.y).get(entry.x + 1).getAvailable()) {
+//            board.get(entry.y).set(entry.x + 1, pedestrianCell);
+//            tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
+//            notifyObserversAboutNewPedestrianOnBoard();
+//            return;
+            addRow = entry.y;
+            addColumn = entry.x+1;
+        }else{
             return;
         }
 
+        board.get(addRow).set(addColumn, pedestrianCell);
+        tmpBoard.get(addRow).set(addColumn, pedestrianCell);
+        notifyObserversAboutNewPedestrianOnBoard();
+        count++;
 
     }
 

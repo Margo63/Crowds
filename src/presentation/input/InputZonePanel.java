@@ -1,10 +1,10 @@
 package presentation.input;
 
-import model.State;
+import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import utils.Constants;
-import utils.DrawCell;
+import utils.DrawUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class InputZonePanel extends ViewModelPanel {
 
-    DrawCell drawCell = new DrawCell();
     private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> zones = new ArrayList<>();
     private Point startZonePoint, endZonePoint;
@@ -53,7 +52,7 @@ public class InputZonePanel extends ViewModelPanel {
         //draw board
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
-                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
+                DrawUtils.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
             }
         }
     }

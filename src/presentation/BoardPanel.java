@@ -2,10 +2,10 @@ package presentation;
 
 import analyze.Analyze;
 import model.ca.Board;
-import model.ca.MapPoint;
+import data.MapPoint;
 import presentation.models.PedestrianInput;
 import utils.Constants;
-import utils.DrawCell;
+import utils.DrawUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,8 +19,7 @@ import java.util.Date;
 
 public class BoardPanel extends ViewModelPanel {
     private Board board;
-    private Analyze analyze = new Analyze();
-    private DrawCell drawCell = new DrawCell();
+    private Analyze analyze;
     private int hour = 0;
     private int minute = 0;
     private boolean loaded = false;
@@ -35,7 +34,7 @@ public class BoardPanel extends ViewModelPanel {
         if (this.getViewModel().checkBoard() && board != null) {
             for (int i = 0; i < board.getAmountOfRows(); i++) {
                 for (int j = 0; j < board.getAmountOfCols(); j++) {
-                    drawCell.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
+                    DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
                 }
             }
         }
@@ -44,6 +43,12 @@ public class BoardPanel extends ViewModelPanel {
     }
 
     public BoardPanel() {
+        this.board = new Board();
+        this.analyze = new Analyze();
+        this.board.addObserver(this.analyze);
+
+        pedestrianEntryQueue = new ArrayList<>();
+
         timerLabel = new JLabel("00:00");
         add(timerLabel);
 
@@ -105,9 +110,6 @@ public class BoardPanel extends ViewModelPanel {
         if (getViewModel().checkBoard()) {
             analyze.loadZones(getViewModel().getZones());
 
-            pedestrianEntryQueue = new ArrayList<>();
-            this.board = new Board();
-            this.board.addObserver(this.analyze);
             this.board.loadMap(getViewModel().getBoardInteger());
 
             ArrayList<PedestrianInput> pedestrian = getViewModel().getPedestrianInputs();

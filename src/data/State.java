@@ -1,4 +1,4 @@
-package model;
+package data;
 
 public enum State {
     ENTRY(-3), EXIT(-2), PEDESTRIAN(3), OBSTRUCTION(-1), EMPTY(0);

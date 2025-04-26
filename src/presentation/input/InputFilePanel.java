@@ -2,7 +2,7 @@ package presentation.input;
 
 import presentation.ViewModelPanel;
 import utils.Constants;
-import utils.Files;
+import utils.FileUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -22,9 +22,8 @@ public class InputFilePanel extends ViewModelPanel {
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                Files readFile = new Files();
                 String path = chooser.getSelectedFile().getAbsolutePath();
-                ArrayList<ArrayList<Integer>> result = readFile.readFile(path);
+                ArrayList<ArrayList<Integer>> result = FileUtils.readFile(path);
                 if(result!=null && !result.isEmpty()){
                     label.setText(Constants.CHOSEN_FILE + path);
                     this.getViewModel().setBoardFromInteger(result);

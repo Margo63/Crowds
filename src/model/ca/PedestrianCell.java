@@ -1,12 +1,11 @@
 package model.ca;
 
-import kotlin.Pair;
-import model.State;
+import data.MapPoint;
+import data.State;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-import static model.State.EMPTY;
+import static data.State.EMPTY;
 
 public class PedestrianCell extends Cell {
 
@@ -14,8 +13,10 @@ public class PedestrianCell extends Cell {
     private ArrayList<ArrayList<Integer>> goalMap = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<MapPoint> way = new ArrayList();
-
-    PedestrianCell(){}
+    private int num;
+    PedestrianCell(int num){
+        this.num = num;
+    }
 
     @Override
     public boolean getIsPedestrian() {

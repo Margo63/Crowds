@@ -1,10 +1,10 @@
 package presentation.input;
 
-import model.State;
+import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import utils.Constants;
-import utils.DrawCell;
+import utils.DrawUtils;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -22,7 +22,6 @@ public class InputDrawPanel extends ViewModelPanel {
     // what draw
     private State currentState = State.EMPTY;
 
-    DrawCell drawCell = new DrawCell();
     JSpinner colsSpinner = new JSpinner(new SpinnerNumberModel(sizeCols, 0, 100, 1));
     JSpinner rowsSpinner = new JSpinner(new SpinnerNumberModel(sizeRows, 0, 100, 1));
 
@@ -34,7 +33,7 @@ public class InputDrawPanel extends ViewModelPanel {
         //System.out.println(board);
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
-                drawCell.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
+                DrawUtils.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
 
             }
             //System.out.println();

@@ -3,10 +3,10 @@ package utils;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Files {
+public class FileUtils {
+    private FileUtils(){}
 
-
-    public ArrayList<ArrayList<Integer>> readFile(String filename) {
+    public static ArrayList<ArrayList<Integer>> readFile(String filename) {
         ArrayList<ArrayList<Integer>> tmp = new ArrayList<>();
         try(BufferedReader br = new BufferedReader(new FileReader(filename)))
         {

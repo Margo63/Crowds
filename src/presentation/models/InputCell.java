@@ -1,6 +1,6 @@
 package presentation.models;
 
-import model.State;
+import data.State;
 import utils.Constants;
 
 public class InputCell {

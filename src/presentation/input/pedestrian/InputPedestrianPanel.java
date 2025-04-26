@@ -1,11 +1,11 @@
 package presentation.input.pedestrian;
 
-import model.State;
+import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
 import utils.Constants;
-import utils.DrawCell;
+import utils.DrawUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +23,6 @@ public class InputPedestrianPanel extends ViewModelPanel {
     //
     JComboBox<PedestrianInput> comboBoxEntries;
     JComboBox<Point> comboBoxExits;
-    DrawCell drawCell = new DrawCell();
 
     @Override
     public void paint(Graphics g) {
@@ -32,7 +31,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         //System.out.println(board);
         for (int i = 0; i < board.size(); i++) {
             for (int j = 0; j < board.getFirst().size(); j++) {
-                drawCell.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
+                DrawUtils.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
 
             }
             //System.out.println();

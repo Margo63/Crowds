@@ -1,12 +1,12 @@
 package utils;
 
-import model.State;
+import data.State;
 
 import java.awt.*;
 
-public class DrawCell {
-
-    public void draw(Graphics g, State state, int x, int y){
+public class DrawUtils {
+    private DrawUtils(){}
+    public static void draw(Graphics g, State state, int x, int y){
         switch (state) {
             case EMPTY:
                 g.drawRect(x,y, Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL);

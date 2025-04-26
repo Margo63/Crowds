@@ -1,5 +1,5 @@
 package model;
-import model.ca.MapPoint;
+import data.MapPoint;
 import observer.IObservable;
 import observer.IObserver;
 

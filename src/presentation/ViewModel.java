@@ -1,6 +1,6 @@
 package presentation;
 
-import model.State;
+import data.State;
 import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
 import utils.Constants;
@@ -15,14 +15,19 @@ public class ViewModel {
     private Screen screen;
     private ArrayList<PedestrianInput> pedestrianInputs;
 
-    public void setBoard(ArrayList<ArrayList<InputCell>> board) {
+    ViewModel(){
+        board = new ArrayList<>();
+        zones = new ArrayList<>();
+    }
 
+    public void setBoard(ArrayList<ArrayList<InputCell>> board) {
+        if(board == null) return;
         this.board = board;
         loadZone();
     }
 
     public void setBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
-
+        if(board == null) return;
         ArrayList<ArrayList<InputCell>> tmp = new ArrayList<>();
         for (int i = 0; i < board.size(); i++) {
             tmp.add(new ArrayList<>(board.size()));

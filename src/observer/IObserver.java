@@ -1,6 +1,6 @@
 package observer;
 
-import model.ca.MapPoint;
+import data.MapPoint;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package model.ca;
+package data;
 
 public record MapPoint(int row, int column) {
     @Override

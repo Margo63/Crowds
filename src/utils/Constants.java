@@ -1,6 +1,7 @@
 package utils;
 
 public class Constants {
+    private Constants(){}
     public static final int SIZE_OF_CELL = 20;
     public static final String INPUT_FILE = "file";
     public static final String INPUT_DRAW = "draw";

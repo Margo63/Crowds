@@ -5,11 +5,12 @@ import java.awt.*;
 
 public class Screen {
     private JFrame frame;
-    private CardLayout cardLayout = new CardLayout();
+    private CardLayout cardLayout;
     private JPanel cards;
     private ViewModel viewModel;
 
     public Screen() {
+        cardLayout = new CardLayout();
         frame = new JFrame();
         viewModel = new ViewModel();
         frame.setSize(1000,1000);
