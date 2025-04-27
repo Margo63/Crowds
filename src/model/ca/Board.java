@@ -7,7 +7,6 @@ import data.State;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,10 +178,10 @@ public class Board extends Model {
         Cell left = tmpBoard.get(row).get(col - 1);
         Cell right = tmpBoard.get(row).get(col + 1);
 
-        int up_value = tmpPedestrian.getProximityToExit(row - 1, col);
-        int down_value = tmpPedestrian.getProximityToExit(row + 1, col);
-        int left_value = tmpPedestrian.getProximityToExit(row, col - 1);
-        int right_value = tmpPedestrian.getProximityToExit(row, col + 1);
+        int up_value = tmpPedestrian.getProximityToGoal(row - 1, col);
+        int down_value = tmpPedestrian.getProximityToGoal(row + 1, col);
+        int left_value = tmpPedestrian.getProximityToGoal(row, col - 1);
+        int right_value = tmpPedestrian.getProximityToGoal(row, col + 1);
 
         ArrayList<Integer> arr = new ArrayList<>();
 
@@ -210,7 +209,7 @@ public class Board extends Model {
         }
 
         //check not to go back
-        if (min > tmpPedestrian.getProximityToExit(row, col)) return;
+        if (min > tmpPedestrian.getProximityToGoal(row, col)) return;
 
         if (up.getAvailable() && up_value == min)
             list_to_go.add(new MapPoint(row - 1, col));
@@ -320,11 +319,31 @@ public class Board extends Model {
         //printBoard();
     }
 
+    public void setPanicMode(){
+        ArrayList<MapPoint> exits = new ArrayList<>();
+        for (int i = 0; i < this.getAmountOfRows(); i++) {
+            for (int j = 0; j < this.getAmountOfCols(); j++) {
+                if (this.getCell(i, j).getState() == EXIT) {
+                    exits.add(new MapPoint(i,j));
+                }
+            }
+        }
+
+        for (int i = 0; i < this.getAmountOfRows(); i++) {
+            for (int j = 0; j < this.getAmountOfCols(); j++) {
+                if (this.getCell(i, j).getIsPedestrian()) {
+                    ((PedestrianCell)this.getCell(i, j)).loadPanicGoalMap(exits);
+                }
+            }
+        }
+
+    }
+
     private void updateBoard() {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 board.get(i).set(j, tmpBoard.get(i).get(j));
-                if (board.get(i).get(j).isGoalAchieved(i, j)) {
+                if (board.get(i).get(j).isExitAchieved(i, j)) {
                     this.removePedestrian(i, j);
                 }
             }

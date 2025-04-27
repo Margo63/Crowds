@@ -14,6 +14,8 @@ public class PedestrianCell extends Cell {
     private ArrayList<ArrayList<Integer>> startMap;
     private ArrayList<MapPoint> way = new ArrayList();
     private boolean isAgressor = false;
+    private boolean isPanic = false;
+    private ArrayList<MapPoint> exits;
 
     public boolean isAgressor() {
         return isAgressor;
@@ -24,7 +26,8 @@ public class PedestrianCell extends Cell {
     }
 
     public int num;
-    PedestrianCell(int num){
+
+    PedestrianCell(int num) {
         this.num = num;
     }
 
@@ -43,7 +46,7 @@ public class PedestrianCell extends Cell {
         return false;
     }
 
-    public int getProximityToExit(int x, int y) {
+    public int getProximityToGoal(int x, int y) {
         return goalMap.get(x).get(y);
     }
 
@@ -52,8 +55,11 @@ public class PedestrianCell extends Cell {
         //this.goalMap = new ArrayList<>(goalMap);
     }
 
+
     public void loadGoalMap() {
-        if (goalMap != null) goalMap.clear();
+        if (goalMap==null) return;
+
+        goalMap.clear();
         for (int i = 0; i < startMap.size(); i++) {
             goalMap.add(new ArrayList<>(startMap.size()));
             for (int j = 0; j < startMap.getFirst().size(); j++) {
@@ -64,7 +70,10 @@ public class PedestrianCell extends Cell {
         ArrayList<MapPoint> currentWave = new ArrayList<>();
         ArrayList<MapPoint> nextWave = new ArrayList<>();
 
-        currentWave.add(this.goalList.getFirst());
+        if (!isPanic)
+            currentWave.add(this.goalList.getFirst());
+        else
+            currentWave.addAll(this.exits);
 
         int height = goalMap.size();
         if (height == 0) return;
@@ -109,12 +118,23 @@ public class PedestrianCell extends Cell {
 
             //printMap();
         }
-        MapPoint currentGoal = goalList.getFirst();
-        goalMap.get(currentGoal.row()).set(currentGoal.column(), 0);
+        if(!isPanic){
+            MapPoint currentGoal = goalList.getFirst();
+            goalMap.get(currentGoal.row()).set(currentGoal.column(), 0);
+        }else{
+            for (MapPoint exit : exits) {
+                goalMap.get(exit.row()).set(exit.column(), 0);
+            }
+        }
+
         //printMap();
     }
 
-
+    public void loadPanicGoalMap(ArrayList<MapPoint> exits) {
+        this.exits = exits;
+        this.isPanic = true;
+        loadGoalMap();
+    }
 
     public void printMap() {
         for (int i = 0; i < this.goalMap.size(); i++) {
@@ -126,27 +146,26 @@ public class PedestrianCell extends Cell {
         System.out.println("////////////////////////////////////////////////////");
     }
 
-    public ArrayList<MapPoint> getWay(){
+    public ArrayList<MapPoint> getWay() {
         return way;
     }
 
     @Override
-    public boolean isGoalAchieved(int row, int col) {
+    public boolean isExitAchieved(int row, int col) {
         way.add(new MapPoint(row, col));
-        MapPoint currentGoal = goalList.getFirst();
-        if (row == currentGoal.row() && col == currentGoal.column()) {
-
-
-            goalList.removeFirst();
-            if(!goalList.isEmpty()) {
-                loadGoalMap();
+        if(!isPanic){
+            MapPoint currentGoal = goalList.getFirst();
+            if (row == currentGoal.row() && col == currentGoal.column()) {
+                goalList.removeFirst();
+                if (!goalList.isEmpty()) {
+                    loadGoalMap();
+                }
+                return goalList.isEmpty();
             }
-
-//            for (Pair<Integer, Integer> goal : goalList) {
-//                System.out.println("goal row: " + goal.getFirst() + " column: " + goal.getSecond());
-//            }
-            return goalList.isEmpty();
+        }else {
+            return goalMap.get(row).get(col) == 0;
         }
+
         return false;
     }
 
@@ -160,8 +179,9 @@ public class PedestrianCell extends Cell {
 //            System.out.println("goal row: "+goal.getFirst() +" column: "+ goal.getSecond());
 //        }
     }
-    public void goToExit(){
-        if(!goalList.isEmpty()){
+
+    public void goToExit() {
+        if (!goalList.isEmpty()) {
             MapPoint exit = goalList.getLast();
             goalList.clear();
             goalList.add(exit);

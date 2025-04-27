@@ -25,7 +25,7 @@ public class Cell{
     public boolean getIsPedestrian(){
         return false;
     }
-    public boolean isGoalAchieved(int row, int col) {
+    public boolean isExitAchieved(int row, int col) {
         return false;
     }
 }

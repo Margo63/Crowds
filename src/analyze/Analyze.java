@@ -55,7 +55,8 @@ public class Analyze implements IObserver {
             for (int j = 0; j < board.get(i).size(); j++) {
                 if (State.getFromInt(board.get(i).get(j)) == State.PEDESTRIAN) {
                     int zoneIndex = zones.get(i).get(j);
-                    zoneData.get(zoneIndex).amountOfPedestrian++;
+                    if(zoneIndex>=0)
+                        zoneData.get(zoneIndex).amountOfPedestrian++;
 
 
                 }

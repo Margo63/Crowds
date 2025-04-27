@@ -30,23 +30,24 @@ public class BoardPanel extends ViewModelPanel {
     private JLabel conflictLabel;
     private int conflictPercent = 0;
     private double probabilityDeviation = 0.0;
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         if (this.getViewModel().checkBoard() && board != null && loaded) {
-            DrawUtils.drawBoard(g,board.getBoardOfIntegers());
-            for (int i = 1; i < board.getAmountOfRows()-1; i++) {
-                for (int j = 1; j < board.getAmountOfCols()-1; j++) {
+            DrawUtils.drawBoard(g, board.getBoardOfIntegers());
+            for (int i = 1; i < board.getAmountOfRows() - 1; i++) {
+                for (int j = 1; j < board.getAmountOfCols() - 1; j++) {
                     //DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
 
-                    if(board.getCell(i, j).getState() == State.PEDESTRIAN){
+                    if (board.getCell(i, j).getState() == State.PEDESTRIAN) {
                         FontMetrics fm = g.getFontMetrics();
                         PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
                         int textWidth = fm.stringWidth(String.valueOf(cell.num));
                         int textHeight = fm.getHeight();
 
-                        int textX = (int) ((j-1)*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
-                        int textY = (int) ((i-1)*Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
+                        int textX = (int) ((j - 1) * Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
+                        int textY = (int) ((i - 1) * Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
 
                         g.drawString(String.valueOf(cell.num), textX, textY);
                     }
@@ -85,7 +86,7 @@ public class BoardPanel extends ViewModelPanel {
         });
         this.add(conflictPercentSpinner);
 
-        JLabel probabilityDeviationLabel  = new JLabel("probability deviation: ");
+        JLabel probabilityDeviationLabel = new JLabel("probability deviation: ");
         this.add(probabilityDeviationLabel);
         JSpinner probabilityDeviationSpinner = new JSpinner(new SpinnerNumberModel(probabilityDeviation, 0.0, 1.0, 0.01));
         probabilityDeviationSpinner.addChangeListener(new ChangeListener() {
@@ -119,6 +120,13 @@ public class BoardPanel extends ViewModelPanel {
             analyze.report();
         });
 
+        JButton panicButton = new JButton("panic");
+        add(panicButton);
+
+        panicButton.addActionListener(e -> {
+            board.setPanicMode();
+        });
+
 
     }
 
@@ -134,7 +142,7 @@ public class BoardPanel extends ViewModelPanel {
 
             for (int i = 0; i < pedestrian.size(); i++) {
                 for (int j = 0; j < pedestrian.get(i).amountOfPedestrian; j++) {
-                    pedestrianEntryQueue.addLast( pedestrian.get(i));
+                    pedestrianEntryQueue.addLast(pedestrian.get(i));
                 }
             }
             //System.out.println(pedestrianEntryQueue);
@@ -148,14 +156,13 @@ public class BoardPanel extends ViewModelPanel {
     }
 
 
-    private void step(){
+    private void step() {
         minute++;
-        if(minute==60){
-            minute=0;
+        if (minute == 60) {
+            minute = 0;
             hour++;
         }
         timerLabel.setText(String.format("%02d:%02d", hour, minute));
-
 
 
         try {
@@ -167,18 +174,18 @@ public class BoardPanel extends ViewModelPanel {
             throw new RuntimeException(ex);
         }
 
-        if(!pedestrianEntryQueue.isEmpty()){
+        if (!pedestrianEntryQueue.isEmpty()) {
 
             Date date = new Date(pedestrianEntryQueue.getFirst().timeIn);
 
-            if(date.getHours()*60 + date.getMinutes() <= hour*60+minute ){
+            if (date.getHours() * 60 + date.getMinutes() <= hour * 60 + minute) {
                 ArrayList<MapPoint> way = new ArrayList<>();
                 for (Point point : pedestrianEntryQueue.getFirst().way) {
                     way.add(new MapPoint(point.y, point.x));
                 }
                 //TODO
                 //check that exit exist
-                if(this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit)){
+                if (this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit)) {
                     pedestrianEntryQueue.removeFirst();
                     //System.out.println("added");
                 }
@@ -197,7 +204,7 @@ public class BoardPanel extends ViewModelPanel {
         loadBoard();
         minute = 0;
         hour = 0;
-        Timer timer = new Timer(100, new ActionListener() {
+        Timer timer = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 step();
