@@ -9,11 +9,6 @@ public class Zone {
         this.size = 1;
         this.densityOfPedestrian = 0.0;
     }
-    public Zone(int amountOfPedestrian, int size, double densityOfPedestrian){
-        this.amountOfPedestrian = amountOfPedestrian;
-        this.size = size;
-        this.densityOfPedestrian = densityOfPedestrian;
-    }
 
     @Override
     public String toString() {

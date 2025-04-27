@@ -1,6 +1,8 @@
 rows board: 11
 columns board: 11
-amount of conflict: 244
+amount of conflict: 264
 amount of exited pedestrian: 100
 amount of entered pedestrian: 100
-zone_0: 78
+zone_0: 35
+zone_1: 13
+zone_2: 30

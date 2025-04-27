@@ -6,7 +6,7 @@ import model.ca.Board;
 import data.MapPoint;
 import model.ca.PedestrianCell;
 import presentation.models.PedestrianInput;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -46,8 +46,8 @@ public class BoardPanel extends ViewModelPanel {
                         int textWidth = fm.stringWidth(String.valueOf(cell.num));
                         int textHeight = fm.getHeight();
 
-                        int textX = (int) ((j - 1) * Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL - textWidth) / 2);
-                        int textY = (int) ((i - 1) * Constants.SIZE_OF_CELL + (Constants.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
+                        int textX = (int) ((j - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL - textWidth) / 2);
+                        int textY = (int) ((i - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
 
                         g.drawString(String.valueOf(cell.num), textX, textY);
                     }
@@ -167,7 +167,7 @@ public class BoardPanel extends ViewModelPanel {
 
         try {
             board.step();
-            analyze.analyze_board(board.getBoardOfIntegers());
+            analyze.analyzeStep(board.getBoardOfIntegers());
             conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
         } catch (InterruptedException ex) {

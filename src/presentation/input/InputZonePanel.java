@@ -3,7 +3,7 @@ package presentation.input;
 import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -71,7 +71,7 @@ public class InputZonePanel extends ViewModelPanel {
 //            }
 //        });
 
-        JLabel label = new JLabel(Constants.INPUT_ZONE_LABEL);
+        JLabel label = new JLabel(ConstantUtil.INPUT_ZONE_LABEL);
         this.add(label);
 
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));

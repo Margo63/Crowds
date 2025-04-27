@@ -1,6 +1,6 @@
 package presentation;
 
-import utils.Constants;
+import utils.ConstantUtil;
 
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
@@ -13,8 +13,8 @@ public class ViewModelPanel extends JPanel {
 
     public ViewModelPanel() {
         super();
-        nextButton = new JButton(Constants.NEXT);
-        previousButton = new JButton(Constants.PREVIOUS);
+        nextButton = new JButton(ConstantUtil.NEXT);
+        previousButton = new JButton(ConstantUtil.PREVIOUS);
         this.add(previousButton);
         this.add(nextButton);
 

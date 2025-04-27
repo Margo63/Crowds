@@ -1,16 +1,16 @@
 package presentation.models;
 
 import data.State;
-import utils.Constants;
+import utils.ConstantUtil;
 
 public class InputCell {
     private State state;
-    private int x,y,width = Constants.SIZE_OF_CELL,height=Constants.SIZE_OF_CELL;
+    private int x,y,width = ConstantUtil.SIZE_OF_CELL,height= ConstantUtil.SIZE_OF_CELL;
 
     public InputCell(int x, int y){
         this.state = State.EMPTY;
-        this.x = x * Constants.SIZE_OF_CELL;
-        this.y = y * Constants.SIZE_OF_CELL;
+        this.x = x * ConstantUtil.SIZE_OF_CELL;
+        this.y = y * ConstantUtil.SIZE_OF_CELL;
 
     }
 

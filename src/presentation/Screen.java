@@ -13,6 +13,8 @@ public class Screen {
         cardLayout = new CardLayout();
         frame = new JFrame();
         viewModel = new ViewModel();
+        this.viewModel.setScreen(this);
+
         frame.setSize(1000,1000);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,7 +23,6 @@ public class Screen {
     }
 
     public void addPanel(ViewModelPanel panel, String name){
-        this.viewModel.setScreen(this);
         panel.setViewModel(this.viewModel);
         this.cards.add(panel, name);
     }

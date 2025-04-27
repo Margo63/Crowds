@@ -4,7 +4,7 @@ import presentation.input.InputDrawPanel;
 import presentation.input.InputFilePanel;
 import presentation.input.InputZonePanel;
 import presentation.input.pedestrian.InputPedestrianPanel;
-import utils.Constants;
+import utils.ConstantUtil;
 
 /*
 * Состоит из нескольких глобальных задач: разработка симулятора (выбор существующего), проведение симуляции и анализ поведения толпы.
@@ -45,12 +45,12 @@ public class System {
         InputZonePanel zonePanel = new InputZonePanel();
         InputPedestrianPanel pedestrianPanel = new InputPedestrianPanel();
 
-        screen.addPanel(inputPanel, Constants.INPUT_FILE);
-        screen.addPanel(boardPanel,Constants.BOARD);
-        screen.addPanel(drawPanel,Constants.INPUT_DRAW);
-        screen.addPanel(zonePanel,Constants.INPUT_ZONE);
-        screen.addPanel(pedestrianPanel,Constants.INPUT_PEDESTRIAN);
+        screen.addPanel(inputPanel, ConstantUtil.INPUT_FILE);
+        screen.addPanel(boardPanel, ConstantUtil.BOARD);
+        screen.addPanel(drawPanel, ConstantUtil.INPUT_DRAW);
+        screen.addPanel(zonePanel, ConstantUtil.INPUT_ZONE);
+        screen.addPanel(pedestrianPanel, ConstantUtil.INPUT_PEDESTRIAN);
 
-        screen.changePanel(Constants.INPUT_FILE);
+        screen.changePanel(ConstantUtil.INPUT_FILE);
     }
 }

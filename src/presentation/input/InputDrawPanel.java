@@ -3,7 +3,7 @@ package presentation.input;
 import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -55,10 +55,10 @@ public class InputDrawPanel extends ViewModelPanel {
 //            }
 //        });
 
-        JButton wallButton = new JButton(Constants.WALL_BUTTON);
-        JButton exitButton = new JButton(Constants.EXIT_BUTTON);
-        JButton entryButton = new JButton(Constants.ENTRY_BUTTON);
-        JButton emptyButton = new JButton(Constants.EMPTY_BUTTON);
+        JButton wallButton = new JButton(ConstantUtil.WALL_BUTTON);
+        JButton exitButton = new JButton(ConstantUtil.EXIT_BUTTON);
+        JButton entryButton = new JButton(ConstantUtil.ENTRY_BUTTON);
+        JButton emptyButton = new JButton(ConstantUtil.EMPTY_BUTTON);
 
 
 //        JButton check = new JButton("Check");

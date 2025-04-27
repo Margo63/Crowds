@@ -3,14 +3,14 @@ package presentation;
 import data.State;
 import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
-import utils.Constants;
+import utils.ConstantUtil;
 
 import java.util.ArrayList;
 
 public class ViewModel {
     private ArrayList<ArrayList<InputCell>> board;
     private ArrayList<ArrayList<Integer>> zones;
-    private final String[] pages = {Constants.INPUT_FILE, Constants.INPUT_DRAW, Constants.INPUT_ZONE, Constants.INPUT_PEDESTRIAN, Constants.BOARD};
+    private final String[] pages = {ConstantUtil.INPUT_FILE, ConstantUtil.INPUT_DRAW, ConstantUtil.INPUT_ZONE, ConstantUtil.INPUT_PEDESTRIAN, ConstantUtil.BOARD};
     private int pageIndex = 0;
     private Screen screen;
     private ArrayList<PedestrianInput> pedestrianInputs;

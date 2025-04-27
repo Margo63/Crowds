@@ -5,7 +5,7 @@ import data.MapPoint;
 import java.util.ArrayList;
 
 public class FrechetDistance {
-    // Вычисление евклидова расстояния между двумя точками
+
     private static double dist(MapPoint p1, MapPoint p2) {
         return Math.sqrt(Math.pow(p1.row()-p2.row(),2) + Math.pow(p1.column()- p2.column(), 2));
     }

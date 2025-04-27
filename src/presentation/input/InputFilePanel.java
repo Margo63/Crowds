@@ -1,7 +1,7 @@
 package presentation.input;
 
 import presentation.ViewModelPanel;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.FileUtils;
 
 import javax.swing.*;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class InputFilePanel extends ViewModelPanel {
 
     public InputFilePanel() {
-        JLabel label = new JLabel(Constants.CHOSEN_FILE);
+        JLabel label = new JLabel(ConstantUtil.CHOSEN_FILE);
         this.add(label);
-        JButton buttonChooseFile = new JButton(Constants.CHOOSE_FILE_BUTTON);
+        JButton buttonChooseFile = new JButton(ConstantUtil.CHOOSE_FILE_BUTTON);
         this.add(buttonChooseFile);
         buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
@@ -25,7 +25,7 @@ public class InputFilePanel extends ViewModelPanel {
                 String path = chooser.getSelectedFile().getAbsolutePath();
                 ArrayList<ArrayList<Integer>> result = FileUtils.readFile(path);
                 if(result!=null && !result.isEmpty()){
-                    label.setText(Constants.CHOSEN_FILE + path);
+                    label.setText(ConstantUtil.CHOSEN_FILE + path);
                     this.getViewModel().setBoardFromInteger(result);
                     repaint();
                 }

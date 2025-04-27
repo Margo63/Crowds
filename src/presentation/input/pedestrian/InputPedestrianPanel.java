@@ -4,7 +4,7 @@ import data.State;
 import presentation.ViewModelPanel;
 import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.DrawUtils;
 
 import javax.swing.*;
@@ -41,18 +41,18 @@ public class InputPedestrianPanel extends ViewModelPanel {
         if (pedestrianInput != null) {
             Point selectedPoint = pedestrianInput.pedestrianEntry;
             if (selectedPoint != null) {
-                g.drawRect(selectedPoint.x * Constants.SIZE_OF_CELL, selectedPoint.y * Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL);
+                g.drawRect(selectedPoint.x * ConstantUtil.SIZE_OF_CELL, selectedPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
             }
             Point selectedExitPoint = pedestrianInput.pedestrianExit;
             if (selectedExitPoint != null) {
                 g.setColor(Color.GREEN);
-                g.drawRect(selectedExitPoint.x * Constants.SIZE_OF_CELL, selectedExitPoint.y * Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL);
+                g.drawRect(selectedExitPoint.x * ConstantUtil.SIZE_OF_CELL, selectedExitPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
             }
             ArrayList<Point> way = pedestrianInput.way;
             if (way != null) {
                 for (int i = 0; i < way.size(); i++) {
                     g.setColor(Color.BLUE);
-                    g.drawRect(way.get(i).x *Constants.SIZE_OF_CELL, way.get(i).y*Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL);
+                    g.drawRect(way.get(i).x * ConstantUtil.SIZE_OF_CELL, way.get(i).y* ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 }
             }
 
@@ -69,17 +69,17 @@ public class InputPedestrianPanel extends ViewModelPanel {
         comboBoxEntries.setRenderer(new EntryRender());
         this.add(comboBoxEntries);
 
-        JLabel labelWay = new JLabel(Constants.WAY_LABEL);
+        JLabel labelWay = new JLabel(ConstantUtil.WAY_LABEL);
         this.add(labelWay);
 
-        JButton addWay = new JButton(Constants.ADD_WAY_BUTTON);
+        JButton addWay = new JButton(ConstantUtil.ADD_WAY_BUTTON);
         this.add(addWay);
         addWay.addActionListener(e -> {
             addWay.setEnabled(false);
             repaint();
         });
 
-        JButton removeWay = new JButton(Constants.REMOVE_WAY_BUTTON);
+        JButton removeWay = new JButton(ConstantUtil.REMOVE_WAY_BUTTON);
         this.add(removeWay);
         removeWay.addActionListener(e -> {
             removeWay.setEnabled(false);
@@ -88,7 +88,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         });
 
 
-        JLabel labelAmountPedestrian = new JLabel(Constants.AMOUNT_PEDESTRIAN_LABEL);
+        JLabel labelAmountPedestrian = new JLabel(ConstantUtil.AMOUNT_PEDESTRIAN_LABEL);
         this.add(labelAmountPedestrian);
         JSpinner spinnerAmount = new JSpinner();
         this.add(spinnerAmount);
@@ -99,7 +99,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             }
         });
 
-        JLabel timeIn = new JLabel(Constants.TIME_IN_LABEL);
+        JLabel timeIn = new JLabel(ConstantUtil.TIME_IN_LABEL);
         this.add(timeIn);
 
         Date dateIn = new Date();
@@ -118,7 +118,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             }
         });
 
-        JLabel timeOut = new JLabel(Constants.TIME_OUT_LABEL);
+        JLabel timeOut = new JLabel(ConstantUtil.TIME_OUT_LABEL);
         this.add(timeOut);
 
         Date dateOut = new Date();
@@ -153,7 +153,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
             //System.out.println("Выбран: " + comboBox.getSelectedItem());
             PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
             if (pedestrianInput != null) {
-                labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
+                labelWay.setText(ConstantUtil.WAY_LABEL + pedestrianInput.way);
                 spinnerAmount.setValue(pedestrianInput.amountOfPedestrian);
                 comboBoxExits.setSelectedItem(pedestrianInput.pedestrianExit);
                 spinnerTimeIn.setValue(new Date(pedestrianInput.timeIn));
@@ -187,16 +187,16 @@ public class InputPedestrianPanel extends ViewModelPanel {
                     if (!removeWay.isEnabled() && pedestrianInput.way!=null)
                         for (int i = 0; i < pedestrianInput.way.size(); i++) {
                             Rectangle rect = new Rectangle(
-                                    pedestrianInput.way.get(i).x *Constants.SIZE_OF_CELL,
-                                    pedestrianInput.way.get(i).y*Constants.SIZE_OF_CELL,
-                                    Constants.SIZE_OF_CELL, Constants.SIZE_OF_CELL);
+                                    pedestrianInput.way.get(i).x * ConstantUtil.SIZE_OF_CELL,
+                                    pedestrianInput.way.get(i).y* ConstantUtil.SIZE_OF_CELL,
+                                    ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                             if (rect.contains(e.getX(), e.getY())) {
                                 pedestrianInput.way.remove(pedestrianInput.way.get(i));
                                 removeWay.setEnabled(true);
                             }
                         }
 
-                    labelWay.setText(Constants.WAY_LABEL + pedestrianInput.way);
+                    labelWay.setText(ConstantUtil.WAY_LABEL + pedestrianInput.way);
                     repaint();
                 }
 

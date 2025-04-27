@@ -1,10 +1,9 @@
 package analyze;
 
 import data.State;
-import model.ca.Board;
 import data.MapPoint;
 import observer.IObserver;
-import utils.Constants;
+import utils.ConstantUtil;
 import utils.FileUtils;
 
 import java.util.ArrayList;
@@ -14,9 +13,6 @@ import java.util.Map;
 
 public class Analyze implements IObserver {
     private int amountOfAllConflict = 0;
-
-
-
     private int amountStepConflict = 0;
     private ArrayList<ArrayList<Integer>> zones;
     private final Map<Integer, Zone> zoneData = new HashMap<>();
@@ -29,22 +25,22 @@ public class Analyze implements IObserver {
     private List<ArrayList<MapPoint>> pedestrianWays = new ArrayList<>();
 
     public Analyze() {
-        FileUtils.createFile(Constants.TBL_ZONE_AMOUNT);
-        FileUtils.createFile(Constants.TBL_ZONE_DENSITY);
-        FileUtils.createFile(Constants.TBL_WAY);
-        FileUtils.writeToFile(Constants.TBL_WAY, "ways\n");
-        FileUtils.createFile(Constants.TBL_CONFLICT_POINT);
-        FileUtils.writeToFile(Constants.TBL_CONFLICT_POINT, "row,column\n");
-        FileUtils.createFile(Constants.TBL_REPORT);
+        FileUtils.createFile(ConstantUtil.TBL_ZONE_AMOUNT);
+        FileUtils.createFile(ConstantUtil.TBL_ZONE_DENSITY);
+        FileUtils.createFile(ConstantUtil.TBL_WAY);
+        FileUtils.writeToFile(ConstantUtil.TBL_WAY, "ways\n");
+        FileUtils.createFile(ConstantUtil.TBL_CONFLICT_POINT);
+        FileUtils.writeToFile(ConstantUtil.TBL_CONFLICT_POINT, "row,column\n");
+        FileUtils.createFile(ConstantUtil.TBL_REPORT);
 
-        FileUtils.createFile(Constants.TBL_CONFLICT_IN_TIME);
-        FileUtils.writeToFile(Constants.TBL_CONFLICT_IN_TIME, "amount_conflict\n");
-        FileUtils.createFile(Constants.TBL_AMOUNT_PEDESTRIAN_IN_TIME);
-        FileUtils.writeToFile(Constants.TBL_AMOUNT_PEDESTRIAN_IN_TIME, "amount_pedestrian\n");
+        FileUtils.createFile(ConstantUtil.TBL_CONFLICT_IN_TIME);
+        FileUtils.writeToFile(ConstantUtil.TBL_CONFLICT_IN_TIME, "amount_conflict\n");
+        FileUtils.createFile(ConstantUtil.TBL_AMOUNT_PEDESTRIAN_IN_TIME);
+        FileUtils.writeToFile(ConstantUtil.TBL_AMOUNT_PEDESTRIAN_IN_TIME, "amount_pedestrian\n");
     }
 
 
-    public void analyze_board(ArrayList<ArrayList<Integer>> board) {
+    public void analyzeStep(ArrayList<ArrayList<Integer>> board) {
 
 
         for (Integer key : zoneData.keySet()) {
@@ -81,10 +77,10 @@ public class Analyze implements IObserver {
         }
         stringBuilderAmount.append('\n');
         stringBuilderDensity.append('\n');
-        FileUtils.writeToFile(Constants.TBL_ZONE_AMOUNT, stringBuilderAmount.toString());
-        FileUtils.writeToFile(Constants.TBL_ZONE_DENSITY, stringBuilderDensity.toString());
-        FileUtils.writeToFile(Constants.TBL_AMOUNT_PEDESTRIAN_IN_TIME, amountOfPedestrianOnBoard+"\n");
-        FileUtils.writeToFile(Constants.TBL_CONFLICT_IN_TIME, amountStepConflict +"\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_ZONE_AMOUNT, stringBuilderAmount.toString());
+        FileUtils.writeToFile(ConstantUtil.TBL_ZONE_DENSITY, stringBuilderDensity.toString());
+        FileUtils.writeToFile(ConstantUtil.TBL_AMOUNT_PEDESTRIAN_IN_TIME, amountOfPedestrianOnBoard+"\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_CONFLICT_IN_TIME, amountStepConflict +"\n");
         amountStepConflict = 0;
     }
 
@@ -112,8 +108,8 @@ public class Analyze implements IObserver {
             div = ",";
         }
         stringBuilder.append('\n');
-        FileUtils.writeToFile(Constants.TBL_ZONE_AMOUNT, stringBuilder.toString());
-        FileUtils.writeToFile(Constants.TBL_ZONE_DENSITY, stringBuilder.toString());
+        FileUtils.writeToFile(ConstantUtil.TBL_ZONE_AMOUNT, stringBuilder.toString());
+        FileUtils.writeToFile(ConstantUtil.TBL_ZONE_DENSITY, stringBuilder.toString());
 
     }
 
@@ -131,18 +127,15 @@ public class Analyze implements IObserver {
                 + " amount of entered pedestrian = " + amountOfEnteredPedestrian
                 + "ways = " + pedestrianWays
         );
-        FileUtils.writeToFile(Constants.TBL_REPORT, "rows board: " + boardRows + "\n");
-        FileUtils.writeToFile(Constants.TBL_REPORT, "columns board: " + boardColumns + "\n");
-        FileUtils.writeToFile(Constants.TBL_REPORT, "amount of conflict: " + amountOfAllConflict + "\n");
-        FileUtils.writeToFile(Constants.TBL_REPORT, "amount of exited pedestrian: " + amountOfExitedPedestrian + "\n");
-        FileUtils.writeToFile(Constants.TBL_REPORT, "amount of entered pedestrian: " + amountOfEnteredPedestrian + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "rows board: " + boardRows + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "columns board: " + boardColumns + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "amount of conflict: " + amountOfAllConflict + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "amount of exited pedestrian: " + amountOfExitedPedestrian + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "amount of entered pedestrian: " + amountOfEnteredPedestrian + "\n");
         for (Integer key : zoneData.keySet()) {
-            FileUtils.writeToFile(Constants.TBL_REPORT, "zone_"+key+": "+zoneData.get(key).size + "\n");
+            FileUtils.writeToFile(ConstantUtil.TBL_REPORT, "zone_"+key+": "+zoneData.get(key).size + "\n");
         }
 
-//        for (ArrayList<MapPoint> way: pedestrianWays) {
-//            Files.writeToFile(Constants.TBL_WAY, way.toString()+"\n");
-//        }
 //        try {
 //            ProcessBuilder pb = new ProcessBuilder("python", "test.py");
 //            Process process = pb.start();
@@ -158,7 +151,7 @@ public class Analyze implements IObserver {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        analizeWay();
+        //analizeWay();
 
     }
 
@@ -188,7 +181,7 @@ public class Analyze implements IObserver {
     public void updateConflict(int row, int col) {
         amountOfAllConflict++;
         amountStepConflict++;
-        FileUtils.writeToFile(Constants.TBL_CONFLICT_POINT, row + ", " + col + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_CONFLICT_POINT, row + ", " + col + "\n");
     }
 
     @Override
@@ -205,7 +198,7 @@ public class Analyze implements IObserver {
 
     @Override
     public void addWayPedestrian(ArrayList<MapPoint> way) {
-        FileUtils.writeToFile(Constants.TBL_WAY, way.toString() + "\n");
+        FileUtils.writeToFile(ConstantUtil.TBL_WAY, way.toString() + "\n");
         pedestrianWays.add(way);
     }
 

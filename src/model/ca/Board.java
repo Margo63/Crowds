@@ -20,13 +20,13 @@ public class Board extends Model {
     private ArrayList<ArrayList<Cell>> tmpBoard = new ArrayList<>();
     private int count = 1;
     //cell from_x, from_y to_x to_y
-    public Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
-    //private ArrayList<Pair<Cell, Pair<Integer, Integer>>> wish_list = new ArrayList<>();
+    private Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
+
 
 
     public Board() {
         super();
-        board = new ArrayList<ArrayList<Cell>>();
+        board = new ArrayList<>();
     }
 
     public void loadMap(ArrayList<ArrayList<Integer>> startMap) {
@@ -105,37 +105,21 @@ public class Board extends Model {
         if (mapPointEntry.row() - 1 >= 0 && board.get(mapPointEntry.row() - 1).get(mapPointEntry.column()).getAvailable()) {
             addRow = mapPointEntry.row() - 1;
             addColumn = mapPointEntry.column();
-//            board.get(entry.y - 1).set(entry.x, pedestrianCell);
-//            tmpBoard.get(entry.y - 1).set(entry.x, pedestrianCell);
-//            notifyObserversAboutNewPedestrianOnBoard();
-//            return;
         }
         //check down
         else if (mapPointEntry.row() + 1 < board.size() && board.get(mapPointEntry.row() + 1).get(mapPointEntry.column()).getAvailable()) {
-//            board.get(entry.y + 1).set(entry.x, pedestrianCell);
-//            tmpBoard.get(entry.y + 1).set(entry.x, pedestrianCell);
-//            notifyObserversAboutNewPedestrianOnBoard();
-//            return;
             addRow = mapPointEntry.row() + 1;
             addColumn = mapPointEntry.column();
         }
 
         //check left
         else if (mapPointEntry.column() - 1 >= 0 && board.get(mapPointEntry.row()).get(mapPointEntry.column() - 1).getAvailable()) {
-//            board.get(entry.y).set(entry.x - 1, pedestrianCell);
-//            tmpBoard.get(entry.y).set(entry.x - 1, pedestrianCell);
-//            notifyObserversAboutNewPedestrianOnBoard();
-//            return;
             addRow = mapPointEntry.row();
             addColumn = mapPointEntry.column() - 1;
         }
 
         //check right
         else if (mapPointEntry.column() + 1 < board.getFirst().size() && board.get(mapPointEntry.row()).get(mapPointEntry.column() + 1).getAvailable()) {
-//            board.get(entry.y).set(entry.x + 1, pedestrianCell);
-//            tmpBoard.get(entry.y).set(entry.x + 1, pedestrianCell);
-//            notifyObserversAboutNewPedestrianOnBoard();
-//            return;
             addRow = mapPointEntry.row();
             addColumn = mapPointEntry.column() + 1;
         } else {
