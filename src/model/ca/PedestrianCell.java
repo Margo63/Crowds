@@ -16,6 +16,7 @@ public class PedestrianCell extends Cell {
     private boolean isAgressor = false;
     private boolean isPanic = false;
     private ArrayList<MapPoint> exits;
+    private long timeOut;
 
     public boolean isAgressor() {
         return isAgressor;
@@ -27,8 +28,9 @@ public class PedestrianCell extends Cell {
 
     public int num;
 
-    PedestrianCell(int num) {
+    PedestrianCell(int num, long timeOut) {
         this.num = num;
+        this.timeOut = timeOut;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class PedestrianCell extends Cell {
 
 
     public void loadGoalMap() {
-        if (goalMap==null) return;
+        if (goalMap == null) return;
 
         goalMap.clear();
         for (int i = 0; i < startMap.size(); i++) {
@@ -118,10 +120,10 @@ public class PedestrianCell extends Cell {
 
             //printMap();
         }
-        if(!isPanic){
+        if (!isPanic) {
             MapPoint currentGoal = goalList.getFirst();
             goalMap.get(currentGoal.row()).set(currentGoal.column(), 0);
-        }else{
+        } else {
             for (MapPoint exit : exits) {
                 goalMap.get(exit.row()).set(exit.column(), 0);
             }
@@ -153,7 +155,7 @@ public class PedestrianCell extends Cell {
     @Override
     public boolean isExitAchieved(int row, int col) {
         way.add(new MapPoint(row, col));
-        if(!isPanic){
+        if (!isPanic) {
             MapPoint currentGoal = goalList.getFirst();
             if (row == currentGoal.row() && col == currentGoal.column()) {
                 goalList.removeFirst();
@@ -162,7 +164,7 @@ public class PedestrianCell extends Cell {
                 }
                 return goalList.isEmpty();
             }
-        }else {
+        } else {
             return goalMap.get(row).get(col) == 0;
         }
 
@@ -180,11 +182,12 @@ public class PedestrianCell extends Cell {
 //        }
     }
 
-    public void goToExit() {
-        if (!goalList.isEmpty()) {
+    public void needToGoExit(long time) {
+        if (this.timeOut <= time && !goalList.isEmpty()) {
             MapPoint exit = goalList.getLast();
             goalList.clear();
             goalList.add(exit);
+            loadGoalMap();
         }
     }
 }

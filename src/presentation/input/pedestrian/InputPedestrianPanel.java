@@ -257,7 +257,9 @@ public class InputPedestrianPanel extends ViewModelPanel {
         if (this.getViewModel()!=null) {
             ArrayList<PedestrianInput> items = new ArrayList<>();
             for (int i = 0; i < comboBoxEntries.getItemCount(); i++) {
-                items.add(comboBoxEntries.getItemAt(i));
+                PedestrianInput item = comboBoxEntries.getItemAt(i);
+                //TODO converter time?
+                items.add(item);
             }
             this.getViewModel().setPedestrianInputs(items);
         }

@@ -23,7 +23,6 @@ public class Board extends Model {
     private Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
 
 
-
     public Board() {
         super();
         board = new ArrayList<>();
@@ -92,12 +91,12 @@ public class Board extends Model {
 //        printBoard();
     }
 
-    public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit) {
+    public boolean addPedestrian(Point entry, ArrayList<MapPoint> way, Point exit, long timeOut) {
         MapPoint mapPointEntry = new MapPoint(entry.y + 1, entry.x + 1);
         MapPoint mapPointExit = new MapPoint(exit.y + 1, exit.x + 1);
 
-        PedestrianCell pedestrianCell = new PedestrianCell(count);
-        if(count%2==0) pedestrianCell.setAgressor(true);
+        PedestrianCell pedestrianCell = new PedestrianCell(count, timeOut);
+        if (count % 2 == 0) pedestrianCell.setAgressor(true);
 
 
         int addRow, addColumn;
@@ -153,10 +152,12 @@ public class Board extends Model {
     }
 
     // load wish list of pedestrian steps
-    public void pedestrianStep(int row, int col) {
+    public void pedestrianStep(int row, int col, long time) {
         //printBoard();
         //System.out.println(row + " " + col);
         PedestrianCell tmpPedestrian = (PedestrianCell) tmpBoard.get(row).get(col);
+        tmpPedestrian.needToGoExit(time);
+
         Cell up = tmpBoard.get(row - 1).get(col);
         Cell down = tmpBoard.get(row + 1).get(col);
         Cell left = tmpBoard.get(row).get(col - 1);
@@ -255,14 +256,14 @@ public class Board extends Model {
         return board.get(row).get(col);
     }
 
-    public void step() throws InterruptedException {
+    public void step(long time) {
         //Thread.sleep(1000);
         pedestriansWishList.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                 //System.out.print(this.getCell(i,j).getAvailable()+" ");
                 if (this.getCell(i, j).getIsPedestrian()) {
-                    pedestrianStep(i, j);
+                    pedestrianStep(i, j, time);
                 }
             }
             //System.out.println();
@@ -303,12 +304,12 @@ public class Board extends Model {
         //printBoard();
     }
 
-    public void setPanicMode(){
+    public void setPanicMode() {
         ArrayList<MapPoint> exits = new ArrayList<>();
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 if (this.getCell(i, j).getState() == EXIT) {
-                    exits.add(new MapPoint(i,j));
+                    exits.add(new MapPoint(i, j));
                 }
             }
         }
@@ -316,7 +317,7 @@ public class Board extends Model {
         for (int i = 0; i < this.getAmountOfRows(); i++) {
             for (int j = 0; j < this.getAmountOfCols(); j++) {
                 if (this.getCell(i, j).getIsPedestrian()) {
-                    ((PedestrianCell)this.getCell(i, j)).loadPanicGoalMap(exits);
+                    ((PedestrianCell) this.getCell(i, j)).loadPanicGoalMap(exits);
                 }
             }
         }

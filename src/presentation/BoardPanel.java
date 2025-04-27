@@ -2,6 +2,7 @@ package presentation;
 
 import analyze.Analyze;
 import data.State;
+import kotlin.Pair;
 import model.ca.Board;
 import data.MapPoint;
 import model.ca.PedestrianCell;
@@ -24,8 +25,10 @@ public class BoardPanel extends ViewModelPanel {
     private Analyze analyze;
     private int hour = 0;
     private int minute = 0;
+
     private boolean loaded = false;
     private ArrayList<PedestrianInput> pedestrianEntryQueue;
+
     private JLabel timerLabel;
     private JLabel conflictLabel;
     private int conflictPercent = 0;
@@ -165,14 +168,9 @@ public class BoardPanel extends ViewModelPanel {
         timerLabel.setText(String.format("%02d:%02d", hour, minute));
 
 
-        try {
-            board.step();
-            analyze.analyzeStep(board.getBoardOfIntegers());
-            conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
-
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
+        board.step(hour * 60L + minute);
+        analyze.analyzeStep(board.getBoardOfIntegers());
+        conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
         if (!pedestrianEntryQueue.isEmpty()) {
 
@@ -185,7 +183,9 @@ public class BoardPanel extends ViewModelPanel {
                 }
                 //TODO
                 //check that exit exist
-                if (this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way, pedestrianEntryQueue.getFirst().pedestrianExit)) {
+                Date out = new Date(pedestrianEntryQueue.getFirst().timeOut);
+                if (this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way,
+                        pedestrianEntryQueue.getFirst().pedestrianExit, out.getHours() * 60 + out.getMinutes())) {
                     pedestrianEntryQueue.removeFirst();
                     //System.out.println("added");
                 }
