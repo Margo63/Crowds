@@ -19,6 +19,10 @@ public class Board extends Model {
     private ArrayList<ArrayList<Cell>> board;
     private ArrayList<ArrayList<Cell>> tmpBoard = new ArrayList<>();
     private int count = 1;
+    private double conflictPercent = 0.0;
+    private double probabilityDeviation = 0.0;
+    private int amountOfPedestrian = 0;
+    private int amountOfAggressivePedestrian = 0;
     //cell from_x, from_y to_x to_y
     private Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
 
@@ -96,7 +100,7 @@ public class Board extends Model {
         MapPoint mapPointExit = new MapPoint(exit.y + 1, exit.x + 1);
 
         PedestrianCell pedestrianCell = new PedestrianCell(count, timeOut);
-        if (count % 2 == 0) pedestrianCell.setAgressor(true);
+        //if (count % 2 == 0) pedestrianCell.setAgressor(true);
 
 
         int addRow, addColumn;
@@ -134,6 +138,8 @@ public class Board extends Model {
         tmpBoard.get(addRow).set(addColumn, pedestrianCell);
         notifyObserversAboutNewPedestrianOnBoard();
         count++;
+        amountOfPedestrian++;
+        loadAggressivePedestrian();
         return true;
     }
 
@@ -143,8 +149,60 @@ public class Board extends Model {
         // get path that pedestrian walk
         board.get(row).set(col, new Cell(EXIT));
         tmpBoard.get(row).set(col, new Cell(EXIT));
+        amountOfPedestrian--;
+        loadAggressivePedestrian();
     }
 
+    public void setConflictPercent(double conflictPercent) {
+        this.conflictPercent = conflictPercent;
+        loadAggressivePedestrian();
+    }
+
+    private void loadAggressivePedestrian() {
+        double conflict = (double) amountOfAggressivePedestrian/amountOfPedestrian;
+
+        if(conflict<conflictPercent){
+            for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
+                for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
+                    if (this.getCell(i, j).getIsPedestrian()) {
+                        PedestrianCell pedestrianCell = (PedestrianCell)this.getCell(i, j);
+                        if(!pedestrianCell.isAgressor()){
+                            ((PedestrianCell) this.getCell(i, j)).setAgressor(true);
+                            amountOfAggressivePedestrian++;
+                        }
+
+                    }
+                    conflict = (double) amountOfAggressivePedestrian/amountOfPedestrian;
+                    if(conflict>=conflictPercent){
+                        return;
+                    }
+                }
+            }
+        }else{
+
+            for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
+                for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
+                    if (this.getCell(i, j).getIsPedestrian()) {
+                        PedestrianCell pedestrianCell = (PedestrianCell)this.getCell(i, j);
+                        if(pedestrianCell.isAgressor()){
+                            ((PedestrianCell) this.getCell(i, j)).setAgressor(false);
+                            amountOfAggressivePedestrian--;
+                        }
+
+                    }
+                    conflict = (double) amountOfAggressivePedestrian/amountOfPedestrian;
+                    if(conflict<=conflictPercent){
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void setProbabilityDeviation(double probabilityDeviation) {
+        this.probabilityDeviation = probabilityDeviation;
+    }
 
     public void cleanCell(int row, int col) {
         board.get(row).get(col).setState(EMPTY);
@@ -258,6 +316,8 @@ public class Board extends Model {
 
     public void step(long time) {
         //Thread.sleep(1000);
+        System.out.println("conflict pedestrian: "+amountOfAggressivePedestrian+" all pedestrian: "+amountOfPedestrian
+                +" percent: "+(double)amountOfAggressivePedestrian/amountOfPedestrian+"user percent: "+conflictPercent);
         pedestriansWishList.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {

@@ -80,6 +80,8 @@ public class BoardPanel extends ViewModelPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     conflictPercent = (int) conflictPercentSpinner.getValue();
+                    board.setConflictPercent((double) conflictPercent /100);
+
                     repaint();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
@@ -97,6 +99,7 @@ public class BoardPanel extends ViewModelPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     probabilityDeviation = (double) probabilityDeviationSpinner.getValue();
+                    board.setProbabilityDeviation(probabilityDeviation);
                     repaint();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
