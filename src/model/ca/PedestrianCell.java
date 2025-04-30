@@ -24,6 +24,7 @@ public class PedestrianCell extends Cell {
 
     public void setAgressor(boolean agressor) {
         isAgressor = agressor;
+
     }
 
     public int num;
@@ -40,6 +41,7 @@ public class PedestrianCell extends Cell {
 
     @Override
     public State getState() {
+        if(isAgressor) return State.AGGRESSIVE;
         return State.PEDESTRIAN;
     }
 

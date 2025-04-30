@@ -43,7 +43,7 @@ public class BoardPanel extends ViewModelPanel {
                 for (int j = 1; j < board.getAmountOfCols() - 1; j++) {
                     //DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
 
-                    if (board.getCell(i, j).getState() == State.PEDESTRIAN) {
+                    if (board.getCell(i, j).getState() == State.PEDESTRIAN || board.getCell(i, j).getState() == State.AGGRESSIVE) {
                         FontMetrics fm = g.getFontMetrics();
                         PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
                         int textWidth = fm.stringWidth(String.valueOf(cell.num));

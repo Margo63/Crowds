@@ -1,7 +1,7 @@
 package data;
 
 public enum State {
-    ENTRY(-3), EXIT(-2), PEDESTRIAN(3), OBSTRUCTION(-1), EMPTY(0);
+    ENTRY(-3), EXIT(-2), PEDESTRIAN(3),AGGRESSIVE(4), OBSTRUCTION(-1), EMPTY(0);
 
     private final int id;
 
@@ -20,6 +20,7 @@ public enum State {
             case -3 -> ENTRY;
             case -2 -> EXIT;
             case 3 -> PEDESTRIAN;
+            case 4 -> AGGRESSIVE;
             default -> OBSTRUCTION;
         };
     }

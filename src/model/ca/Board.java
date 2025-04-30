@@ -146,10 +146,12 @@ public class Board extends Model {
     private void removePedestrian(int row, int col) {
         notifyObserversAboutRemovePedestrianOffBoard();
         notifyObserversAboutPedestrianWay(((PedestrianCell) board.get(row).get(col)).getWay());
+        if(((PedestrianCell) board.get(row).get(col)).isAgressor())amountOfAggressivePedestrian--;
         // get path that pedestrian walk
         board.get(row).set(col, new Cell(EXIT));
         tmpBoard.get(row).set(col, new Cell(EXIT));
         amountOfPedestrian--;
+
         loadAggressivePedestrian();
     }
 
@@ -167,7 +169,7 @@ public class Board extends Model {
                     if (this.getCell(i, j).getIsPedestrian()) {
                         PedestrianCell pedestrianCell = (PedestrianCell)this.getCell(i, j);
                         if(!pedestrianCell.isAgressor()){
-                            ((PedestrianCell) this.getCell(i, j)).setAgressor(true);
+                            setAggressivePedestrian(i,j,true);
                             amountOfAggressivePedestrian++;
                         }
 
@@ -185,7 +187,7 @@ public class Board extends Model {
                     if (this.getCell(i, j).getIsPedestrian()) {
                         PedestrianCell pedestrianCell = (PedestrianCell)this.getCell(i, j);
                         if(pedestrianCell.isAgressor()){
-                            ((PedestrianCell) this.getCell(i, j)).setAgressor(false);
+                            setAggressivePedestrian(i,j,false);
                             amountOfAggressivePedestrian--;
                         }
 
@@ -210,7 +212,9 @@ public class Board extends Model {
         board.get(row).get(col).setState(EMPTY);
         tmpBoard.get(row).get(col).setState(EMPTY);
     }
-
+    private void setAggressivePedestrian(int row, int col, boolean aggressive) {
+        ((PedestrianCell)board.get(row).get(col)).setAgressor(aggressive);
+    }
     // load wish list of pedestrian steps
     private void pedestrianStep(int row, int col, long time) {
         //printBoard();
@@ -318,8 +322,8 @@ public class Board extends Model {
 
     public void step(long time) {
         //Thread.sleep(1000);
-        //System.out.println("conflict pedestrian: "+amountOfAggressivePedestrian+" all pedestrian: "+amountOfPedestrian
-        //        +" percent: "+(double)amountOfAggressivePedestrian/amountOfPedestrian+"user percent: "+conflictPercent);
+//        System.out.println("conflict pedestrian: "+amountOfAggressivePedestrian+" all pedestrian: "+amountOfPedestrian
+//                +" percent: "+(double)amountOfAggressivePedestrian/amountOfPedestrian+"user percent: "+conflictPercent);
         pedestriansWishList.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {

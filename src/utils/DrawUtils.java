@@ -34,9 +34,15 @@ public class DrawUtils {
                 g.fillRect(x,y, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 g.setColor(Color.BLACK);
                 break;
+            case AGGRESSIVE:
+                g.setColor(Color.ORANGE);
+                g.fillRect(x,y, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                g.setColor(Color.BLACK);
+                break;
             case OBSTRUCTION:
                 g.fillRect(x,y, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 break;
+
             default:
                 g.drawRect(x,y, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 break;
