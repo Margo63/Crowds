@@ -24,7 +24,7 @@ public class Board extends Model {
     private int amountOfPedestrian = 0;
     private int amountOfAggressivePedestrian = 0;
     //cell from_x, from_y to_x to_y
-    private Map<MapPoint, ArrayList<Pair<Cell, MapPoint>>> pedestriansWishList = new HashMap<>();
+    private Map<MapPoint, ArrayList<Pair<PedestrianCell, MapPoint>>> pedestriansWishList = new HashMap<>();
 
 
     public Board() {
@@ -179,7 +179,7 @@ public class Board extends Model {
                 }
             }
         }else{
-
+            //System.out.println("load"+conflict+" "+conflictPercent);
             for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
                 for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
                     if (this.getCell(i, j).getIsPedestrian()) {
@@ -191,7 +191,9 @@ public class Board extends Model {
 
                     }
                     conflict = (double) amountOfAggressivePedestrian/amountOfPedestrian;
+
                     if(conflict<=conflictPercent){
+                        //System.out.println("return");
                         return;
                     }
                 }
@@ -210,7 +212,7 @@ public class Board extends Model {
     }
 
     // load wish list of pedestrian steps
-    public void pedestrianStep(int row, int col, long time) {
+    private void pedestrianStep(int row, int col, long time) {
         //printBoard();
         //System.out.println(row + " " + col);
         PedestrianCell tmpPedestrian = (PedestrianCell) tmpBoard.get(row).get(col);
@@ -221,62 +223,62 @@ public class Board extends Model {
         Cell left = tmpBoard.get(row).get(col - 1);
         Cell right = tmpBoard.get(row).get(col + 1);
 
-        int up_value = tmpPedestrian.getProximityToGoal(row - 1, col);
-        int down_value = tmpPedestrian.getProximityToGoal(row + 1, col);
-        int left_value = tmpPedestrian.getProximityToGoal(row, col - 1);
-        int right_value = tmpPedestrian.getProximityToGoal(row, col + 1);
+        int upValue = tmpPedestrian.getProximityToGoal(row - 1, col);
+        int downValue = tmpPedestrian.getProximityToGoal(row + 1, col);
+        int leftValue = tmpPedestrian.getProximityToGoal(row, col - 1);
+        int rightValue = tmpPedestrian.getProximityToGoal(row, col + 1);
 
         ArrayList<Integer> arr = new ArrayList<>();
 
         if (up.getAvailable()) {
-            arr.add(up_value);
+            arr.add(upValue);
         }
 
         if (down.getAvailable()) {
-            arr.add(down_value);
+            arr.add(downValue);
         }
         if (left.getAvailable()) {
-            arr.add(left_value);
+            arr.add(leftValue);
         }
         if (right.getAvailable()) {
-            arr.add(right_value);
+            arr.add(rightValue);
         }
 
 
-        ArrayList<MapPoint> list_to_go = new ArrayList<>();
+        ArrayList<MapPoint> listToGo = new ArrayList<>();
 
-        //TODO set min as current pedestrian proximity to exit???
-        int min = 100000000;
+
+        int min = tmpPedestrian.getProximityToGoal(row, col);
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i) >= 0 && min > arr.get(i)) min = arr.get(i);
         }
 
         //check not to go back
-        if (min > tmpPedestrian.getProximityToGoal(row, col)) return;
+       // if (min > tmpPedestrian.getProximityToGoal(row, col)) return;
 
-        if (up.getAvailable() && up_value == min)
-            list_to_go.add(new MapPoint(row - 1, col));
+        if (up.getAvailable() && upValue == min)
+            listToGo.add(new MapPoint(row - 1, col));
 
-        if (down.getAvailable() && down_value == min)
-            list_to_go.add(new MapPoint(row + 1, col));
+        if (down.getAvailable() && downValue == min)
+            listToGo.add(new MapPoint(row + 1, col));
 
-        if (left.getAvailable() && left_value == min)
-            list_to_go.add(new MapPoint(row, col - 1));
+        if (left.getAvailable() && leftValue == min)
+            listToGo.add(new MapPoint(row, col - 1));
 
-        if (right.getAvailable() && right_value == min)
-            list_to_go.add(new MapPoint(row, col + 1));
+        if (right.getAvailable() && rightValue == min)
+            listToGo.add(new MapPoint(row, col + 1));
 
 
-        if (list_to_go.isEmpty()) return;
+        if (listToGo.isEmpty()) return;
 
-        int next = (int) ((Math.random() * 100) % list_to_go.size());
-        int next_row = list_to_go.get(next).row();
-        int next_col = list_to_go.get(next).column();
+        int next = (int) ((Math.random() * 100) % listToGo.size());
+        int next_row = listToGo.get(next).row();
+        int next_col = listToGo.get(next).column();
 
         //System.out.println(next_row + " " + next_col + " " +up_value + " " + down_value + " " + left_value + " " + right_value);
 
-        //пешеход и куда он хочет пойти
-        Pair<Cell, MapPoint> pedestrian_wish =
+        //пешеход и откуда он идет
+        Pair<PedestrianCell, MapPoint> pedestrian_wish =
                 new Pair<>(tmpPedestrian, new MapPoint(row, col));
 
 
@@ -316,8 +318,8 @@ public class Board extends Model {
 
     public void step(long time) {
         //Thread.sleep(1000);
-        System.out.println("conflict pedestrian: "+amountOfAggressivePedestrian+" all pedestrian: "+amountOfPedestrian
-                +" percent: "+(double)amountOfAggressivePedestrian/amountOfPedestrian+"user percent: "+conflictPercent);
+        //System.out.println("conflict pedestrian: "+amountOfAggressivePedestrian+" all pedestrian: "+amountOfPedestrian
+        //        +" percent: "+(double)amountOfAggressivePedestrian/amountOfPedestrian+"user percent: "+conflictPercent);
         pedestriansWishList.clear();
         for (int i = 1; i < this.getAmountOfRows() - 1; i++) {
             for (int j = 1; j < this.getAmountOfCols() - 1; j++) {
@@ -342,16 +344,37 @@ public class Board extends Model {
                 tmpBoard.get(row).set(col, newCell);
                 //System.out.println("swap");
             } else {
-                //System.out.println("conflict");
+
+                ArrayList<Pair<PedestrianCell, MapPoint>> agressors = new ArrayList<>();
+                for (int i = 0; i < value.size(); i++) {
+                    if(value.get(i).getFirst().isAgressor()){
+                        agressors.add(value.get(i));
+                    }
+                }
+
+                if(agressors.isEmpty()){
+                    //patient conflict
+                    int next = (int) ((Math.random() * 100) % value.size());
+                    int row = value.get(next).getSecond().row();
+                    int col = value.get(next).getSecond().column();
+                    Cell newCell = tmpBoard.get(next_row).get(next_col);
+                    tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
+                    tmpBoard.get(row).set(col, newCell);
+                    notifyObserversAboutConflict(row, col);
+                }else{
+                    int next = (int) ((Math.random() * 100) % agressors.size());
+                    int row = agressors.get(next).getSecond().row();
+                    int col = agressors.get(next).getSecond().column();
+                    Cell newCell = tmpBoard.get(next_row).get(next_col);
+                    tmpBoard.get(next_row).set(next_col, agressors.get(next).getFirst());
+                    tmpBoard.get(row).set(col, newCell);
+                    notifyObserversAboutConflict(row, col);
+
+                }
 
 
-                int next = (int) ((Math.random() * 100) % value.size());
-                int row = value.get(next).getSecond().row();
-                int col = value.get(next).getSecond().column();
-                Cell newCell = tmpBoard.get(next_row).get(next_col);
-                tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
-                tmpBoard.get(row).set(col, newCell);
-                notifyObserversAboutConflict(row, col);
+
+
             }
 
         });
