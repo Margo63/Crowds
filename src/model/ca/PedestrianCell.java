@@ -41,7 +41,7 @@ public class PedestrianCell extends Cell {
 
     @Override
     public State getState() {
-        if(isAgressor) return State.AGGRESSIVE;
+        if (isAgressor) return State.AGGRESSIVE;
         return State.PEDESTRIAN;
     }
 
@@ -59,6 +59,21 @@ public class PedestrianCell extends Cell {
         //this.goalMap = new ArrayList<>(goalMap);
     }
 
+    public void randomPoint(double probability) {
+        int row, column;
+        boolean isSelected = false;
+        while (!isSelected) {
+            row = (int) (Math.random() * startMap.size());
+            column = (int) (Math.random() * startMap.size());
+            if (startMap.get(row).get(column) == 0 && !goalList.contains(new MapPoint(row, column))) {
+                if (Math.random() < probability){
+                    goalList.add(goalList.size() / 2, new MapPoint(row, column));
+                    loadGoalMap();
+                }
+                isSelected = true;
+            }
+        }
+    }
 
     public void loadGoalMap() {
         if (goalMap == null) return;
