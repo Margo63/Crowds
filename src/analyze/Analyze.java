@@ -156,17 +156,17 @@ public class Analyze implements IObserver {
     }
 
     private void analizeWay() {
-        double[][] matrix = new double[pedestrianWays.size()][pedestrianWays.size()];
-        for (int i = 0; i < pedestrianWays.size(); i++) {
-            for (int j = i + 1; j < pedestrianWays.size(); j++) {
-                double distance = FrechetDistance.frechetDistance(
-                        pedestrianWays.get(i),
-                        pedestrianWays.get(j)
-                );
-                matrix[i][j] = distance;
-                matrix[j][i] = distance;
-            }
-        }
+//        double[][] matrix = new double[pedestrianWays.size()][pedestrianWays.size()];
+//        for (int i = 0; i < pedestrianWays.size(); i++) {
+//            for (int j = i + 1; j < pedestrianWays.size(); j++) {
+//                double distance = FrechetDistance.frechetDistance(
+//                        pedestrianWays.get(i),
+//                        pedestrianWays.get(j)
+//                );
+//                matrix[i][j] = distance;
+//                matrix[j][i] = distance;
+//            }
+//        }
 //        for (int i = 0; i < pedestrianWays.size(); i++) {
 //            for (int j = 0; j < pedestrianWays.size(); j++) {
 //                System.out.print(matrix[i][j]+"\t");

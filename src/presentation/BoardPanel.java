@@ -33,7 +33,7 @@ public class BoardPanel extends ViewModelPanel {
     private JLabel conflictLabel;
     private int conflictPercent = 0;
     private double probabilityDeviation = 0.0;
-
+    private long allTime = 0;
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -170,8 +170,15 @@ public class BoardPanel extends ViewModelPanel {
         }
         timerLabel.setText(String.format("%02d:%02d", hour, minute));
 
-
+        long startTime = System.nanoTime();
         board.step(hour * 60L + minute);
+        long endTime = System.nanoTime();
+        allTime+= (endTime - startTime);
+        //System.out.println("time:"+(endTime - startTime));
+        //System.out.println("all:"+allTime);
+
+
+
         analyze.analyzeStep(board.getBoardOfIntegers());
         conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
@@ -181,8 +188,9 @@ public class BoardPanel extends ViewModelPanel {
 
             if (date.getHours() * 60 + date.getMinutes() <= hour * 60 + minute) {
                 ArrayList<MapPoint> way = new ArrayList<>();
+                //TODO make to map point
                 for (Point point : pedestrianEntryQueue.getFirst().way) {
-                    way.add(new MapPoint(point.y, point.x));
+                    way.add(new MapPoint(point.y+1, point.x+1));
                 }
                 //TODO
                 //check that exit exist
@@ -207,15 +215,17 @@ public class BoardPanel extends ViewModelPanel {
         loadBoard();
         minute = 0;
         hour = 0;
-        Timer timer = new Timer(400, new ActionListener() {
+
+
+        Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                step();
+                //step();
 
             }
         });
 
-        timer.start();
+        //timer.start();
     }
 
     @Override

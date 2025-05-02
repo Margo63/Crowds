@@ -146,7 +146,7 @@ public class PedestrianCell extends Cell {
             }
         }
 
-        //printMap();
+        printMap();
     }
 
     public void loadPanicGoalMap(ArrayList<MapPoint> exits) {
@@ -190,6 +190,7 @@ public class PedestrianCell extends Cell {
 
     public void setGoalList(ArrayList<MapPoint> goalList) {
         this.goalList = new ArrayList<>(goalList);
+        System.out.println(this.goalList);
     }
 
     public void setExitGoal(int rowGoal, int colGoal) {
