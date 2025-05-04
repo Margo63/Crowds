@@ -88,6 +88,10 @@ public class ViewModel {
         this.pedestrianInputs = pedestrianInputs;
     }
 
+    public void showAnalysis(){
+        this.screen.changePanel(ConstantUtil.ANALYSIS);
+    }
+
     //init zones on panel
     private void loadZone() {
         if (this.zones == null || this.zones.size() != board.size()) {

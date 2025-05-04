@@ -146,7 +146,7 @@ public class PedestrianCell extends Cell {
             }
         }
 
-        printMap();
+        //printMap();
     }
 
     public void loadPanicGoalMap(ArrayList<MapPoint> exits) {

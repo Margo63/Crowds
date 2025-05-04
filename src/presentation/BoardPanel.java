@@ -123,7 +123,8 @@ public class BoardPanel extends ViewModelPanel {
         add(reportButton);
 
         reportButton.addActionListener(e -> {
-            analyze.report();
+            //analyze.report();
+            this.showAnalysis();
         });
 
         JButton panicButton = new JButton("panic");
@@ -174,8 +175,8 @@ public class BoardPanel extends ViewModelPanel {
         board.step(hour * 60L + minute);
         long endTime = System.nanoTime();
         allTime+= (endTime - startTime);
-        //System.out.println("time:"+(endTime - startTime));
-        //System.out.println("all:"+allTime);
+        System.out.println("time:"+(endTime - startTime));
+        System.out.println("all:"+allTime);
 
 
 

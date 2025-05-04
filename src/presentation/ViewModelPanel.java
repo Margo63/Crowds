@@ -57,6 +57,9 @@ public class ViewModelPanel extends JPanel {
         previousButton.setVisible(viewModel.checkPreviousPage());
         repaint();
     }
+    public void showAnalysis(){
+        viewModel.showAnalysis();
+    }
 
     public void panelShown() {
 

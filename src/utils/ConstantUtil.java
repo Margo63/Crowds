@@ -7,6 +7,7 @@ public class ConstantUtil {
     public static final String INPUT_DRAW = "draw";
     public static final String INPUT_ZONE = "zone";
     public static final String BOARD = "board";
+    public static final String ANALYSIS = "analysis";
     public static final String INPUT_PEDESTRIAN = "pedestrian";
 
     //strings
