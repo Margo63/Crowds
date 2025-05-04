@@ -365,7 +365,7 @@ public class Board extends Model {
                     Cell newCell = tmpBoard.get(next_row).get(next_col);
                     tmpBoard.get(next_row).set(next_col, value.get(next).getFirst());
                     tmpBoard.get(row).set(col, newCell);
-                    notifyObserversAboutConflict(row, col);
+                    notifyObserversAboutConflict(row-1, col-1);
                 }else{
                     int next = (int) ((Math.random() * 100) % agressors.size());
                     int row = agressors.get(next).getSecond().row();
@@ -373,7 +373,7 @@ public class Board extends Model {
                     Cell newCell = tmpBoard.get(next_row).get(next_col);
                     tmpBoard.get(next_row).set(next_col, agressors.get(next).getFirst());
                     tmpBoard.get(row).set(col, newCell);
-                    notifyObserversAboutConflict(row, col);
+                    notifyObserversAboutConflict(row-1, col-1);
 
                 }
 

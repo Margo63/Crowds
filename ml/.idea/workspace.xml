@@ -15,15 +15,17 @@
       <change beforePath="$PROJECT_DIR$/density_line.png" beforeDir="false" afterPath="$PROJECT_DIR$/density_line.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tbl_amount_pedestrian_in_time.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_amount_pedestrian_in_time.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tbl_conflict_in_time.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_conflict_in_time.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tbl_conflict_point.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_conflict_point.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tbl_report.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_report.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tbl_way.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_way.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tbl_zone_amount.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_zone_amount.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tbl_zone_density.csv" beforeDir="false" afterPath="$PROJECT_DIR$/tbl_zone_density.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/way_0.png" beforeDir="false" afterPath="$PROJECT_DIR$/way_0.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/way_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/way_1.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/way_2.png" beforeDir="false" afterPath="$PROJECT_DIR$/way_2.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/way_3.png" beforeDir="false" afterPath="$PROJECT_DIR$/way_3.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/way_4.png" beforeDir="false" afterPath="$PROJECT_DIR$/way_4.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/analyze/FrechetDistance.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/analyze/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/analyze/Analyze.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/analyze/Analyze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/presentation/AnalysisPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/presentation/AnalysisPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/presentation/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/presentation/BoardPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/presentation/ViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/presentation/ViewModel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

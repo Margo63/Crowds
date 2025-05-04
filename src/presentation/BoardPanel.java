@@ -119,11 +119,12 @@ public class BoardPanel extends ViewModelPanel {
             step();
         });
 
-        JButton reportButton = new JButton("report");
+        JButton reportButton = new JButton("analysis");
         add(reportButton);
 
         reportButton.addActionListener(e -> {
-            //analyze.report();
+            analyze.report();
+            this.getViewModel().setConflictPoints(analyze.getConflictPoints());
             this.showAnalysis();
         });
 
@@ -133,6 +134,10 @@ public class BoardPanel extends ViewModelPanel {
         panicButton.addActionListener(e -> {
             board.setPanicMode();
         });
+
+
+
+
 
 
     }
@@ -175,8 +180,8 @@ public class BoardPanel extends ViewModelPanel {
         board.step(hour * 60L + minute);
         long endTime = System.nanoTime();
         allTime+= (endTime - startTime);
-        System.out.println("time:"+(endTime - startTime));
-        System.out.println("all:"+allTime);
+        //System.out.println("time:"+(endTime - startTime));
+        //System.out.println("all:"+allTime);
 
 
 
@@ -221,12 +226,12 @@ public class BoardPanel extends ViewModelPanel {
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //step();
+                step();
 
             }
         });
 
-        //timer.start();
+        timer.start();
     }
 
     @Override

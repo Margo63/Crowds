@@ -23,6 +23,7 @@ public class Analyze implements IObserver {
     private int boardRows = 0;
     private int boardColumns = 0;
     private List<ArrayList<MapPoint>> pedestrianWays = new ArrayList<>();
+    private Map<MapPoint,Integer> conflictPoints = new HashMap<>();
 
     public Analyze() {
         FileUtils.createFile(ConstantUtil.TBL_ZONE_AMOUNT);
@@ -154,26 +155,8 @@ public class Analyze implements IObserver {
         //analizeWay();
 
     }
-
-    private void analizeWay() {
-//        double[][] matrix = new double[pedestrianWays.size()][pedestrianWays.size()];
-//        for (int i = 0; i < pedestrianWays.size(); i++) {
-//            for (int j = i + 1; j < pedestrianWays.size(); j++) {
-//                double distance = FrechetDistance.frechetDistance(
-//                        pedestrianWays.get(i),
-//                        pedestrianWays.get(j)
-//                );
-//                matrix[i][j] = distance;
-//                matrix[j][i] = distance;
-//            }
-//        }
-//        for (int i = 0; i < pedestrianWays.size(); i++) {
-//            for (int j = 0; j < pedestrianWays.size(); j++) {
-//                System.out.print(matrix[i][j]+"\t");
-//            }
-//            System.out.println();
-//        }
-
+    public Map<MapPoint, Integer> getConflictPoints() {
+        return conflictPoints;
     }
 
 
@@ -181,6 +164,13 @@ public class Analyze implements IObserver {
     public void updateConflict(int row, int col) {
         amountOfAllConflict++;
         amountStepConflict++;
+        MapPoint point = new MapPoint(row, col);
+        if(conflictPoints.containsKey(point))
+            conflictPoints.put(point, conflictPoints.get(point)+1);
+        else
+            conflictPoints.put(point, 1);
+
+
         FileUtils.writeToFile(ConstantUtil.TBL_CONFLICT_POINT, row + ", " + col + "\n");
     }
 

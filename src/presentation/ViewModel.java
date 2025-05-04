@@ -1,15 +1,18 @@
 package presentation;
 
+import data.MapPoint;
 import data.State;
 import presentation.models.InputCell;
 import presentation.models.PedestrianInput;
 import utils.ConstantUtil;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ViewModel {
     private ArrayList<ArrayList<InputCell>> board;
     private ArrayList<ArrayList<Integer>> zones;
+    private Map<MapPoint, Integer> conflictPoints;
     private final String[] pages = {ConstantUtil.INPUT_FILE, ConstantUtil.INPUT_DRAW, ConstantUtil.INPUT_ZONE, ConstantUtil.INPUT_PEDESTRIAN, ConstantUtil.BOARD};
     private int pageIndex = 0;
     private Screen screen;
@@ -18,6 +21,13 @@ public class ViewModel {
     ViewModel(){
         board = new ArrayList<>();
         zones = new ArrayList<>();
+    }
+
+    public void setConflictPoints(Map<MapPoint, Integer> conflictPoints) {
+        this.conflictPoints = conflictPoints;
+    }
+    public Map<MapPoint, Integer> getConflictPoints() {
+        return conflictPoints;
     }
 
     public void setBoard(ArrayList<ArrayList<InputCell>> board) {
@@ -41,6 +51,7 @@ public class ViewModel {
 
         loadZone();
     }
+
 
     public ArrayList<ArrayList<InputCell>> getBoard() {
         return board;

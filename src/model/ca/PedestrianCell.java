@@ -171,7 +171,8 @@ public class PedestrianCell extends Cell {
 
     @Override
     public boolean isExitAchieved(int row, int col) {
-        way.add(new MapPoint(row, col));
+        way.add(new MapPoint(row-1, col-1));
+
         if (!isPanic) {
             MapPoint currentGoal = goalList.getFirst();
             if (row == currentGoal.row() && col == currentGoal.column()) {
@@ -190,7 +191,7 @@ public class PedestrianCell extends Cell {
 
     public void setGoalList(ArrayList<MapPoint> goalList) {
         this.goalList = new ArrayList<>(goalList);
-        System.out.println(this.goalList);
+        //System.out.println(this.goalList);
     }
 
     public void setExitGoal(int rowGoal, int colGoal) {
