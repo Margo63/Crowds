@@ -220,6 +220,7 @@ public class Board extends Model {
         //printBoard();
         //System.out.println(row + " " + col);
         PedestrianCell tmpPedestrian = (PedestrianCell) tmpBoard.get(row).get(col);
+
         tmpPedestrian.randomPoint(probabilityDeviation);
         tmpPedestrian.needToGoExit(time);
 

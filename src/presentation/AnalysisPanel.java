@@ -20,7 +20,7 @@ public class AnalysisPanel extends ViewModelPanel {
     public void paint(Graphics g) {
         super.paint(g);
         if(getViewModel().checkBoard())
-            DrawUtils.drawBoard(g,getViewModel().getBoardInteger());
+            DrawUtils.drawBoard(g,getViewModel().getBoardInteger(), getWidth());
 
         if(loaded){
             for (MapPoint key: map.keySet()){

@@ -22,6 +22,7 @@ public class InputZonePanel extends ViewModelPanel {
 
     @Override
     public void paint(Graphics g) {
+        //draw board
         super.paint(g);
 
         //draw selected zone
@@ -37,24 +38,12 @@ public class InputZonePanel extends ViewModelPanel {
         //draw zone index on board
         for (int i = 0; i < zones.size(); i++) {
             for (int j = 0; j < zones.get(i).size(); j++) {
-
-                FontMetrics fm = g.getFontMetrics();
-                int textWidth = fm.stringWidth(String.valueOf(zones.get(i).get(j)));
-                int textHeight = fm.getHeight();
-
-                int textX = (int) (board.get(i).get(j).getX() + (board.get(i).get(j).getWidth() - textWidth) / 2);
-                int textY = (int) (board.get(i).get(j).getY() + (board.get(i).get(j).getHeight() + textHeight) / 2 - fm.getDescent());
-
-                g.drawString(String.valueOf(zones.get(i).get(j)), textX, textY);
+                if(zones.get(i).get(j)>=0)
+                    DrawUtils.drawText(g, String.valueOf(zones.get(i).get(j)),j,i,getWidth(),zones.get(i).size());
             }
         }
 
-        //draw board
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.getFirst().size(); j++) {
-                DrawUtils.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
-            }
-        }
+
     }
 
 
@@ -75,6 +64,8 @@ public class InputZonePanel extends ViewModelPanel {
         this.add(label);
 
         JSpinner spinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
+        spinner.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spinner.setMaximumSize(spinner.getPreferredSize());
         spinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -107,8 +98,9 @@ public class InputZonePanel extends ViewModelPanel {
 
                 for (int i = 0; i < board.size(); i++) {
                     for (int j = 0; j < board.get(i).size(); j++) {
-                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
-                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+                        Rectangle cellRectangle = DrawUtils.getCellRectangle(j,i,getWidth(), board.get(i).size());
+//                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+//                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
                         if (rect.contains(cellRectangle) && board.get(i).get(j).getState() == State.EMPTY) {
                             zones.get(i).set(j, zoneIndex);
 

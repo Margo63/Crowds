@@ -28,25 +28,29 @@ public class InputPedestrianPanel extends ViewModelPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        //System.out.println(board);
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.getFirst().size(); j++) {
-                DrawUtils.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
-
-            }
-            //System.out.println();
-        }
+//        //System.out.println(board);
+//        for (int i = 0; i < board.size(); i++) {
+//            for (int j = 0; j < board.getFirst().size(); j++) {
+//                DrawUtils.draw(g, board.get(i).get(j).getState(), (int) board.get(i).get(j).getX(), (int) board.get(i).get(j).getY());
+//
+//            }
+//            //System.out.println();
+//        }
         g.setColor(Color.RED);
         PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
         if (pedestrianInput != null) {
             Point selectedPoint = pedestrianInput.pedestrianEntry;
             if (selectedPoint != null) {
-                g.drawRect(selectedPoint.x * ConstantUtil.SIZE_OF_CELL, selectedPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                Rectangle rect = DrawUtils.getCellRectangle(selectedPoint.x, selectedPoint.y, getWidth(), board.getFirst().size());
+                g.drawRect(rect.x, rect.y, rect.width, rect.height);
+                //g.drawRect(selectedPoint.x * ConstantUtil.SIZE_OF_CELL, selectedPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
             }
             Point selectedExitPoint = pedestrianInput.pedestrianExit;
             if (selectedExitPoint != null) {
                 g.setColor(Color.GREEN);
-                g.drawRect(selectedExitPoint.x * ConstantUtil.SIZE_OF_CELL, selectedExitPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                Rectangle rect = DrawUtils.getCellRectangle(selectedExitPoint.x, selectedExitPoint.y, getWidth(), board.getFirst().size());
+                g.drawRect(rect.x, rect.y, rect.width, rect.height);
+                //g.drawRect(selectedExitPoint.x * ConstantUtil.SIZE_OF_CELL, selectedExitPoint.y * ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
             }
             ArrayList<Point> way = pedestrianInput.way;
             if (way != null) {
@@ -63,10 +67,11 @@ public class InputPedestrianPanel extends ViewModelPanel {
     }
 
     public InputPedestrianPanel() {
-        this.add(Box.createVerticalStrut(500));
-
         comboBoxEntries = new JComboBox();
         comboBoxEntries.setRenderer(new EntryRender());
+        comboBoxEntries.setAlignmentX(Component.LEFT_ALIGNMENT);
+        comboBoxEntries.setPreferredSize(new Dimension(200, comboBoxEntries.getPreferredSize().height));
+        comboBoxEntries.setMaximumSize(comboBoxEntries.getPreferredSize());
         this.add(comboBoxEntries);
 
         JLabel labelWay = new JLabel(ConstantUtil.WAY_LABEL);
@@ -90,7 +95,10 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
         JLabel labelAmountPedestrian = new JLabel(ConstantUtil.AMOUNT_PEDESTRIAN_LABEL);
         this.add(labelAmountPedestrian);
+
         JSpinner spinnerAmount = new JSpinner();
+        spinnerAmount.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spinnerAmount.setMaximumSize(spinnerAmount.getPreferredSize());
         this.add(spinnerAmount);
         spinnerAmount.addChangeListener(e -> {
             PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
@@ -107,6 +115,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
         JSpinner spinnerTimeIn = new JSpinner(smIn);
         JSpinner.DateEditor te = new JSpinner.DateEditor(spinnerTimeIn, "HH:mm");
         spinnerTimeIn.setEditor(te);
+        spinnerTimeIn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spinnerTimeIn.setMaximumSize(spinnerTimeIn.getPreferredSize());
         this.add(spinnerTimeIn);
 
         spinnerTimeIn.addChangeListener(e -> {
@@ -126,6 +136,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
         JSpinner spinnerTimeOut = new JSpinner(smOut);
         JSpinner.DateEditor teOut = new JSpinner.DateEditor(spinnerTimeOut, "HH:mm");
         spinnerTimeOut.setEditor(teOut);
+        spinnerTimeOut.setAlignmentX(Component.LEFT_ALIGNMENT);
+        spinnerTimeOut.setMaximumSize(spinnerTimeOut.getPreferredSize());
         this.add(spinnerTimeOut);
 
         spinnerTimeOut.addChangeListener(e -> {
@@ -140,6 +152,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
         comboBoxExits = new JComboBox();
         comboBoxExits.setRenderer(new ExitRender());
+        comboBoxExits.setAlignmentX(Component.LEFT_ALIGNMENT);
+        comboBoxExits.setMaximumSize(comboBoxExits.getPreferredSize());
         this.add(comboBoxExits);
         comboBoxExits.addActionListener(e -> {
             PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();

@@ -30,14 +30,15 @@ public class InputDrawPanel extends ViewModelPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
+        //getViewModel().setBoard(board);
         //System.out.println(board);
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.getFirst().size(); j++) {
-                DrawUtils.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
-
-            }
-            //System.out.println();
-        }
+//        for (int i = 0; i < board.size(); i++) {
+//            for (int j = 0; j < board.getFirst().size(); j++) {
+//                DrawUtils.draw(g,board.get(i).get(j).getState(),(int) board.get(i).get(j).getX(),(int) board.get(i).get(j).getY() );
+//
+//            }
+//            //System.out.println();
+//        }
     }
 
     public InputDrawPanel() {
@@ -86,7 +87,8 @@ public class InputDrawPanel extends ViewModelPanel {
         });
 
 
-
+        rowsSpinner.setAlignmentX(Component.LEFT_ALIGNMENT);
+        rowsSpinner.setMaximumSize(rowsSpinner.getPreferredSize());
         rowsSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -102,7 +104,8 @@ public class InputDrawPanel extends ViewModelPanel {
         });
         this.add(rowsSpinner);
 
-
+        colsSpinner.setAlignmentX(Component.LEFT_ALIGNMENT);
+        colsSpinner.setMaximumSize(colsSpinner.getPreferredSize());
         colsSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -118,13 +121,18 @@ public class InputDrawPanel extends ViewModelPanel {
             }
         });
         this.add(colsSpinner);
+
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 for (int i = 0; i  < sizeRows; i++) {
                     for (int j = 0; j < sizeCols; j++) {
-                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
-                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+
+                        Rectangle cellRectangle = DrawUtils.getCellRectangle(j,i,getWidth(), sizeCols);
+//                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+//                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+
                         if(cellRectangle.contains(e.getX(), e.getY())){
                             board.get(i).get(j).setState(currentState);
                             repaint();

@@ -11,14 +11,13 @@ import utils.ConstantUtil;
 import utils.DrawUtils;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.*;
 
 public class BoardPanel extends ViewModelPanel {
     private Board board;
@@ -27,7 +26,7 @@ public class BoardPanel extends ViewModelPanel {
     private int minute = 0;
 
     private boolean loaded = false;
-    private ArrayList<PedestrianInput> pedestrianEntryQueue;
+    private Map<MapPoint,ArrayList<PedestrianInput>> pedestrianEntryQueue = new HashMap<>();
 
     private JLabel timerLabel;
     private JLabel conflictLabel;
@@ -38,7 +37,7 @@ public class BoardPanel extends ViewModelPanel {
     public void paint(Graphics g) {
         super.paint(g);
         if (this.getViewModel().checkBoard() && board != null && loaded) {
-            DrawUtils.drawBoard(g, board.getBoardOfIntegers());
+            DrawUtils.drawBoard(g, board.getBoardOfIntegers(), getWidth());
             for (int i = 1; i < board.getAmountOfRows() - 1; i++) {
                 for (int j = 1; j < board.getAmountOfCols() - 1; j++) {
                     //DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
@@ -67,7 +66,7 @@ public class BoardPanel extends ViewModelPanel {
         this.analyze = new Analyze();
         this.board.addObserver(this.analyze);
 
-        pedestrianEntryQueue = new ArrayList<>();
+        //pedestrianEntryQueue = new ArrayList<>();
 
         timerLabel = new JLabel("00:00");
         add(timerLabel);
@@ -153,9 +152,18 @@ public class BoardPanel extends ViewModelPanel {
             pedestrian.sort(byTimeIn);
 
             for (int i = 0; i < pedestrian.size(); i++) {
+                ArrayList<PedestrianInput> inputs = new ArrayList<>();
                 for (int j = 0; j < pedestrian.get(i).amountOfPedestrian; j++) {
-                    pedestrianEntryQueue.addLast(pedestrian.get(i));
+                    inputs.addLast(pedestrian.get(i));
                 }
+                PedestrianInput pedestrianGroup = pedestrian.get(i);
+                MapPoint entry = new MapPoint(pedestrianGroup.pedestrianEntry.y, pedestrianGroup.pedestrianEntry.x);
+                if(pedestrianEntryQueue.containsKey(entry)) {
+                    pedestrianEntryQueue.get(entry).addLast(pedestrianGroup);
+                }else{
+                    pedestrianEntryQueue.put(entry, inputs);
+                }
+
             }
             //System.out.println(pedestrianEntryQueue);
             loaded = true;
@@ -188,28 +196,32 @@ public class BoardPanel extends ViewModelPanel {
         analyze.analyzeStep(board.getBoardOfIntegers());
         conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
-        if (!pedestrianEntryQueue.isEmpty()) {
+        for(MapPoint key: pedestrianEntryQueue.keySet()) {
+            ArrayList<PedestrianInput> inputs = pedestrianEntryQueue.get(key);
+            if (!inputs.isEmpty()) {
 
-            Date date = new Date(pedestrianEntryQueue.getFirst().timeIn);
+                Date date = new Date(inputs.getFirst().timeIn);
 
-            if (date.getHours() * 60 + date.getMinutes() <= hour * 60 + minute) {
-                ArrayList<MapPoint> way = new ArrayList<>();
-                //TODO make to map point
-                for (Point point : pedestrianEntryQueue.getFirst().way) {
-                    way.add(new MapPoint(point.y+1, point.x+1));
-                }
-                //TODO
-                //check that exit exist
-                Date out = new Date(pedestrianEntryQueue.getFirst().timeOut);
-                if (this.board.addPedestrian(pedestrianEntryQueue.getFirst().pedestrianEntry, way,
-                        pedestrianEntryQueue.getFirst().pedestrianExit, out.getHours() * 60 + out.getMinutes())) {
-                    pedestrianEntryQueue.removeFirst();
-                    //System.out.println("added");
+                if (date.getHours() * 60 + date.getMinutes() <= hour * 60 + minute) {
+                    ArrayList<MapPoint> way = new ArrayList<>();
+                    //TODO make to map point
+                    for (Point point : inputs.getFirst().way) {
+                        way.add(new MapPoint(point.y+1, point.x+1));
+                    }
+                    //TODO
+                    //check that exit exist
+                    Date out = new Date(inputs.getFirst().timeOut);
+                    if (this.board.addPedestrian(inputs.getFirst().pedestrianEntry, way,
+                            inputs.getFirst().pedestrianExit, out.getHours() * 60 + out.getMinutes())) {
+                        pedestrianEntryQueue.get(key).removeFirst();
+                        //System.out.println("added");
+                    }
+
                 }
 
             }
-
         }
+
 
 
         repaint();

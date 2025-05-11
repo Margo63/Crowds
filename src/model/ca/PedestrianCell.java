@@ -60,17 +60,18 @@ public class PedestrianCell extends Cell {
     }
 
     public void randomPoint(double probability) {
-        int row, column;
-        boolean isSelected = false;
-        while (!isSelected) {
-            row = (int) (Math.random() * startMap.size());
-            column = (int) (Math.random() * startMap.size());
-            if (startMap.get(row).get(column) == 0 && !goalList.contains(new MapPoint(row, column))) {
-                if (Math.random() < probability){
+        if (Math.random() < probability) {
+            int row, column;
+            boolean isSelected = false;
+            while (!isSelected) {
+                row = (int) (Math.random() * (startMap.size() - 1));
+                column = (int) (Math.random() * (startMap.getFirst().size() - 1));
+                if (State.getFromInt(startMap.get(row).get(column)) == EMPTY
+                        && !goalList.contains(new MapPoint(row, column))) {
                     goalList.add(goalList.size() / 2, new MapPoint(row, column));
                     loadGoalMap();
+                    isSelected = true;
                 }
-                isSelected = true;
             }
         }
     }
@@ -171,7 +172,8 @@ public class PedestrianCell extends Cell {
 
     @Override
     public boolean isExitAchieved(int row, int col) {
-        way.add(new MapPoint(row-1, col-1));
+        //-1 without frame
+        way.add(new MapPoint(row - 1, col - 1));
 
         if (!isPanic) {
             MapPoint currentGoal = goalList.getFirst();

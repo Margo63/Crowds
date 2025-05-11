@@ -1,8 +1,10 @@
 package presentation;
 
 import utils.ConstantUtil;
+import utils.DrawUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -11,8 +13,17 @@ public class ViewModelPanel extends JPanel {
     private JButton nextButton;
     private JButton previousButton;
 
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        if(viewModel.checkBoard())
+            DrawUtils.drawBoard(g,viewModel.getBoardInteger(), getWidth());
+    }
+
     public ViewModelPanel() {
         super();
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         nextButton = new JButton(ConstantUtil.NEXT);
         previousButton = new JButton(ConstantUtil.PREVIOUS);
         this.add(previousButton);

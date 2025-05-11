@@ -6,15 +6,20 @@ import utils.FileUtils;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class InputFilePanel extends ViewModelPanel {
 
     public InputFilePanel() {
+
+
         JLabel label = new JLabel(ConstantUtil.CHOSEN_FILE);
         this.add(label);
+
         JButton buttonChooseFile = new JButton(ConstantUtil.CHOOSE_FILE_BUTTON);
         this.add(buttonChooseFile);
+
         buttonChooseFile.addActionListener(e -> {
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(

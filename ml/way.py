@@ -31,8 +31,9 @@ def clust(arr):
             dist = similaritymeasures.frechet_dist(arr[i], arr[j])
             dist_matrix[i, j] = dist
             dist_matrix[j, i] = dist
+        print(i)
     #print(dist_matrix)
-    cl = DBSCAN(eps=2, min_samples=1, metric='precomputed')
+    cl = DBSCAN(eps=4, min_samples=1, metric='precomputed')
     dbscan_clust = cl.fit(dist_matrix)
     clusters = cl.labels_
     return clusters
@@ -63,9 +64,10 @@ if __name__ == '__main__':
 
     for i in range(1, len(nums)):
         lst = ast.literal_eval(nums[i])
-        arr_ways.append(lst)
+        if lst not in arr_ways:
+            arr_ways.append(lst)
 
-
+    print(len(arr_ways))
 
 
     df_conflict_point = read("tbl_conflict_point.csv")
@@ -118,7 +120,7 @@ if __name__ == '__main__':
     for key,value in dict_clust.items():
         data = pd.DataFrame(value[0], columns=["row", "column"])
         #plot_way = sns.lineplot(data=data,x='column', y='row',marker='o')
-        way_plot = sns.scatterplot(data=data,  x='column', y='row',  sizes=(50, 300), legend=False, alpha=0.7, color=colors[key], markers="o")
+        way_plot = sns.scatterplot(data=data,  x='column', y='row',  sizes=(50, 300), legend=False, alpha=0.7, color=colors[0], markers="o")
         plt.plot(data["column"],data["row"])
         # print(key,colors[key], value[0])
         # print(data)
@@ -146,3 +148,26 @@ if __name__ == '__main__':
     # ax.axis('off')  # Отключаем оси
     #
     # plt.show()
+#
+#[ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+  # 0  0  0  0  0  0  0  2  2  2  2  2  2  2  2  2  2  2  2  2  2  3  0  0
+  # 2  4  4  0  2  2  4  0  5  2  2  2  3  3  3  0  0  6  3  0  3  3  2  0
+  # 0  0  0  0  5  2  4  7  0  2  2  0  2  2  2  5  8  2  7  8  9  5  7  7
+  # 2 10 10  2  2  2  2  2  2  2 11 12  5  5  5  5  5  5  2  7  7 13]
+#
