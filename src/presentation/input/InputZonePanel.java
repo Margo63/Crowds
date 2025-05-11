@@ -43,6 +43,8 @@ public class InputZonePanel extends ViewModelPanel {
             }
         }
 
+        DrawUtils.drawBoard(g,getViewModel().getBoardInteger(), getWidth());
+
 
     }
 

@@ -3,6 +3,8 @@ package utils;
 public class ConstantUtil {
     private ConstantUtil(){}
     public static final int SIZE_OF_CELL = 20;
+
+    //navigation
     public static final String INPUT_FILE = "file";
     public static final String INPUT_DRAW = "draw";
     public static final String INPUT_ZONE = "zone";

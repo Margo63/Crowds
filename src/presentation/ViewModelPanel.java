@@ -16,8 +16,8 @@ public class ViewModelPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if(viewModel.checkBoard())
-            DrawUtils.drawBoard(g,viewModel.getBoardInteger(), getWidth());
+//        if(viewModel.checkBoard())
+//            DrawUtils.drawBoard(g,viewModel.getBoardInteger(), getWidth());
     }
 
     public ViewModelPanel() {
@@ -26,6 +26,7 @@ public class ViewModelPanel extends JPanel {
 
         nextButton = new JButton(ConstantUtil.NEXT);
         previousButton = new JButton(ConstantUtil.PREVIOUS);
+
         this.add(previousButton);
         this.add(nextButton);
 

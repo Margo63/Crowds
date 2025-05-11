@@ -36,6 +36,8 @@ public class InputPedestrianPanel extends ViewModelPanel {
 //            }
 //            //System.out.println();
 //        }
+
+        DrawUtils.drawBoard(g, getViewModel().getBoardInteger(), getWidth());
         g.setColor(Color.RED);
         PedestrianInput pedestrianInput = (PedestrianInput) comboBoxEntries.getSelectedItem();
         if (pedestrianInput != null) {
@@ -56,7 +58,9 @@ public class InputPedestrianPanel extends ViewModelPanel {
             if (way != null) {
                 for (int i = 0; i < way.size(); i++) {
                     g.setColor(Color.BLUE);
-                    g.drawRect(way.get(i).x * ConstantUtil.SIZE_OF_CELL, way.get(i).y* ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                    Rectangle rect = DrawUtils.getCellRectangle(way.get(i).x, way.get(i).y, getWidth(), board.getFirst().size());
+                    g.drawRect(rect.x, rect.y, rect.width, rect.height);
+                    //g.drawRect(way.get(i).x * ConstantUtil.SIZE_OF_CELL, way.get(i).y* ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 }
             }
 
@@ -96,7 +100,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         JLabel labelAmountPedestrian = new JLabel(ConstantUtil.AMOUNT_PEDESTRIAN_LABEL);
         this.add(labelAmountPedestrian);
 
-        JSpinner spinnerAmount = new JSpinner();
+        JSpinner spinnerAmount = new JSpinner(new SpinnerNumberModel(1, 0, 1000, 1));
         spinnerAmount.setAlignmentX(Component.LEFT_ALIGNMENT);
         spinnerAmount.setMaximumSize(spinnerAmount.getPreferredSize());
         this.add(spinnerAmount);
@@ -153,6 +157,7 @@ public class InputPedestrianPanel extends ViewModelPanel {
         comboBoxExits = new JComboBox();
         comboBoxExits.setRenderer(new ExitRender());
         comboBoxExits.setAlignmentX(Component.LEFT_ALIGNMENT);
+        comboBoxExits.setPreferredSize(new Dimension(200, comboBoxExits.getPreferredSize().height));
         comboBoxExits.setMaximumSize(comboBoxExits.getPreferredSize());
         this.add(comboBoxExits);
         comboBoxExits.addActionListener(e -> {
@@ -184,8 +189,9 @@ public class InputPedestrianPanel extends ViewModelPanel {
                     if (!addWay.isEnabled())
                         for (int i = 0; i < board.size(); i++) {
                             for (int j = 0; j < board.getFirst().size(); j++) {
-                                Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
-                                        board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
+                                Rectangle cellRectangle = DrawUtils.getCellRectangle(j,i,getWidth(),board.getFirst().size());
+//                                Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
+//                                        board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
                                 if (cellRectangle.contains(e.getX(), e.getY())) {
 
 
@@ -200,10 +206,15 @@ public class InputPedestrianPanel extends ViewModelPanel {
 
                     if (!removeWay.isEnabled() && pedestrianInput.way!=null)
                         for (int i = 0; i < pedestrianInput.way.size(); i++) {
-                            Rectangle rect = new Rectangle(
-                                    pedestrianInput.way.get(i).x * ConstantUtil.SIZE_OF_CELL,
-                                    pedestrianInput.way.get(i).y* ConstantUtil.SIZE_OF_CELL,
-                                    ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+//                            Rectangle rect = new Rectangle(
+//                                    pedestrianInput.way.get(i).x * ConstantUtil.SIZE_OF_CELL,
+//                                    pedestrianInput.way.get(i).y* ConstantUtil.SIZE_OF_CELL,
+//                                    ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                            Rectangle rect = DrawUtils.getCellRectangle(
+                                    pedestrianInput.way.get(i).x,
+                                    pedestrianInput.way.get(i).y,
+                                    getWidth(),
+                                    board.getFirst().size());
                             if (rect.contains(e.getX(), e.getY())) {
                                 pedestrianInput.way.remove(pedestrianInput.way.get(i));
                                 removeWay.setEnabled(true);

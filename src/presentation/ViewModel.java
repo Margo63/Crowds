@@ -18,7 +18,7 @@ public class ViewModel {
     private Screen screen;
     private ArrayList<PedestrianInput> pedestrianInputs;
 
-    ViewModel(){
+    ViewModel() {
         board = new ArrayList<>();
         zones = new ArrayList<>();
     }
@@ -26,18 +26,19 @@ public class ViewModel {
     public void setConflictPoints(Map<MapPoint, Integer> conflictPoints) {
         this.conflictPoints = conflictPoints;
     }
+
     public Map<MapPoint, Integer> getConflictPoints() {
         return conflictPoints;
     }
 
     public void setBoard(ArrayList<ArrayList<InputCell>> board) {
-        if(board == null) return;
+        if (board == null) return;
         this.board = board;
         loadZone();
     }
 
     public void setBoardFromInteger(ArrayList<ArrayList<Integer>> board) {
-        if(board == null) return;
+        if (board == null) return;
         ArrayList<ArrayList<InputCell>> tmp = new ArrayList<>();
         for (int i = 0; i < board.size(); i++) {
             tmp.add(new ArrayList<>(board.size()));
@@ -99,24 +100,26 @@ public class ViewModel {
         this.pedestrianInputs = pedestrianInputs;
     }
 
-    public void showAnalysis(){
+    public void showAnalysis() {
         this.screen.changePanel(ConstantUtil.ANALYSIS);
     }
 
     //init zones on panel
     private void loadZone() {
-        if (this.zones == null || this.zones.size() != board.size()) {
-            this.zones = new ArrayList<>();
-            for (int i = 0; i < board.size(); i++) {
-                this.zones.add(new ArrayList<>(board.size()));
-                for (int j = 0; j < board.get(i).size(); j++) {
-                    if (board.get(i).get(j).getState() == State.EMPTY)
-                        this.zones.get(i).add(0);
-                    else
-                        this.zones.get(i).add(-1);
-                }
+
+        //   if (this.zones == null || this.zones.size() != board.size()) {
+        this.zones.clear();
+        this.zones = new ArrayList<>();
+        for (int i = 0; i < board.size(); i++) {
+            this.zones.add(new ArrayList<>(board.size()));
+            for (int j = 0; j < board.get(i).size(); j++) {
+                if (board.get(i).get(j).getState() == State.EMPTY)
+                    this.zones.get(i).add(0);
+                else
+                    this.zones.get(i).add(-1);
             }
         }
+        //   }
         //System.out.println("load:"+zones);
     }
 

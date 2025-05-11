@@ -39,6 +39,7 @@ public class InputDrawPanel extends ViewModelPanel {
 //            }
 //            //System.out.println();
 //        }
+        DrawUtils.drawBoard(g,getViewModel().getBoardInteger(), getWidth());
     }
 
     public InputDrawPanel() {

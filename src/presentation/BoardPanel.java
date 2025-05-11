@@ -26,13 +26,14 @@ public class BoardPanel extends ViewModelPanel {
     private int minute = 0;
 
     private boolean loaded = false;
-    private Map<MapPoint,ArrayList<PedestrianInput>> pedestrianEntryQueue = new HashMap<>();
+    private Map<MapPoint, ArrayList<PedestrianInput>> pedestrianEntryQueue = new HashMap<>();
 
     private JLabel timerLabel;
     private JLabel conflictLabel;
     private int conflictPercent = 0;
     private double probabilityDeviation = 0.0;
     private long allTime = 0;
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -43,15 +44,17 @@ public class BoardPanel extends ViewModelPanel {
                     //DrawUtils.draw(g, board.getCell(i, j).getState(), j * Constants.SIZE_OF_CELL, i * Constants.SIZE_OF_CELL);
 
                     if (board.getCell(i, j).getState() == State.PEDESTRIAN || board.getCell(i, j).getState() == State.AGGRESSIVE) {
-                        FontMetrics fm = g.getFontMetrics();
                         PedestrianCell cell = (PedestrianCell) board.getCell(i, j);
-                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
-                        int textHeight = fm.getHeight();
-
-                        int textX = (int) ((j - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL - textWidth) / 2);
-                        int textY = (int) ((i - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
-
-                        g.drawString(String.valueOf(cell.num), textX, textY);
+                        DrawUtils.drawText(g, String.valueOf(cell.num), j - 1, i - 1, getWidth(), board.getAmountOfCols()-2);
+//                        FontMetrics fm = g.getFontMetrics();
+//
+//                        int textWidth = fm.stringWidth(String.valueOf(cell.num));
+//                        int textHeight = fm.getHeight();
+//
+//                        int textX = (int) ((j - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL - textWidth) / 2);
+//                        int textY = (int) ((i - 1) * ConstantUtil.SIZE_OF_CELL + (ConstantUtil.SIZE_OF_CELL + textHeight) / 2 - fm.getDescent());
+//
+//                        g.drawString(String.valueOf(cell.num), textX, textY);
                     }
 
                 }
@@ -74,12 +77,14 @@ public class BoardPanel extends ViewModelPanel {
         JLabel conflictPercentLabel = new JLabel("conflict percent: ");
         this.add(conflictPercentLabel);
         JSpinner conflictPercentSpinner = new JSpinner(new SpinnerNumberModel(conflictPercent, 0, 100, 1));
+        conflictPercentSpinner.setAlignmentX(Component.LEFT_ALIGNMENT);
+        conflictPercentSpinner.setMaximumSize(conflictPercentSpinner.getPreferredSize());
         conflictPercentSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 try {
                     conflictPercent = (int) conflictPercentSpinner.getValue();
-                    board.setConflictPercent((double) conflictPercent /100);
+                    board.setConflictPercent((double) conflictPercent / 100);
 
                     repaint();
                 } catch (Exception err) {
@@ -93,6 +98,8 @@ public class BoardPanel extends ViewModelPanel {
         JLabel probabilityDeviationLabel = new JLabel("probability deviation: ");
         this.add(probabilityDeviationLabel);
         JSpinner probabilityDeviationSpinner = new JSpinner(new SpinnerNumberModel(probabilityDeviation, 0.0, 1.0, 0.01));
+        probabilityDeviationSpinner.setAlignmentX(Component.LEFT_ALIGNMENT);
+        probabilityDeviationSpinner.setMaximumSize(probabilityDeviationSpinner.getPreferredSize());
         probabilityDeviationSpinner.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -135,10 +142,6 @@ public class BoardPanel extends ViewModelPanel {
         });
 
 
-
-
-
-
     }
 
     private void loadBoard() {
@@ -158,9 +161,9 @@ public class BoardPanel extends ViewModelPanel {
                 }
                 PedestrianInput pedestrianGroup = pedestrian.get(i);
                 MapPoint entry = new MapPoint(pedestrianGroup.pedestrianEntry.y, pedestrianGroup.pedestrianEntry.x);
-                if(pedestrianEntryQueue.containsKey(entry)) {
+                if (pedestrianEntryQueue.containsKey(entry)) {
                     pedestrianEntryQueue.get(entry).addLast(pedestrianGroup);
-                }else{
+                } else {
                     pedestrianEntryQueue.put(entry, inputs);
                 }
 
@@ -187,16 +190,15 @@ public class BoardPanel extends ViewModelPanel {
         long startTime = System.nanoTime();
         board.step(hour * 60L + minute);
         long endTime = System.nanoTime();
-        allTime+= (endTime - startTime);
+        allTime += (endTime - startTime);
         //System.out.println("time:"+(endTime - startTime));
         //System.out.println("all:"+allTime);
-
 
 
         analyze.analyzeStep(board.getBoardOfIntegers());
         conflictLabel.setText("количество конфликтов: " + analyze.getAmountOfAllConflict());
 
-        for(MapPoint key: pedestrianEntryQueue.keySet()) {
+        for (MapPoint key : pedestrianEntryQueue.keySet()) {
             ArrayList<PedestrianInput> inputs = pedestrianEntryQueue.get(key);
             if (!inputs.isEmpty()) {
 
@@ -206,7 +208,7 @@ public class BoardPanel extends ViewModelPanel {
                     ArrayList<MapPoint> way = new ArrayList<>();
                     //TODO make to map point
                     for (Point point : inputs.getFirst().way) {
-                        way.add(new MapPoint(point.y+1, point.x+1));
+                        way.add(new MapPoint(point.y + 1, point.x + 1));
                     }
                     //TODO
                     //check that exit exist
@@ -223,7 +225,6 @@ public class BoardPanel extends ViewModelPanel {
         }
 
 
-
         repaint();
 
     }
@@ -238,7 +239,7 @@ public class BoardPanel extends ViewModelPanel {
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                step();
+                //step();
 
             }
         });
