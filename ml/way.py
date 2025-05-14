@@ -25,15 +25,16 @@ def plot(df, name):
 
 def clust(arr):
     n = len(arr)
+
     dist_matrix = np.zeros((n, n))
-    for i in range(n - 1):
+    for i in range(0, n - 1):
         for j in range(i + 1, n):
             dist = similaritymeasures.frechet_dist(arr[i], arr[j])
             dist_matrix[i, j] = dist
             dist_matrix[j, i] = dist
         print(i)
     #print(dist_matrix)
-    cl = DBSCAN(eps=4, min_samples=1, metric='precomputed')
+    cl = DBSCAN(eps=2, min_samples=1, metric='precomputed')
     dbscan_clust = cl.fit(dist_matrix)
     clusters = cl.labels_
     return clusters
@@ -63,7 +64,8 @@ if __name__ == '__main__':
         nums = f.read().splitlines()
 
     for i in range(1, len(nums)):
-        lst = ast.literal_eval(nums[i])
+        lst = ast.literal_eval(nums[i])[::2]
+        #print(lst)
         if lst not in arr_ways:
             arr_ways.append(lst)
 

@@ -17,6 +17,9 @@ public class InputDrawPanel extends ViewModelPanel {
     // size of board
     private int sizeRows = 0;
     private int sizeCols = 0;
+
+    private int exits = 0;
+    private int entries = 0;
     // board to draw
     private ArrayList<ArrayList<InputCell>> board = new ArrayList<>();
     // what draw
@@ -39,11 +42,10 @@ public class InputDrawPanel extends ViewModelPanel {
 //            }
 //            //System.out.println();
 //        }
-        DrawUtils.drawBoard(g,getViewModel().getBoardInteger(), getWidth());
+        DrawUtils.drawBoard(g, getViewModel().getBoardInteger(), getWidth());
     }
 
     public InputDrawPanel() {
-
         //System.out.println(this.getViewModel().getBoard());
 
 //        addComponentListener(new ComponentAdapter() {
@@ -97,6 +99,7 @@ public class InputDrawPanel extends ViewModelPanel {
                     sizeRows = (int) rowsSpinner.getValue();
                     resizeBoard();
                     repaint();
+                    check();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
                 }
@@ -112,9 +115,9 @@ public class InputDrawPanel extends ViewModelPanel {
             public void stateChanged(ChangeEvent e) {
                 try {
                     sizeCols = (int) colsSpinner.getValue();
-
                     resizeBoard();
                     repaint();
+                    check();
                 } catch (Exception err) {
                     System.out.println(err.getMessage());
                 }
@@ -127,22 +130,27 @@ public class InputDrawPanel extends ViewModelPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                for (int i = 0; i  < sizeRows; i++) {
+                entries = 0;
+                exits = 0;
+                for (int i = 0; i < sizeRows; i++) {
                     for (int j = 0; j < sizeCols; j++) {
 
-                        Rectangle cellRectangle = DrawUtils.getCellRectangle(j,i,getWidth(), sizeCols);
+                        Rectangle cellRectangle = DrawUtils.getCellRectangle(j, i, getWidth(), sizeCols);
 //                        Rectangle cellRectangle = new Rectangle(board.get(i).get(j).getX(), board.get(i).get(j).getY(),
 //                                board.get(i).get(j).getWidth(), board.get(i).get(j).getHeight());
 
-                        if(cellRectangle.contains(e.getX(), e.getY())){
+                        if (cellRectangle.contains(e.getX(), e.getY())) {
                             board.get(i).get(j).setState(currentState);
                             repaint();
                         }
+
+                        if(board.get(i).get(j).getState() == State.ENTRY) entries++;
+                        if(board.get(i).get(j).getState() == State.EXIT) exits++;
                     }
                 }
+                check();
             }
         });
-
 
 
     }
@@ -208,7 +216,7 @@ public class InputDrawPanel extends ViewModelPanel {
                 //System.out.println("add col:");
                 while (cols < sizeCols) {
                     for (int i = 0; i < sizeRows; i++) {
-                        InputCell rect = new InputCell(cols,i);
+                        InputCell rect = new InputCell(cols, i);
                         board.get(i).add(rect);
                         //board.get(i).getLast().setPosition(cols,i);
                         //this.add(rect);
@@ -227,28 +235,35 @@ public class InputDrawPanel extends ViewModelPanel {
 
     @Override
     public void panelShown() {
-        if(this.getViewModel().checkBoard()){
+        if (this.getViewModel().checkBoard()) {
             ArrayList<ArrayList<InputCell>> board = this.getViewModel().getBoard();
             sizeRows = board.size();
             rowsSpinner.setValue(sizeRows);
-            if(sizeRows > 0){
+            if (sizeRows > 0) {
                 sizeCols = board.getFirst().size();
                 colsSpinner.setValue(sizeCols);
             }
             this.board = board;
             //resize();
 
-//            for (int i = 0; i < board.size(); i++) {
-//                for (int j = 0; j < board.get(i).size(); j++) {
-//                    this.board.get(i).get(j).changeState(State.getFromInt(board.get(i).get(j)));
-//                }
-//            }
+            for (int i = 0; i < board.size(); i++) {
+                for (int j = 0; j < board.get(i).size(); j++) {
+                        if(board.get(i).get(j).getState() == State.ENTRY) entries++;
+                        if(board.get(i).get(j).getState() == State.EXIT) exits++;
+                }
+            }
+
             repaint();
         }
+        check();
     }
 
     @Override
     public void panelHidden() {
         getViewModel().setBoard(board);
+    }
+
+    private void check() {
+        checkNextButton(sizeCols > 0 && sizeRows > 0 && exits > 0 && entries > 0);
     }
 }

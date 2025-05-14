@@ -239,7 +239,7 @@ public class BoardPanel extends ViewModelPanel {
         Timer timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //step();
+                step();
 
             }
         });

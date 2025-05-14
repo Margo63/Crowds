@@ -39,8 +39,10 @@ public class AnalysisPanel extends ViewModelPanel {
                 }else{
                     g.setColor(new Color(0x003CFF));
                 }
-                g.fillRect(key.column()* ConstantUtil.SIZE_OF_CELL, key.row()*ConstantUtil.SIZE_OF_CELL,
-                        ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
+                Rectangle rectangle = DrawUtils.getCellRectangle(key.column(), key.row(), getWidth(), getViewModel().getBoardInteger().getFirst().size());
+                g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+//                g.fillRect(key.column()* ConstantUtil.SIZE_OF_CELL, key.row()*ConstantUtil.SIZE_OF_CELL,
+//                        ConstantUtil.SIZE_OF_CELL, ConstantUtil.SIZE_OF_CELL);
                 g.setColor(Color.BLACK);
             }
         }

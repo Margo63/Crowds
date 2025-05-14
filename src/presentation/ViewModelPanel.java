@@ -73,6 +73,9 @@ public class ViewModelPanel extends JPanel {
         viewModel.showAnalysis();
     }
 
+    public void checkNextButton(boolean condition){
+        nextButton.setEnabled(condition);
+    }
     public void panelShown() {
 
     }

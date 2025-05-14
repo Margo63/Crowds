@@ -8,6 +8,7 @@ import utils.ConstantUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 public class ViewModel {
     private ArrayList<ArrayList<InputCell>> board;
@@ -141,6 +142,7 @@ public class ViewModel {
     public boolean checkNextPage() {
         return !(pageIndex == pages.length - 1);
     }
+
 
     public boolean checkPreviousPage() {
         return !(pageIndex == 0 || pageIndex == pages.length - 1);
